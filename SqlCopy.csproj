@@ -107,7 +107,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="database.png" />
     <Content Include="exec.ico" />
   </ItemGroup>
   <ItemGroup>
