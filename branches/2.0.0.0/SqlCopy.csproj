@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A028C3DF-0DA2-4160-8FF5-CD83325518B5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="exec.ico" />
+    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Data.Access.Components.2.8">
