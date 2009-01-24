@@ -46,5 +46,8 @@ exec sp_msforeachtable 'ALTER TABLE ? DISABLE TRIGGER all';</Value>
       <Value Profile="(Default)">exec sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all';
 exec sp_msforeachtable 'ALTER TABLE ? ENABLE TRIGGER all';</Value>
     </Setting>
+    <Setting Name="ThreadCount" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
