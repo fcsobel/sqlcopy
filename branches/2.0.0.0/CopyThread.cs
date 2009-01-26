@@ -110,7 +110,7 @@ namespace Test.SqlCopy
                             if (result >= 0 && result != WaitHandle.WaitTimeout) // quit event
                             {
                                 //string tableName = (string)row.Cells[1].Value;
-                                Trace.TraceInformation("Staring to process table {0} with thread {1}", tableName, result);
+                                Trace.TraceInformation("Starting to process table {0} with thread {1}", tableName, result);
                                 //row.Cells[3].Value = "Started";
                                 idleEvents[result].Reset();
                                 threadPool[result].CopyTable(tableName);
