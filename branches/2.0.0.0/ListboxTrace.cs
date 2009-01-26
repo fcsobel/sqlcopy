@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace Test.SqlCopy
 {
-    class ListboxTrace : TraceListener
+    /// <summary>
+    /// can be used to display trace output into a listbox
+    /// </summary>
+    public class ListboxTrace : TraceListener
     {
         private ListBox _lb;
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="lb">The listbox that will receive trace data</param>
         public ListboxTrace(ListBox lb)
         {
             _lb = lb;
@@ -34,7 +37,7 @@ namespace Test.SqlCopy
 
         public override void Write(string message)
         {
-            //this.WriteLine(message);
+            // ignore this
         }
     }
 }

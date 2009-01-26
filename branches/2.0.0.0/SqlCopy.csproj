@@ -119,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="exec.ico" />
-    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Data.Access.Components.2.8">

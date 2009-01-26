@@ -23,8 +23,8 @@ namespace Test.SqlCopy
 
         public ProcessResultArgs(string tableName, Exception ex)
         {
-            this.Exception = ex;
-            this.TableName = tableName;
+            Exception = ex;
+            TableName = tableName;
         }
         public ProcessResultArgs(string tableName) : this(tableName, null)
         {
@@ -44,7 +44,7 @@ namespace Test.SqlCopy
 
         public WorkerThread(ManualResetEvent quitEvent, CopyData copyData)
         {
-            this.CopyDataInfo = copyData;
+            CopyDataInfo = copyData;
             _quitEvent = quitEvent;
 
             IdleEvent = new ManualResetEvent(true);
@@ -52,8 +52,8 @@ namespace Test.SqlCopy
 
         public void CopyTable(string tableName)
         {
-            this.TableName = tableName;
-            this.IdleEvent.Reset();
+            TableName = tableName;
+            IdleEvent.Reset();
             _processingEvent.Set();
         }
 

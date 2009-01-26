@@ -16,10 +16,10 @@ namespace Test.SqlCopy
 {
     public partial class SqlCopyForm : Form, INotifyPropertyChanged 
     {
-        public string Source { get { return this.cboSource.Text; } }
-        public string Destination { get { return this.cboDestination.Text; } }
-        public int BulkCopyTimeout { get { return int.Parse(this.txtTimeout.Text); } }
-        public int BatchSize { get { return int.Parse(this.txtBatchSize.Text); } }
+        public string Source { get { return cboSource.Text; } }
+        public string Destination { get { return cboDestination.Text; } }
+        public int BulkCopyTimeout { get { return int.Parse(txtTimeout.Text); } }
+        public int BatchSize { get { return int.Parse(txtBatchSize.Text); } }
         private ManualResetEvent quitEvent = new ManualResetEvent(false);
         private CopyThread _copyThread;
 
@@ -31,7 +31,7 @@ namespace Test.SqlCopy
             get { return _busy;}
             set {
 
-                if (!this.InvokeRequired)
+                if (!InvokeRequired)
                 {
                     _busy = value;
                     if (PropertyChanged != null)
@@ -39,7 +39,7 @@ namespace Test.SqlCopy
                 }
                 else
                 {
-                    this.BeginInvoke(new MethodInvoker(delegate() { Busy = value; }));
+                    BeginInvoke(new MethodInvoker(delegate() { Busy = value; }));
                 }
             }
         }
@@ -62,27 +62,27 @@ namespace Test.SqlCopy
         {
             InitializeComponent();
 
-            this.btnCancel.DataBindings.Add(new Binding("Enabled", this, "Busy"));
+            btnCancel.DataBindings.Add(new Binding("Enabled", this, "Busy"));
             
-            this.cboDestination.Text = Properties.Settings.Default.destination;
-            this.txtBatchSize.Text = Properties.Settings.Default.BatchSize.ToString();
-            this.txtTimeout.Text = Properties.Settings.Default.Timeout.ToString();
-            this.btnSql.Enabled = Properties.Settings.Default.DeleteRows;
+            cboDestination.Text = Properties.Settings.Default.destination;
+            txtBatchSize.Text = Properties.Settings.Default.BatchSize.ToString();
+            txtTimeout.Text = Properties.Settings.Default.Timeout.ToString();
+            btnSql.Enabled = Properties.Settings.Default.DeleteRows;
 
             if (Properties.Settings.Default.sourcelist == null)
             {
                 Properties.Settings.Default.sourcelist = new System.Collections.Specialized.StringCollection();
             }
-            this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
+            cboSource.DataSource = Properties.Settings.Default.sourcelist;
 
             if (Properties.Settings.Default.destinationlist == null)
             {
                 Properties.Settings.Default.destinationlist = new System.Collections.Specialized.StringCollection();
             }
-            this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
+            cboDestination.DataSource = Properties.Settings.Default.destinationlist;
 
-            this.cboSource.Text = Properties.Settings.Default.source;
-            this.cboDestination.Text = Properties.Settings.Default.destination;
+            cboSource.Text = Properties.Settings.Default.source;
+            cboDestination.Text = Properties.Settings.Default.destination;
 
         }
 
@@ -93,29 +93,29 @@ namespace Test.SqlCopy
 
             Busy = true;
 
-            Properties.Settings.Default.destination = this.cboDestination.Text;
-            Properties.Settings.Default.Timeout = this.BulkCopyTimeout;
-            Properties.Settings.Default.BatchSize = this.BatchSize;
+            Properties.Settings.Default.destination = cboDestination.Text;
+            Properties.Settings.Default.Timeout = BulkCopyTimeout;
+            Properties.Settings.Default.BatchSize = BatchSize;
 
             if (!Properties.Settings.Default.destinationlist.Contains(Properties.Settings.Default.destination))
             {
                 Properties.Settings.Default.destinationlist.Add(Properties.Settings.Default.destination);
-                this.cboDestination.DataSource = null;
-                this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
+                cboDestination.DataSource = null;
+                cboDestination.DataSource = Properties.Settings.Default.destinationlist;
 
-                this.cboDestination.Text = Properties.Settings.Default.destination;
+                cboDestination.Text = Properties.Settings.Default.destination;
             }
 
             Properties.Settings.Default.Save();
 
-            this.CopyTablesAsc();
+            CopyTablesAsc();
         }
 
 
         public void CopyTablesAsc()
         {
             // clear the status fields
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 row.Cells[3].Value = string.Empty;
                 row.Cells[4].Value = 0;
@@ -124,7 +124,7 @@ namespace Test.SqlCopy
             _quit = false;
 
             List<string> tableNames = new List<string>();
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 bool status = (bool)row.Cells[0].Value;
                 if (status)
@@ -134,14 +134,14 @@ namespace Test.SqlCopy
             }
 
             _copyThread = new CopyThread(
-                this.cbxDeleteRows.Checked
-                , this.Destination
-                , this.Source
+                cbxDeleteRows.Checked
+                , Destination
+                , Source
                 , quitEvent
                 , (int)numThreadCount.Value
-                , this.Options
-                , this.BulkCopyTimeout
-                , this.BatchSize
+                , Options
+                , BulkCopyTimeout
+                , BatchSize
                 , tableNames.ToArray());
             _copyThread.CopyDone += new EventHandler<CopyDoneEventArgs>(_copyThread_CopyDone);
             Thread tr = new Thread(_copyThread.CopyTables);
@@ -171,7 +171,7 @@ namespace Test.SqlCopy
                 if (_quit)
                     e.SqlArgs.Abort = true;
 
-                foreach (DataGridViewRow row in this.dataGridView1.Rows)
+                foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
                     if ((string)row.Cells[1].Value == copy.DestinationTableName)
                     {
@@ -184,7 +184,7 @@ namespace Test.SqlCopy
             {
                 if (e.Exception != null && !string.IsNullOrEmpty(e.TableName))
                 {
-                    foreach (DataGridViewRow row in this.dataGridView1.Rows)
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
                         if ((string)row.Cells[1].Value == e.TableName)
                         {
@@ -198,21 +198,21 @@ namespace Test.SqlCopy
 
         public void GetTables()
         {
-            this.dataGridView1.Rows.Clear();
+            dataGridView1.Rows.Clear();
 
             string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name, TABLE_TYPE FROM information_schema.tables WHERE table_name <> 'sysdiagrams' ORDER BY TABLE_TYPE, TABLE_NAME";
 
-            using (SqlConnection source = new SqlConnection(this.Source))
+            using (SqlConnection source = new SqlConnection(Source))
             {
                 using (SqlCommand command = new SqlCommand(sql, source))
                 {
-                    command.CommandTimeout = this.BulkCopyTimeout;
+                    command.CommandTimeout = BulkCopyTimeout;
                     source.Open();
                     using (IDataReader dr = command.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), dr["table_type"], "");
+                            dataGridView1.Rows.Add(true, dr["table_name"].ToString(), dr["table_type"], "");
                         }
                     }
                 }
@@ -224,16 +224,16 @@ namespace Test.SqlCopy
         {
             try
             {
-                this.GetTables();
-                Properties.Settings.Default.source = this.cboSource.Text;
+                GetTables();
+                Properties.Settings.Default.source = cboSource.Text;
 
                 if (!Properties.Settings.Default.sourcelist.Contains(Properties.Settings.Default.source))
                 {
-                    this.cboSource.DataSource = null;
+                    cboSource.DataSource = null;
                     Properties.Settings.Default.sourcelist.Add(Properties.Settings.Default.source);
-                    this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
+                    cboSource.DataSource = Properties.Settings.Default.sourcelist;
 
-                    this.cboSource.Text = Properties.Settings.Default.source;
+                    cboSource.Text = Properties.Settings.Default.source;
                 }
 
                 Properties.Settings.Default.Save();
@@ -246,7 +246,7 @@ namespace Test.SqlCopy
 
         private void bttnSelectAll_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 row.SetValues(true);
             }
@@ -255,7 +255,7 @@ namespace Test.SqlCopy
 
         private void bttnDeselectAll_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 row.SetValues(false);
             }
@@ -263,7 +263,7 @@ namespace Test.SqlCopy
 
         private void bttnFlipSelect_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 bool status = (bool)row.Cells[0].Value;
                 row.SetValues(!status);
@@ -280,16 +280,16 @@ namespace Test.SqlCopy
         {
             if (e.KeyCode == Keys.Delete)
             {
-                if (Properties.Settings.Default.sourcelist.Contains(this.cboSource.Text))
+                if (Properties.Settings.Default.sourcelist.Contains(cboSource.Text))
                 {
-                    if (MessageBox.Show(this.cboSource.Text, "Remove this entry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    if (MessageBox.Show(cboSource.Text, "Remove this entry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         // Remove the item
-                        Properties.Settings.Default.sourcelist.Remove(this.cboSource.Text);
+                        Properties.Settings.Default.sourcelist.Remove(cboSource.Text);
 
                         // Reload the drop down
-                        this.cboSource.DataSource = null;
-                        this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
+                        cboSource.DataSource = null;
+                        cboSource.DataSource = Properties.Settings.Default.sourcelist;
                     }
 
                     // Save users settings
@@ -302,16 +302,16 @@ namespace Test.SqlCopy
         {
             if (e.KeyCode == Keys.Delete)
             {
-                if (Properties.Settings.Default.destinationlist.Contains(this.cboDestination.Text))
+                if (Properties.Settings.Default.destinationlist.Contains(cboDestination.Text))
                 {
-                    if (MessageBox.Show(this.cboDestination.Text, "Remove this entry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    if (MessageBox.Show(cboDestination.Text, "Remove this entry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         // Remove the item
-                        Properties.Settings.Default.destinationlist.Remove(this.cboDestination.Text);
+                        Properties.Settings.Default.destinationlist.Remove(cboDestination.Text);
 
                         // Reload the drop down
-                        this.cboDestination.DataSource = null;
-                        this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
+                        cboDestination.DataSource = null;
+                        cboDestination.DataSource = Properties.Settings.Default.destinationlist;
                     }
 
                     // Save users settings
@@ -323,7 +323,7 @@ namespace Test.SqlCopy
 
         private void cbxDeleteRows_Click(object sender, EventArgs e)
         {
-            this.btnSql.Enabled = this.cbxDeleteRows.Checked;
+            btnSql.Enabled = cbxDeleteRows.Checked;
 
             if (cbxDeleteRows.Checked)
             {
@@ -360,7 +360,7 @@ namespace Test.SqlCopy
 
         private void btnSelectTables_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 row.SetValues(((string)row.Cells[2].Value).Equals("BASE TABLE", StringComparison.OrdinalIgnoreCase));
             }
@@ -369,7 +369,7 @@ namespace Test.SqlCopy
 
         private void btnSelectViews_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 row.SetValues(((string)row.Cells[2].Value).Equals("VIEW", StringComparison.OrdinalIgnoreCase));
             }

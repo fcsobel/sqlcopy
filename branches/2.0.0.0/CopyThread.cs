@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Threading;
 
 namespace Test.SqlCopy
@@ -65,7 +62,7 @@ namespace Test.SqlCopy
                 try
                 {
                     if (_deleteRows)
-                        this.PreCopySql();
+                        PreCopySql();
                 }
                 catch
                 {
@@ -136,11 +133,11 @@ namespace Test.SqlCopy
                 {
                     CopyDone.Invoke(this, null);
                 }
-               
+
 
                 try
                 {
-                    if (_deleteRows) this.PostCopySql();
+                    if (_deleteRows) PostCopySql();
                     Trace.TraceInformation("Done");
 
                 }

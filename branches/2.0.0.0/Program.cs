@@ -12,8 +12,6 @@ namespace Test.SqlCopy
         [STAThread]
         static void Main()
         {
-            //Control.CheckForIllegalCrossThreadCalls = false;
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new   SqlCopyForm());

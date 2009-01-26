@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Test.SqlCopy
@@ -28,15 +28,15 @@ namespace Test.SqlCopy
 
         public CopyProgressEventArgs(SqlRowsCopiedEventArgs args, string tableName, long total)
         {
-            this.TableName = tableName;
-            this.SqlArgs = args;
-            this.Total = total;
+            TableName = tableName;
+            SqlArgs = args;
+            Total = total;
         }
 
         public CopyProgressEventArgs(string tableName, Exception ex)
         {
-            this.Exception = ex;
-            this.TableName = tableName;
+            Exception = ex;
+            TableName = tableName;
         }
 
         /// <summary>
@@ -65,21 +65,21 @@ namespace Test.SqlCopy
 
         public CopyData(string sourceConnectionString, string destinationConnectionString, SqlBulkCopyOptions options, int timeout, int batchSize)
         {
-            this._source = sourceConnectionString;
-            this._destination = destinationConnectionString;
-            this._options = options;
-            this._batchSize = batchSize;
-            this._timeout = timeout;
+            _source = sourceConnectionString;
+            _destination = destinationConnectionString;
+            _options = options;
+            _batchSize = batchSize;
+            _timeout = timeout;
         }
 
         public CopyData(string sourceConnectionString, string destinationConnectionString, SqlBulkCopyOptions options, int timeout, int batchSize, bool deleteOption)        
         {
-            this._source = sourceConnectionString;
-            this._destination = destinationConnectionString;
-            this._options = options;
-            this._batchSize = batchSize;
-            this._timeout = timeout;
-            this._deleteoption = deleteOption;
+            _source = sourceConnectionString;
+            _destination = destinationConnectionString;
+            _options = options;
+            _batchSize = batchSize;
+            _timeout = timeout;
+            _deleteoption = deleteOption;
         }
 
 
@@ -103,7 +103,7 @@ namespace Test.SqlCopy
         public void CopyTable(string table)
         {
             // delete destination rows first
-            if (this._deleteoption) this.DeleteTable(table);
+            if (_deleteoption) DeleteTable(table);
 
             using (SqlConnection source = new SqlConnection(_source))
             {
@@ -115,7 +115,7 @@ namespace Test.SqlCopy
                 long rowCount = 0;
                 using (SqlCommand command = new SqlCommand(sql, source))
                 {
-                    command.CommandTimeout = this._timeout;
+                    command.CommandTimeout = _timeout;
                     rowCount = (int)command.ExecuteScalar();
                 }
 
@@ -143,15 +143,15 @@ namespace Test.SqlCopy
 
                 using (SqlCommand command = new SqlCommand(sql, source))
                 {
-                    command.CommandTimeout = this._timeout;
+                    command.CommandTimeout = _timeout;
 
                     using (IDataReader dr = command.ExecuteReader())
                     {
 
                         using (SqlBulkCopy copy = new SqlBulkCopy(_destination, _options))
                         {
-                            copy.BulkCopyTimeout = this._timeout;
-                            copy.BatchSize = this._batchSize;
+                            copy.BulkCopyTimeout = _timeout;
+                            copy.BatchSize = _batchSize;
                             // setup notification
                             copy.NotifyAfter = 1000;        
                             copy.DestinationTableName = table;
