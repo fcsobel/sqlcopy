@@ -16,17 +16,6 @@ namespace Test.SqlCopy
             _lb = lb;
         }
 
-        delegate void Invoker(string msg);
-
-        private static void SyncBeginInvoke(Control control, MethodInvoker del)
-        {
-            if ((control != null) && control.InvokeRequired)
-                control.BeginInvoke(del, null);
-            else
-                del();
-        }
-    
-
         public override void WriteLine(string message)
         {
             if (!_lb.InvokeRequired)

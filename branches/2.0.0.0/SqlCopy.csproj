@@ -14,7 +14,7 @@
     <GenerateManifests>true</GenerateManifests>
     <ManifestCertificateThumbprint>D23ACC8C24AC780E852BB4B23C063167C45DA7E1</ManifestCertificateThumbprint>
     <ManifestKeyFile>Test.SqlCopy_TemporaryKey.pfx</ManifestKeyFile>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="CopyData.cs" />
     <Compile Include="CopyThread.cs" />
+    <Compile Include="DataGridViewProgressColumn.cs" />
     <Compile Include="ListboxTrace.cs" />
     <Compile Include="SqlCopyForm.cs">
       <SubType>Form</SubType>

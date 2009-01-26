@@ -42,6 +42,7 @@ namespace Test.SqlCopy
             this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colProgress = new Test.SqlCopy.DataGridViewProgressColumn();
             this.txtTimeout = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -62,6 +63,8 @@ namespace Test.SqlCopy
             this.cbxKeepNulls = new System.Windows.Forms.CheckBox();
             this.cbxKeepIdentity = new System.Windows.Forms.CheckBox();
             this.lstLog = new System.Windows.Forms.ListBox();
+            this.dataGridViewProgressColumn1 = new Test.SqlCopy.DataGridViewProgressColumn();
+            this.btnCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numThreadCount)).BeginInit();
             this.SuspendLayout();
@@ -69,7 +72,7 @@ namespace Test.SqlCopy
             // btnCopy
             // 
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopy.Location = new System.Drawing.Point(650, 581);
+            this.btnCopy.Location = new System.Drawing.Point(574, 602);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(75, 23);
             this.btnCopy.TabIndex = 11;
@@ -90,7 +93,7 @@ namespace Test.SqlCopy
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 587);
+            this.label2.Location = new System.Drawing.Point(11, 606);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 4;
@@ -119,7 +122,7 @@ namespace Test.SqlCopy
             // bttnSelectAll
             // 
             this.bttnSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bttnSelectAll.Location = new System.Drawing.Point(79, 483);
+            this.bttnSelectAll.Location = new System.Drawing.Point(79, 502);
             this.bttnSelectAll.Name = "bttnSelectAll";
             this.bttnSelectAll.Size = new System.Drawing.Size(75, 23);
             this.bttnSelectAll.TabIndex = 3;
@@ -130,7 +133,7 @@ namespace Test.SqlCopy
             // bttnDeselectAll
             // 
             this.bttnDeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bttnDeselectAll.Location = new System.Drawing.Point(160, 483);
+            this.bttnDeselectAll.Location = new System.Drawing.Point(160, 502);
             this.bttnDeselectAll.Name = "bttnDeselectAll";
             this.bttnDeselectAll.Size = new System.Drawing.Size(75, 23);
             this.bttnDeselectAll.TabIndex = 4;
@@ -141,7 +144,7 @@ namespace Test.SqlCopy
             // bttnFlipSelect
             // 
             this.bttnFlipSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bttnFlipSelect.Location = new System.Drawing.Point(241, 483);
+            this.bttnFlipSelect.Location = new System.Drawing.Point(241, 502);
             this.bttnFlipSelect.Name = "bttnFlipSelect";
             this.bttnFlipSelect.Size = new System.Drawing.Size(65, 23);
             this.bttnFlipSelect.TabIndex = 5;
@@ -162,10 +165,12 @@ namespace Test.SqlCopy
             this.Copy,
             this.table_name,
             this.TableType,
-            this.status});
+            this.status,
+            this.colProgress});
             this.dataGridView1.Location = new System.Drawing.Point(79, 37);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(646, 358);
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(646, 377);
             this.dataGridView1.TabIndex = 16;
             // 
             // Copy
@@ -198,10 +203,17 @@ namespace Test.SqlCopy
             this.status.Name = "status";
             this.status.ReadOnly = true;
             // 
+            // colProgress
+            // 
+            this.colProgress.HeaderText = "Progress";
+            this.colProgress.Name = "colProgress";
+            this.colProgress.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.colProgress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
             // txtTimeout
             // 
             this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTimeout.Location = new System.Drawing.Point(623, 484);
+            this.txtTimeout.Location = new System.Drawing.Point(623, 503);
             this.txtTimeout.Name = "txtTimeout";
             this.txtTimeout.Size = new System.Drawing.Size(51, 20);
             this.txtTimeout.TabIndex = 8;
@@ -212,7 +224,7 @@ namespace Test.SqlCopy
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(569, 486);
+            this.label4.Location = new System.Drawing.Point(569, 505);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(48, 13);
             this.label4.TabIndex = 18;
@@ -223,7 +235,7 @@ namespace Test.SqlCopy
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(675, 487);
+            this.label5.Location = new System.Drawing.Point(675, 506);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(47, 13);
             this.label5.TabIndex = 19;
@@ -232,7 +244,7 @@ namespace Test.SqlCopy
             // txtBatchSize
             // 
             this.txtBatchSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBatchSize.Location = new System.Drawing.Point(623, 510);
+            this.txtBatchSize.Location = new System.Drawing.Point(623, 529);
             this.txtBatchSize.Name = "txtBatchSize";
             this.txtBatchSize.Size = new System.Drawing.Size(51, 20);
             this.txtBatchSize.TabIndex = 9;
@@ -243,7 +255,7 @@ namespace Test.SqlCopy
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(556, 513);
+            this.label6.Location = new System.Drawing.Point(556, 532);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(61, 13);
             this.label6.TabIndex = 21;
@@ -253,7 +265,7 @@ namespace Test.SqlCopy
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(675, 513);
+            this.label7.Location = new System.Drawing.Point(675, 532);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(29, 13);
             this.label7.TabIndex = 22;
@@ -277,9 +289,9 @@ namespace Test.SqlCopy
             this.cboDestination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cboDestination.FormattingEnabled = true;
-            this.cboDestination.Location = new System.Drawing.Point(79, 583);
+            this.cboDestination.Location = new System.Drawing.Point(79, 602);
             this.cboDestination.Name = "cboDestination";
-            this.cboDestination.Size = new System.Drawing.Size(565, 21);
+            this.cboDestination.Size = new System.Drawing.Size(484, 21);
             this.cboDestination.TabIndex = 24;
             this.cboDestination.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cboDestination_KeyDown);
             // 
@@ -287,7 +299,7 @@ namespace Test.SqlCopy
             // 
             this.btnSql.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSql.Enabled = false;
-            this.btnSql.Location = new System.Drawing.Point(241, 528);
+            this.btnSql.Location = new System.Drawing.Point(241, 545);
             this.btnSql.Name = "btnSql";
             this.btnSql.Size = new System.Drawing.Size(65, 23);
             this.btnSql.TabIndex = 29;
@@ -298,7 +310,7 @@ namespace Test.SqlCopy
             // btnSelectTables
             // 
             this.btnSelectTables.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSelectTables.Location = new System.Drawing.Point(79, 526);
+            this.btnSelectTables.Location = new System.Drawing.Point(79, 545);
             this.btnSelectTables.Name = "btnSelectTables";
             this.btnSelectTables.Size = new System.Drawing.Size(75, 23);
             this.btnSelectTables.TabIndex = 31;
@@ -309,7 +321,7 @@ namespace Test.SqlCopy
             // btnSelectViews
             // 
             this.btnSelectViews.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSelectViews.Location = new System.Drawing.Point(160, 526);
+            this.btnSelectViews.Location = new System.Drawing.Point(160, 545);
             this.btnSelectViews.Name = "btnSelectViews";
             this.btnSelectViews.Size = new System.Drawing.Size(75, 23);
             this.btnSelectViews.TabIndex = 32;
@@ -321,7 +333,7 @@ namespace Test.SqlCopy
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(543, 536);
+            this.label8.Location = new System.Drawing.Point(543, 555);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(74, 13);
             this.label8.TabIndex = 34;
@@ -331,7 +343,7 @@ namespace Test.SqlCopy
             // 
             this.numThreadCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.numThreadCount.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::Test.SqlCopy.Properties.Settings.Default, "ThreadCount", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numThreadCount.Location = new System.Drawing.Point(623, 536);
+            this.numThreadCount.Location = new System.Drawing.Point(623, 555);
             this.numThreadCount.Maximum = new decimal(new int[] {
             10,
             0,
@@ -353,7 +365,7 @@ namespace Test.SqlCopy
             this.cbxDeleteRows.AutoSize = true;
             this.cbxDeleteRows.Checked = global::Test.SqlCopy.Properties.Settings.Default.DeleteRows;
             this.cbxDeleteRows.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Test.SqlCopy.Properties.Settings.Default, "DeleteRows", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cbxDeleteRows.Location = new System.Drawing.Point(327, 532);
+            this.cbxDeleteRows.Location = new System.Drawing.Point(327, 551);
             this.cbxDeleteRows.Name = "cbxDeleteRows";
             this.cbxDeleteRows.Size = new System.Drawing.Size(87, 17);
             this.cbxDeleteRows.TabIndex = 28;
@@ -367,7 +379,7 @@ namespace Test.SqlCopy
             this.cbxTableLock.AutoSize = true;
             this.cbxTableLock.Checked = global::Test.SqlCopy.Properties.Settings.Default.TableLock;
             this.cbxTableLock.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Test.SqlCopy.Properties.Settings.Default, "TableLock", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cbxTableLock.Location = new System.Drawing.Point(426, 532);
+            this.cbxTableLock.Location = new System.Drawing.Point(426, 551);
             this.cbxTableLock.Name = "cbxTableLock";
             this.cbxTableLock.Size = new System.Drawing.Size(80, 17);
             this.cbxTableLock.TabIndex = 27;
@@ -380,7 +392,7 @@ namespace Test.SqlCopy
             this.cbxFireTriggers.AutoSize = true;
             this.cbxFireTriggers.Checked = global::Test.SqlCopy.Properties.Settings.Default.FireTriggers;
             this.cbxFireTriggers.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Test.SqlCopy.Properties.Settings.Default, "FireTriggers", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cbxFireTriggers.Location = new System.Drawing.Point(426, 509);
+            this.cbxFireTriggers.Location = new System.Drawing.Point(426, 528);
             this.cbxFireTriggers.Name = "cbxFireTriggers";
             this.cbxFireTriggers.Size = new System.Drawing.Size(84, 17);
             this.cbxFireTriggers.TabIndex = 26;
@@ -394,7 +406,7 @@ namespace Test.SqlCopy
             this.cbxCheckConstraints.AutoSize = true;
             this.cbxCheckConstraints.Checked = global::Test.SqlCopy.Properties.Settings.Default.CheckConstraints;
             this.cbxCheckConstraints.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Test.SqlCopy.Properties.Settings.Default, "CheckConstraints", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cbxCheckConstraints.Location = new System.Drawing.Point(426, 486);
+            this.cbxCheckConstraints.Location = new System.Drawing.Point(426, 505);
             this.cbxCheckConstraints.Name = "cbxCheckConstraints";
             this.cbxCheckConstraints.Size = new System.Drawing.Size(112, 17);
             this.cbxCheckConstraints.TabIndex = 25;
@@ -409,7 +421,7 @@ namespace Test.SqlCopy
             this.cbxKeepNulls.Checked = global::Test.SqlCopy.Properties.Settings.Default.KeepNulls;
             this.cbxKeepNulls.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbxKeepNulls.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Test.SqlCopy.Properties.Settings.Default, "KeepNulls", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cbxKeepNulls.Location = new System.Drawing.Point(327, 509);
+            this.cbxKeepNulls.Location = new System.Drawing.Point(327, 528);
             this.cbxKeepNulls.Name = "cbxKeepNulls";
             this.cbxKeepNulls.Size = new System.Drawing.Size(77, 17);
             this.cbxKeepNulls.TabIndex = 7;
@@ -423,7 +435,7 @@ namespace Test.SqlCopy
             this.cbxKeepIdentity.Checked = global::Test.SqlCopy.Properties.Settings.Default.KeepIdentity;
             this.cbxKeepIdentity.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbxKeepIdentity.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Test.SqlCopy.Properties.Settings.Default, "KeepIdentity", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cbxKeepIdentity.Location = new System.Drawing.Point(327, 486);
+            this.cbxKeepIdentity.Location = new System.Drawing.Point(327, 505);
             this.cbxKeepIdentity.Name = "cbxKeepIdentity";
             this.cbxKeepIdentity.Size = new System.Drawing.Size(88, 17);
             this.cbxKeepIdentity.TabIndex = 6;
@@ -435,16 +447,37 @@ namespace Test.SqlCopy
             this.lstLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lstLog.FormattingEnabled = true;
-            this.lstLog.Location = new System.Drawing.Point(79, 402);
+            this.lstLog.Location = new System.Drawing.Point(79, 421);
             this.lstLog.Name = "lstLog";
             this.lstLog.Size = new System.Drawing.Size(646, 69);
             this.lstLog.TabIndex = 35;
+            // 
+            // dataGridViewProgressColumn1
+            // 
+            this.dataGridViewProgressColumn1.HeaderText = "Progress";
+            this.dataGridViewProgressColumn1.Name = "dataGridViewProgressColumn1";
+            this.dataGridViewProgressColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProgressColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dataGridViewProgressColumn1.Width = 139;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Enabled = false;
+            this.btnCancel.Location = new System.Drawing.Point(655, 602);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 36;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // SqlCopyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(742, 617);
+            this.ClientSize = new System.Drawing.Size(742, 636);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lstLog);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.numThreadCount);
@@ -512,15 +545,18 @@ namespace Test.SqlCopy
         private System.Windows.Forms.CheckBox cbxTableLock;
         private System.Windows.Forms.CheckBox cbxDeleteRows;
         private System.Windows.Forms.Button btnSql;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Copy;
-        private System.Windows.Forms.DataGridViewTextBoxColumn table_name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TableType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.Button btnSelectTables;
         private System.Windows.Forms.Button btnSelectViews;
         private System.Windows.Forms.NumericUpDown numThreadCount;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ListBox lstLog;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Copy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn table_name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TableType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn status;
+        private DataGridViewProgressColumn colProgress;
+        private DataGridViewProgressColumn dataGridViewProgressColumn1;
+        private System.Windows.Forms.Button btnCancel;
     }
 }
 

@@ -14,15 +14,35 @@ using System.Diagnostics;
 
 namespace Test.SqlCopy
 {
-    public partial class SqlCopyForm : Form
+    public partial class SqlCopyForm : Form, INotifyPropertyChanged 
     {
         public string Source { get { return this.cboSource.Text; } }
         public string Destination { get { return this.cboDestination.Text; } }
         public int BulkCopyTimeout { get { return int.Parse(this.txtTimeout.Text); } }
         public int BatchSize { get { return int.Parse(this.txtBatchSize.Text); } }
+        private ManualResetEvent quitEvent = new ManualResetEvent(false);
+        private CopyThread _copyThread;
 
         private bool _quit;
         private bool _busy;
+
+        public bool Busy
+        {
+            get { return _busy;}
+            set {
+
+                if (!this.InvokeRequired)
+                {
+                    _busy = value;
+                    if (PropertyChanged != null)
+                        PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Busy"));
+                }
+                else
+                {
+                    this.BeginInvoke(new MethodInvoker(delegate() { Busy = value; }));
+                }
+            }
+        }
 
         private SqlBulkCopyOptions Options
         {
@@ -42,16 +62,12 @@ namespace Test.SqlCopy
         {
             InitializeComponent();
 
+            this.btnCancel.DataBindings.Add(new Binding("Enabled", this, "Busy"));
+            
             this.cboDestination.Text = Properties.Settings.Default.destination;
             this.txtBatchSize.Text = Properties.Settings.Default.BatchSize.ToString();
             this.txtTimeout.Text = Properties.Settings.Default.Timeout.ToString();
             this.btnSql.Enabled = Properties.Settings.Default.DeleteRows;
-            //this.cbxCheckConstraints.Checked = Properties.Settings.Default.CheckConstraints;
-            //this.cbxFireTriggers.Checked = Properties.Settings.Default.FireTriggers;
-            //this.cbxKeepIdentity.Checked = Properties.Settings.Default.KeepIdentity;
-            //this.cbxKeepNulls.Checked = Properties.Settings.Default.KeepNulls;
-            //this.cbxTableLock.Checked = Properties.Settings.Default.TableLock;
-            //this.cbxDeleteRows.Checked = Properties.Settings.Default.DeleteRows;
 
             if (Properties.Settings.Default.sourcelist == null)
             {
@@ -72,20 +88,14 @@ namespace Test.SqlCopy
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (_busy)
+            if (Busy)
                 return;
 
-            _busy = true;
+            Busy = true;
 
             Properties.Settings.Default.destination = this.cboDestination.Text;
             Properties.Settings.Default.Timeout = this.BulkCopyTimeout;
             Properties.Settings.Default.BatchSize = this.BatchSize;
-            //Properties.Settings.Default.CheckConstraints = this.cbxCheckConstraints.Checked;
-            //Properties.Settings.Default.FireTriggers = this.cbxFireTriggers.Checked;
-            //Properties.Settings.Default.KeepIdentity = this.cbxKeepIdentity.Checked;
-            //Properties.Settings.Default.KeepNulls = this.cbxKeepNulls.Checked;
-            //Properties.Settings.Default.TableLock = this.cbxTableLock.Checked;
-            //Properties.Settings.Default.DeleteRows = this.cbxDeleteRows.Checked;
 
             if (!Properties.Settings.Default.destinationlist.Contains(Properties.Settings.Default.destination))
             {
@@ -101,7 +111,6 @@ namespace Test.SqlCopy
             this.CopyTablesAsc();
         }
 
-        private CopyThread _copyThread;
 
         public void CopyTablesAsc()
         {
@@ -109,6 +118,7 @@ namespace Test.SqlCopy
             foreach (DataGridViewRow row in this.dataGridView1.Rows)
             {
                 row.Cells[3].Value = string.Empty;
+                row.Cells[4].Value = 0;
             }
             quitEvent.Reset();
             _quit = false;
@@ -133,37 +143,20 @@ namespace Test.SqlCopy
                 , this.BulkCopyTimeout
                 , this.BatchSize
                 , tableNames.ToArray());
-            _copyThread.CopyDone += new EventHandler(_copyThread_CopyDone);
+            _copyThread.CopyDone += new EventHandler<CopyDoneEventArgs>(_copyThread_CopyDone);
             Thread tr = new Thread(_copyThread.CopyTables);
             _copyThread.CopyProgress += copy_CopyProgress;
             tr.Start();
         }
 
-        void _copyThread_CopyDone(object sender, EventArgs e)
+        void _copyThread_CopyDone(object sender, CopyDoneEventArgs e)
         {
-            _busy = false;
-        }
-
-        public void ShowProgress(object sender, ProgressChangedEventArgs e)
-        {
-            BackgroundWorker worker = (BackgroundWorker)sender;
-
-            this.dataGridView1.FirstDisplayedScrollingRowIndex = e.ProgressPercentage;
-
-            if (e.UserState == null)
+            Busy = false;
+            if (e != null && e.Ex != null)
             {
-                this.dataGridView1.Rows[e.ProgressPercentage].Cells[3].Value = "Success";
-            }
-            else
-            {
-                Exception er = (Exception)e.UserState;
-
-                this.dataGridView1.Rows[e.ProgressPercentage].Cells[3].Value = er.Message;
+                Trace.TraceError("Error occurred while processing: {0}", e.Ex.Message);
             }
         }
-        private ManualResetEvent quitEvent = new ManualResetEvent(false);
-
-     
 
         /// <summary>
         /// handler for the copy progress
@@ -182,11 +175,25 @@ namespace Test.SqlCopy
                 {
                     if ((string)row.Cells[1].Value == copy.DestinationTableName)
                     {
-                        row.Cells[3].Value = string.Format("{0}: {1} rows copied", e.Done ? "Done" : "Busy", e.SqlArgs.RowsCopied);
+                        row.Cells[3].Value = string.Format("{0}: {1} rows copied", e.Total == e.Current ? "Done" : "Busy", e.SqlArgs.RowsCopied);
+                        row.Cells[4].Value = e.Total == 0 ? 0 : e.Current * 100 / e.Total; // percentage done
                     }
                 }
             }
-
+            else
+            {
+                if (e.Exception != null && !string.IsNullOrEmpty(e.TableName))
+                {
+                    foreach (DataGridViewRow row in this.dataGridView1.Rows)
+                    {
+                        if ((string)row.Cells[1].Value == e.TableName)
+                        {
+                            row.Cells[3].Value = e.Exception.Message;
+                            row.Cells[4].Value = 0; // reset
+                        }
+                    }
+                }
+            }
         }
 
         public void GetTables()
@@ -227,7 +234,6 @@ namespace Test.SqlCopy
                     this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
 
                     this.cboSource.Text = Properties.Settings.Default.source;
-                    //this.cboSource.Items.Add(Properties.Settings.Default.source);
                 }
 
                 Properties.Settings.Default.Save();
@@ -266,6 +272,7 @@ namespace Test.SqlCopy
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
             Trace.Listeners.Add(new ListboxTrace(lstLog));
         }
 
@@ -370,14 +377,11 @@ namespace Test.SqlCopy
 
         private void SqlCopyForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_busy)
+            if (Busy)
             {
                 if (MessageBox.Show("Copy session active, abort?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    _quit = true;
-                    quitEvent.Set();
-                    e.Cancel = true;
-                    _busy = false;
+                    CancelProcess();
                 }
                 else
                 {
@@ -389,6 +393,29 @@ namespace Test.SqlCopy
                 _quit = true;
                 quitEvent.Set();
             }
+        }
+
+        /// <summary>
+        /// cancels the copy process
+        /// </summary>
+        private void CancelProcess()
+        {
+            Trace.TraceWarning("Cancelled the copy on request of user");
+            _quit = true;
+            quitEvent.Set();
+           
+            Busy = false;
+        }
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            CancelProcess();
         }
     }
 }

@@ -12,20 +12,31 @@ namespace Test.SqlCopy
     public class CopyProgressEventArgs : EventArgs
     {
         public SqlRowsCopiedEventArgs SqlArgs { get; private set; }
-        public bool Done { get; private set; }
-
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="count">Nr of rows copied</param>
-        public CopyProgressEventArgs(long count) : this(count, false)
+        public long Total { get; private set; }
+        public Exception Exception { get; private set; }
+        public string TableName { get; private set; }
+        public long Current
         {
+            get
+            {
+                if (SqlArgs != null)
+                    return SqlArgs.RowsCopied;
+                else
+                    return Total;
+            }
         }
 
-        public CopyProgressEventArgs(SqlRowsCopiedEventArgs args, bool done)
+        public CopyProgressEventArgs(SqlRowsCopiedEventArgs args, string tableName, long total)
         {
-            this.SqlArgs = args; 
-            this.Done = done;
+            this.TableName = tableName;
+            this.SqlArgs = args;
+            this.Total = total;
+        }
+
+        public CopyProgressEventArgs(string tableName, Exception ex)
+        {
+            this.Exception = ex;
+            this.TableName = tableName;
         }
 
         /// <summary>
@@ -33,7 +44,7 @@ namespace Test.SqlCopy
         /// </summary>
         /// <param name="count">Nr of rows copied</param>
         /// <param name="done">Copy is complete</param>
-        public CopyProgressEventArgs(long count, bool done) : this(new SqlRowsCopiedEventArgs(count), done)
+        public CopyProgressEventArgs(string tableName, long count, long total) : this(new SqlRowsCopiedEventArgs(count), tableName, total)
         {
         }
     }
@@ -101,12 +112,14 @@ namespace Test.SqlCopy
                 string sql = string.Format("select count(*) from {0}", table);
                 source.Open();
 
-                int count = 0;
+                long rowCount = 0;
                 using (SqlCommand command = new SqlCommand(sql, source))
                 {
                     command.CommandTimeout = this._timeout;
-                    count = (int)command.ExecuteScalar();
+                    rowCount = (int)command.ExecuteScalar();
                 }
+
+                Trace.TraceInformation("Starting to copy {0} rows to table {1}", rowCount, table);
 
                 // get the columns for this table
                 // filter computed columns
@@ -143,34 +156,26 @@ namespace Test.SqlCopy
                             copy.NotifyAfter = 1000;        
                             copy.DestinationTableName = table;
                             // attach event handler
-                            copy.SqlRowsCopied += new SqlRowsCopiedEventHandler(copy_SqlRowsCopied);
+                            copy.SqlRowsCopied +=
+                                delegate(object sender, SqlRowsCopiedEventArgs e)
+                                {
+                                    if (CopyProgress != null)
+                                    {
+                                        CopyProgress.Invoke(sender, new CopyProgressEventArgs(e,table, rowCount));
+                                    }
+                                };
                             copy.WriteToServer(dr);
 
                             // anyone out there?
                             if (CopyProgress != null)
                             {
                                 // invoke the progress with the final count
-                                CopyProgress.Invoke(copy, new CopyProgressEventArgs(count, true));
+                                CopyProgress.Invoke(copy, new CopyProgressEventArgs(table, rowCount, rowCount));
                             }
                         }
                     }
                 }
-                
             }
         }
-
-        /// <summary>
-        /// event handler for the SqlCopy event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void copy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
-        {
-            if (CopyProgress != null)
-            {
-                   CopyProgress.Invoke(sender, new CopyProgressEventArgs(e, false));
-            }
-        }
-
     }
 }

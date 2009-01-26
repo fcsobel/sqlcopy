@@ -8,6 +8,19 @@ using System.Threading;
 
 namespace Test.SqlCopy
 {
+    class CopyDoneEventArgs : EventArgs
+    {
+        public Exception Ex { get; private set; }
+
+        public CopyDoneEventArgs()
+        {
+
+        }
+        public CopyDoneEventArgs(Exception ex)
+        {
+            Ex = ex;
+        }
+    }
     class CopyThread
     {
         private bool _deleteRows;
@@ -21,7 +34,7 @@ namespace Test.SqlCopy
         private string[] _tables;
 
         public event EventHandler<CopyProgressEventArgs> CopyProgress;
-        public event EventHandler CopyDone;
+        public event EventHandler<CopyDoneEventArgs> CopyDone;
 
         public CopyThread(bool deleteRows
             , string destination
@@ -49,43 +62,44 @@ namespace Test.SqlCopy
         {
             try
             {
-                if (_deleteRows)
-                    this.PreCopySql();
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message, "Pre SQL Error");
-                return;
-            }
-
-            int threadCount = _threadCount;
-
-            // the worker thread pool
-            WorkerThread[] threadPool = new WorkerThread[threadCount];
-            // the idle event
-            ManualResetEvent[] idleEvents = new ManualResetEvent[threadCount];
-            // Threads
-            Thread[] workerThreads = new Thread[threadCount];
-
-            // create the copy object
-            CopyData copy = new CopyData(_source, _destination, _options, _bulkCopyTimeout, _batchSize, _deleteRows);
-            // attach the progress handler
-            copy.CopyProgress += new EventHandler<CopyProgressEventArgs>(copy_CopyProgress);
-
-            // construct the thread pool
-            for (int i = 0; i < threadCount; i++)
-            {
-                threadPool[i] = new WorkerThread(_quitEvent, copy);
-                idleEvents[i] = threadPool[i].IdleEvent;
-                workerThreads[i] = new Thread(threadPool[i].ThreadProc);
-                workerThreads[i].Start();
-            }
-            bool aborted = false;
-
-            foreach (string tableName in _tables)
-            {
                 try
                 {
+                    if (_deleteRows)
+                        this.PreCopySql();
+                }
+                catch
+                {
+                    Trace.TraceError("Pre SQL Error");
+                    throw;
+                }
+
+                int threadCount = _threadCount;
+
+                // the worker thread pool
+                WorkerThread[] threadPool = new WorkerThread[threadCount];
+                // the idle event
+                ManualResetEvent[] idleEvents = new ManualResetEvent[threadCount];
+                // Threads
+                Thread[] workerThreads = new Thread[threadCount];
+
+                // create the copy object
+                CopyData copy = new CopyData(_source, _destination, _options, _bulkCopyTimeout, _batchSize, _deleteRows);
+                // attach the progress handler
+                copy.CopyProgress += new EventHandler<CopyProgressEventArgs>(copy_CopyProgress);
+
+                // construct the thread pool
+                for (int i = 0; i < threadCount; i++)
+                {
+                    WorkerThread workerThread = new WorkerThread(_quitEvent, copy);
+                    workerThread.ProcessResult += new EventHandler<ProcessResultArgs>(workerThread_ProcessResult);
+                    threadPool[i] = workerThread;
+                    idleEvents[i] = threadPool[i].IdleEvent;
+                    workerThreads[i] = new Thread(threadPool[i].ThreadProc);
+                    workerThreads[i].Start();
+                }
+                foreach (string tableName in _tables)
+                {
+
                     while (true)
                     {
                         if (!_quitEvent.WaitOne(100, false))
@@ -96,7 +110,7 @@ namespace Test.SqlCopy
                             if (result >= 0 && result != WaitHandle.WaitTimeout) // quit event
                             {
                                 //string tableName = (string)row.Cells[1].Value;
-                                Trace.TraceInformation("Copying table {0} with thread {1}", tableName, result);
+                                Trace.TraceInformation("Staring to process table {0} with thread {1}", tableName, result);
                                 //row.Cells[3].Value = "Started";
                                 idleEvents[result].Reset();
                                 threadPool[result].CopyTable(tableName);
@@ -105,7 +119,6 @@ namespace Test.SqlCopy
                         }
                         else // quit received
                         {
-                            aborted = true;
                             Trace.TraceInformation("Cancelling process");
                             foreach (Thread t in workerThreads)
                                 t.Abort();
@@ -116,36 +129,41 @@ namespace Test.SqlCopy
                         }
                     }
                 }
-                catch (Exception er)
+                // wait for all threads to finish
+                WaitHandle.WaitAll(idleEvents);
+
+                if (CopyDone != null)
                 {
-                    Trace.TraceError(er.Message);
+                    CopyDone.Invoke(this, null);
                 }
-                finally
+               
+
+                try
                 {
+                    if (_deleteRows) this.PostCopySql();
+                    Trace.TraceInformation("Done");
+
                 }
-
+                catch
+                {
+                    Trace.TraceError("Post SQL Error");
+                    throw;
+                }
             }
-            // wait for all threads to finish
-            WaitHandle.WaitAll(idleEvents);
-
-            if (CopyDone != null)
+            catch (Exception ex)
             {
-                CopyDone.Invoke(this, null);
+                if (CopyDone != null)
+                {
+                    CopyDone.Invoke(this, new CopyDoneEventArgs(ex));
+                }
             }
-            if (!aborted)
-            {
-                MessageBox.Show("Copy finished", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+        }
 
-
-            try
+        void workerThread_ProcessResult(object sender, ProcessResultArgs e)
+        {
+            if (CopyProgress != null)
             {
-                if (_deleteRows) this.PostCopySql();
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message, "Post SQL Error");
-                return;
+                CopyProgress.Invoke(this, new CopyProgressEventArgs(e.TableName, e.Exception));
             }
         }
 
