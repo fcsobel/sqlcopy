@@ -152,6 +152,13 @@ namespace Test.SqlCopy
                         {
                             copy.BulkCopyTimeout = _timeout;
                             copy.BatchSize = _batchSize;
+
+                            // explicitly map column names
+                            foreach (string column in columns)
+                            {
+                                copy.ColumnMappings.Add(column, column);
+                            }
+
                             // setup notification
                             copy.NotifyAfter = 1000;        
                             copy.DestinationTableName = table;
