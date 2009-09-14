@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A028C3DF-0DA2-4160-8FF5-CD83325518B5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -58,6 +58,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Oracle.DataAccess, Version=2.111.6.20, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -67,6 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CopyData.cs" />
+    <Compile Include="Data\OracleData.cs" />
+    <Compile Include="Data\SqlData.cs" />
+    <Compile Include="Objects\CopyObject.cs" />
     <Compile Include="SqlCopyForm.cs">
       <SubType>Form</SubType>
     </Compile>
