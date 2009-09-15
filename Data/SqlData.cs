@@ -3,86 +3,95 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using Test.SqlCopy.Objects;
+
 
 namespace Test.SqlCopy.Data
 {
-    public class SqlData
+    public class SqlData : IDbData 
     {
-        public IDataReader SelectTable(string db, string table)
+        public CopyObject settings { get; set; }
+
+        public SqlData(CopyObject settings)
         {
-            SqlConnection source = new SqlConnection(db);
-
-            string sql = string.Format("select * from {0}", table);
-
-            SqlCommand command = new SqlCommand(sql, source);
-
-            source.Open();
-            IDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
-
-            return dr;
+            this.settings = settings;
         }
 
-        public void DeleteTable(string db, string table)
+        public SqlBulkCopyOptions Options
         {
-            using (SqlConnection destination = new SqlConnection(db))
+            get
             {
-                string sql = string.Format("delete from {0};", table);
+                SqlBulkCopyOptions option = SqlBulkCopyOptions.Default;
+                if (settings.KeepIdentity) option = option | SqlBulkCopyOptions.KeepIdentity;
+                if (settings.KeepNulls) option = option | SqlBulkCopyOptions.KeepNulls;
+                if (settings.CheckConstraints) option = option | SqlBulkCopyOptions.CheckConstraints;
+                if (settings.FireTriggers) { option = option | SqlBulkCopyOptions.FireTriggers; }
+                if (settings.TableLock) { option = option | SqlBulkCopyOptions.TableLock; }
+                return option;
+            }
+        }
 
-                SqlCommand command = new SqlCommand(sql, destination);
+        public IDataReader List()
+        {
+            return this.ExecuteReader(this.settings.Source, this.settings.ListSql);
+        }
 
-                destination.Open();
-                command.ExecuteNonQuery();
+        public IDataReader Select(string table)
+        {
+            return this.ExecuteReader(this.settings.Source, string.Format(settings.SelectSql, table));
+        }
+
+        public void Delete(string table)
+        {
+            this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table));
+        }
+
+        public void PreCopy()
+        {
+            this.ExecuteNonQuery(this.settings.Destination, Properties.Settings.Default.PreCopySql);
+        }
+
+
+        public void PostCopy()
+        {
+            this.ExecuteNonQuery(this.settings.Destination, Properties.Settings.Default.PostCopySql);
+        }
+
+
+        public void Copy(string table)
+        {
+            if (settings.DeleteRows) this.Delete(table);
+
+            using (IDataReader dr = this.Select(table))
+            {
+                using (SqlBulkCopy copy = new SqlBulkCopy(settings.Destination, this.Options))
+                {
+                    copy.BulkCopyTimeout = settings.BulkCopyTimeout;
+                    copy.BatchSize = settings.BatchSize;
+                    copy.DestinationTableName = settings.DestinationTableName;
+                    copy.WriteToServer(dr);
+                }
             }
         }
 
 
-        public IDataReader GetTables(string db)
-        {
-            string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
-
-            SqlConnection source = new SqlConnection(db);
-            SqlCommand command = new SqlCommand(sql, source);
-            source.Open();
-            IDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
-
-            return dr;
+        public IDataReader ExecuteReader(string db, string sql)
+        {            
+            SqlConnection connection = new SqlConnection(db);
+            SqlCommand command = new SqlCommand(sql, connection);
+            connection.Open();
+            return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
 
-        //Disable Constraints for all tables
-        //exec sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"
-        //exec sp_msforeachtable "ALTER TABLE ? DISABLE TRIGGER all"
-        public void PreCopySql(string db)
+        public int ExecuteNonQuery(string db, string sql)
         {
-            using (SqlConnection destination = new SqlConnection(db))
+            using (SqlConnection connection = new SqlConnection(db))
             {
-                //string sql = "exec sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? DISABLE TRIGGER all'; ";
-                string sql = Properties.Settings.Default.PreCopySql;
-
-                SqlCommand command = new SqlCommand(sql, destination);
-
-                destination.Open();
-                command.ExecuteNonQuery();
+                SqlCommand command = new SqlCommand(sql, connection);
+                connection.Open();
+                return command.ExecuteNonQuery();
             }
         }
-
-        //Turn constraints and triggers back on
-        //exec sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? CHECK CONSTRAINT all"
-        //exec sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? ENABLE TRIGGER all"
-        public void PostCopySql(string db)
-        {
-            using (SqlConnection destination = new SqlConnection(db))
-            {
-                //string sql = "exec sp_msforeachtable 'ALTER TABLE ? CHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? ENABLE TRIGGER all'; ";
-                string sql = Properties.Settings.Default.PostCopySql;
-
-                SqlCommand command = new SqlCommand(sql, destination);
-
-                destination.Open();
-                command.ExecuteNonQuery();
-            }
-        }
-
-
     }
 }

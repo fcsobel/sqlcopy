@@ -67,7 +67,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\CopyManager.cs" />
     <Compile Include="CopyData.cs" />
+    <Compile Include="Data\IDbData.cs" />
+    <Compile Include="Data\IOracleData.cs" />
+    <Compile Include="Data\ISqlData.cs" />
     <Compile Include="Data\OracleData.cs" />
     <Compile Include="Data\SqlData.cs" />
     <Compile Include="Objects\CopyObject.cs" />

@@ -7,6 +7,8 @@ namespace Test.SqlCopy.Objects
     [Serializable()]
     public class CopyObject
     {
+        public string Dbms { get; set; }
+
         public string Source { get; set; }
         public string Destination { get; set; }
         public int BatchSize { get; set;}
@@ -29,13 +31,28 @@ namespace Test.SqlCopy.Objects
 
         // Custom
         public bool DeleteRows { get; set; }
+
+        // Sql
+        //Disable Constraints for all tables
+        //exec sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"
+        //exec sp_msforeachtable "ALTER TABLE ? DISABLE TRIGGER all"
+        //string sql = "exec sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? DISABLE TRIGGER all'; ";
         public string PreCopySql { get; set; }
+
+        //Turn constraints and triggers back on
+        //exec sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? CHECK CONSTRAINT all"
+        //exec sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? ENABLE TRIGGER all"
+        //string sql = "exec sp_msforeachtable 'ALTER TABLE ? CHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? ENABLE TRIGGER all'; ";
         public string PostCopySql { get; set; }
 
         //@"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
-        public string GetTableSql { get; set; }
+        public string ListSql { get; set; }
 
         //delete from {0};"
         public string DeleteSql { get; set; }
+
+        //"select * from {0}"
+        public string SelectSql { get; set; }
     }
+
 }

@@ -3,83 +3,89 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using Oracle.DataAccess.Client;
+using Test.SqlCopy.Objects;
+using Test.SqlCopy.Data;
 
-namespace Test.SqlCopy.Data
+namespace Test.SqlCopy
 {
-    public class OracleData
+    public class OracleData : IDbData
     {
-        public IDataReader SelectTable(string db, string table)
+        public CopyObject settings { get; set; }
+
+        public OracleData(CopyObject settings)
         {
-            OracleConnection source = new OracleConnection(db);
-
-            string sql = string.Format("select * from {0}", table);
-
-            OracleCommand command = new OracleCommand(sql, source);
-
-            source.Open();
-            IDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
-
-            return dr;
+            this.settings = settings;
         }
 
-        public void DeleteTable(string db, string table)
+        public OracleBulkCopyOptions Options
         {
-            OracleConnection destination = new OracleConnection(db);
-            string sql = string.Format("delete from {0};", table);
-
-            OracleCommand command = new OracleCommand(sql, destination);
-
-            destination.Open();
-            command.ExecuteNonQuery();
-        }
-
-
-        public IDataReader GetTables(string db)
-        {
-            string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
-
-            OracleConnection source = new OracleConnection(db);
-            OracleCommand command = new OracleCommand(sql, source);
-            source.Open();
-            IDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
-
-            return dr;
-        }
-
-
-        //Disable Constraints for all tables
-        //exec sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"
-        //exec sp_msforeachtable "ALTER TABLE ? DISABLE TRIGGER all"
-        public void PreCopySql(string db)
-        {
-            using (OracleConnection destination = new OracleConnection(db))
+            get
             {
-                //string sql = "exec sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? DISABLE TRIGGER all'; ";
-                string sql = Properties.Settings.Default.PreCopySql;
-
-                OracleCommand command = new OracleCommand(sql, destination);
-
-                destination.Open();
-                command.ExecuteNonQuery();
+                OracleBulkCopyOptions option = OracleBulkCopyOptions.Default;
+                if (settings.UseInternalTransaction) option = option | OracleBulkCopyOptions.UseInternalTransaction;
+                return option;
             }
         }
 
-        //Turn constraints and triggers back on
-        //exec sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? CHECK CONSTRAINT all"
-        //exec sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? ENABLE TRIGGER all"
-        public void PostCopySql(string db)
+        public IDataReader List()
         {
-            using (OracleConnection destination = new OracleConnection(db))
+            return this.ExecuteReader(this.settings.Source, this.settings.ListSql);
+        }
+
+        public IDataReader Select(string table)
+        {
+            return this.ExecuteReader(this.settings.Source, string.Format(settings.SelectSql, table));
+        }
+
+        public void Delete(string table)
+        {
+            this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table));
+        }
+
+        public void PreCopy()
+        {
+            this.ExecuteNonQuery(this.settings.Destination, Properties.Settings.Default.PreCopySql);
+        }
+        
+        public void PostCopy()
+        {
+            this.ExecuteNonQuery(this.settings.Destination, Properties.Settings.Default.PostCopySql);
+        }
+
+        public void Copy(string table)
+        {
+            if (settings.DeleteRows) this.Delete(table);
+
+            using (IDataReader dr = this.Select(table))
             {
-                //string sql = "exec sp_msforeachtable 'ALTER TABLE ? CHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? ENABLE TRIGGER all'; ";
-                string sql = Properties.Settings.Default.PostCopySql;
-
-                OracleCommand command = new OracleCommand(sql, destination);
-
-                destination.Open();
-                command.ExecuteNonQuery();
+                using (OracleBulkCopy copy = new OracleBulkCopy(settings.Destination, this.Options))
+                {
+                    copy.BulkCopyTimeout = settings.BulkCopyTimeout;
+                    copy.BatchSize = settings.BatchSize;
+                    copy.DestinationTableName = settings.DestinationTableName;
+                    copy.WriteToServer(dr);
+                }
             }
         }
 
+
+        public IDataReader ExecuteReader(string db, string sql)
+        {
+            OracleConnection connection = new OracleConnection(db);
+            OracleCommand command = new OracleCommand(sql, connection);
+            connection.Open();
+            return command.ExecuteReader(CommandBehavior.CloseConnection);
+        }
+
+
+        public int ExecuteNonQuery(string db, string sql)
+        {
+            using (OracleConnection connection = new OracleConnection(db))
+            {
+                OracleCommand command = new OracleCommand(sql, connection);
+                connection.Open();
+                return command.ExecuteNonQuery();
+            }
+        }
     }
 }
