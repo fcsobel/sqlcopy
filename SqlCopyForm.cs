@@ -13,11 +13,15 @@ namespace Test.SqlCopy
 {
     public partial class SqlCopyForm : Form
     {
+        public List<CopyObject> list { get; set; }
+        public CopyObject CurrentObj { get; set; }
+
         public CopyObject Settings
         {
             get
             {
-                CopyObject obj = new CopyObject();
+                CopyObject obj = this.CurrentObj;
+                obj.Dbms = this.comboBox1.SelectedItem as string;
                 obj.BatchSize = this.BatchSize;
                 obj.BulkCopyTimeout = this.BulkCopyTimeout;
                 obj.CheckConstraints = this.cbxCheckConstraints.Checked;
@@ -41,6 +45,8 @@ namespace Test.SqlCopy
             }
             set
             {
+                this.CurrentObj = value;
+                this.comboBox1.SelectedItem = value.Dbms;
                 this.txtBatchSize.Text = value.BatchSize.ToString();
                 this.txtTimeout.Text = value.BulkCopyTimeout.ToString();
                 this.cbxCheckConstraints.Checked = value.CheckConstraints;
@@ -95,7 +101,7 @@ namespace Test.SqlCopy
             {
                 Properties.Settings.Default.sourcelist = new System.Collections.Specialized.StringCollection();
             }
-            this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
+            //this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
 
             if (Properties.Settings.Default.destinationlist == null)
             {
@@ -105,12 +111,40 @@ namespace Test.SqlCopy
 
             //this.cboSource.Text = Properties.Settings.Default.source;
             //this.cboDestination.Text = Properties.Settings.Default.destination;
-            
+
+            this.list = SerializationHelper.Deserialize<List<CopyObject>>("list.xml");
+
+            if (this.list == null)
+            {
+                this.list = new List<CopyObject>();
+            }
+
+            if (this.list.Count > 0)
+            {
+                this.Settings = list[0];
+                //this.CurrentObj = list[0];
+            }
+            else
+            {
+                this.Settings = new CopyObject();
+                this.list.Add(this.Settings);
+            }
+            ////this.list = new List<CopyObject>();
+            //this.CurrentObj = new CopyObject();
+            //this.CurrentObj.Source = "test";
+            //this.list.Add(CurrentObj);
+
+            this.cboSource.DisplayMember = "Source";
+            this.cboSource.DataSource = this.list;            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             //TODO:  Save Object to disk
+            this.CurrentObj = this.Settings;
+
+            SerializationHelper.Serialize<List<CopyObject>>(this.list, "list.xml");
+
 
             //Properties.Settings.Default.destination = this.cboDestination.Text;
             //Properties.Settings.Default.Timeout = this.BulkCopyTimeout;
