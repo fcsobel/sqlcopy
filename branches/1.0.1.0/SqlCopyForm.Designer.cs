@@ -277,11 +277,13 @@ namespace Test.SqlCopy
             this.cboSource.AllowDrop = true;
             this.cboSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboSource.DisplayMember = "Source";
             this.cboSource.FormattingEnabled = true;
             this.cboSource.Location = new System.Drawing.Point(79, 35);
             this.cboSource.Name = "cboSource";
             this.cboSource.Size = new System.Drawing.Size(565, 21);
             this.cboSource.TabIndex = 23;
+            this.cboSource.ValueMember = "Source";
             this.cboSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cboSource_KeyDown);
             // 
             // cboDestination
