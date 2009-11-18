@@ -26,18 +26,18 @@ namespace Test.SqlCopy
                 obj.BulkCopyTimeout = this.BulkCopyTimeout;
                 obj.CheckConstraints = this.cbxCheckConstraints.Checked;
                 obj.DeleteRows = this.cbxDeleteRows.Checked;
-                obj.DeleteSql = "";
+                //obj.DeleteSql = "";
                 obj.Destination = this.Destination;
-                obj.DestinationPartitionName = "";
-                obj.DestinationTableName = "";
+                //obj.DestinationPartitionName = "";
+                //obj.DestinationTableName = "";
                 obj.FireTriggers = this.cbxFireTriggers.Checked;
                 obj.KeepIdentity = this.cbxKeepIdentity.Checked;
                 obj.KeepNulls = this.cbxKeepNulls.Checked;
-                obj.ListSql = "";
+                //obj.ListSql = "";
                 obj.NotifyAfter = 0;
-                obj.PostCopySql = "";
-                obj.PreCopySql = "";
-                obj.SelectSql = "";
+                //obj.PostCopySql = "";
+                //obj.PreCopySql = "";
+                //obj.SelectSql = "";
                 obj.Source = this.Source;
                 obj.TableLock = cbxTableLock.Checked;
                 obj.UseInternalTransaction = false;
@@ -236,7 +236,11 @@ namespace Test.SqlCopy
         // Background Version
         public void CopyTables(object sender, DoWorkEventArgs e) 
         {
-            CopyManager manager = new CopyManager(this.Settings, new SqlData(Settings));
+            //CopyManager manager = new CopyManager(this.Settings, new SqlData(Settings));
+
+            CopyManager manager = new CopyManager(this.Settings, new SqlData(this.Settings));
+
+            
 
             BackgroundWorker worker = (BackgroundWorker)sender;
 
@@ -290,7 +294,7 @@ namespace Test.SqlCopy
 
         public void GetTables()
         {
-            CopyManager manager = new CopyManager(this.Settings, new SqlData(Settings));
+            CopyManager manager = new CopyManager(this.Settings, new SqlData(this.Settings));
 
             this.dataGridView1.Rows.Clear();
 
@@ -324,6 +328,7 @@ namespace Test.SqlCopy
             try
             {
                 this.GetTables();
+
                 Properties.Settings.Default.source = this.cboSource.Text;
 
                 if (!Properties.Settings.Default.sourcelist.Contains(Properties.Settings.Default.source))
