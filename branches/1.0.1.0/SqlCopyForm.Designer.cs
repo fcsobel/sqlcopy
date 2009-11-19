@@ -284,6 +284,7 @@ namespace Test.SqlCopy
             this.cboSource.Size = new System.Drawing.Size(565, 21);
             this.cboSource.TabIndex = 23;
             this.cboSource.ValueMember = "Source";
+            this.cboSource.SelectedIndexChanged += new System.EventHandler(this.cboSource_SelectedIndexChanged);
             this.cboSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cboSource_KeyDown);
             // 
             // cboDestination
@@ -377,6 +378,7 @@ namespace Test.SqlCopy
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(147, 21);
             this.comboBox1.TabIndex = 31;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // SqlCopyForm
             // 

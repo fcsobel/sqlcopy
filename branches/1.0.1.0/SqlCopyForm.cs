@@ -292,7 +292,7 @@ namespace Test.SqlCopy
         }
 
 
-        public void GetTables()
+        public void GetSqlTables()
         {
             CopyManager manager = new CopyManager(this.Settings, new SqlData(this.Settings));
 
@@ -322,12 +322,53 @@ namespace Test.SqlCopy
             //}
         }
 
+        public void GetOracleTables()
+        {
+            CopyManager manager = new CopyManager(this.Settings, new OracleData(this.Settings));
+
+            this.dataGridView1.Rows.Clear();
+
+            using (IDataReader dr = manager.List())
+            {
+                while (dr.Read())
+                {
+                    this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+                }
+            }
+
+            //string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
+
+            //using (SqlConnection source = new SqlConnection(this.Source))
+            //{
+            //    SqlCommand command = new SqlCommand(sql, source);
+            //    source.Open();
+            //    IDataReader dr = command.ExecuteReader();
+
+            //    while (dr.Read())
+            //    {
+            //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+            //    }
+            //    dr.Close();
+            //}
+        }
+
+
 
         private void bttnRefresh_Click(object sender, EventArgs e)
         {
             try
             {
-                this.GetTables();
+                switch (this.Settings.Dbms)
+                {
+                    case "Oracle":
+                        this.GetOracleTables();
+                        break;
+                    default:
+                        this.GetSqlTables();
+                        break;
+                }
+                               
+                
 
                 Properties.Settings.Default.source = this.cboSource.Text;
 
@@ -460,6 +501,16 @@ namespace Test.SqlCopy
         {
             SqlEditForm form = new SqlEditForm();
             form.ShowDialog(this);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+          //  this.CurrentObj = this.list[this.cboSource.SelectedIndex];
+        }
+
+        private void cboSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.CurrentObj = this.list[this.cboSource.SelectedIndex];
         }
     }
 }
