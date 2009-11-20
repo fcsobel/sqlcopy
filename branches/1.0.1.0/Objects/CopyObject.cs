@@ -15,7 +15,7 @@ namespace Test.SqlCopy.Objects
         public int BulkCopyOptions { get; set; }
         public int BulkCopyTimeout { get; set; }
         public int NotifyAfter { get; set; }
-        public string DestinationTableName { get; set; }
+        //public string DestinationTableName { get; set; }
         public bool Default { get; set; }
         public bool UseInternalTransaction { get; set; }  
 

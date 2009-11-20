@@ -44,17 +44,25 @@ namespace Test.SqlCopy
 
         public void PreCopy()
         {
-            this.ExecuteNonQuery(this.settings.Destination, Properties.Settings.Default.PreCopySql);
+            if (!String.IsNullOrEmpty(this.settings.PreCopySql))
+            {
+                this.ExecuteNonQuery(this.settings.Destination, this.settings.PreCopySql);
+            }
         }
         
         public void PostCopy()
         {
-            this.ExecuteNonQuery(this.settings.Destination, Properties.Settings.Default.PostCopySql);
+            if (!String.IsNullOrEmpty(this.settings.PostCopySql))
+            {
+                this.ExecuteNonQuery(this.settings.Destination, this.settings.PostCopySql);
+            }
         }
 
         public void Copy(string table)
         {
+            // Delete data
             if (settings.DeleteRows) this.Delete(table);
+
 
             using (IDataReader dr = this.Select(table))
             {
@@ -62,7 +70,7 @@ namespace Test.SqlCopy
                 {
                     copy.BulkCopyTimeout = settings.BulkCopyTimeout;
                     copy.BatchSize = settings.BatchSize;
-                    copy.DestinationTableName = settings.DestinationTableName;
+                    copy.DestinationTableName = table;
                     copy.WriteToServer(dr);
                 }
             }
