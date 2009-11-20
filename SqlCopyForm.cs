@@ -140,33 +140,34 @@ namespace Test.SqlCopy
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //TODO:  Save Object to disk
+            
             this.CurrentObj = this.Settings;
 
+            // Save Objects to disk
             SerializationHelper.Serialize<List<CopyObject>>(this.list, "list.xml");
 
 
-            //Properties.Settings.Default.destination = this.cboDestination.Text;
-            //Properties.Settings.Default.Timeout = this.BulkCopyTimeout;
-            //Properties.Settings.Default.BatchSize = this.BatchSize;
-            //Properties.Settings.Default.CheckConstraints = this.cbxCheckConstraints.Checked;
-            //Properties.Settings.Default.FireTriggers  = this.cbxFireTriggers.Checked;
-            //Properties.Settings.Default.KeepIdentity = this.cbxKeepIdentity.Checked;
-            //Properties.Settings.Default.KeepNulls = this.cbxKeepNulls.Checked ;
-            //Properties.Settings.Default.TableLock = this.cbxTableLock.Checked ;
-            //Properties.Settings.Default.DeleteRows = this.cbxDeleteRows.Checked;
+            ////Properties.Settings.Default.destination = this.cboDestination.Text;
+            ////Properties.Settings.Default.Timeout = this.BulkCopyTimeout;
+            ////Properties.Settings.Default.BatchSize = this.BatchSize;
+            ////Properties.Settings.Default.CheckConstraints = this.cbxCheckConstraints.Checked;
+            ////Properties.Settings.Default.FireTriggers  = this.cbxFireTriggers.Checked;
+            ////Properties.Settings.Default.KeepIdentity = this.cbxKeepIdentity.Checked;
+            ////Properties.Settings.Default.KeepNulls = this.cbxKeepNulls.Checked ;
+            ////Properties.Settings.Default.TableLock = this.cbxTableLock.Checked ;
+            ////Properties.Settings.Default.DeleteRows = this.cbxDeleteRows.Checked;
             
-            if (!Properties.Settings.Default.destinationlist.Contains(Properties.Settings.Default.destination))
-            {
-                Properties.Settings.Default.destinationlist.Add(Properties.Settings.Default.destination);
-                //this.cboDestination.Items.Add(Properties.Settings.Default.destination);
-                this.cboDestination.DataSource = null;
-                this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
+            //if (!Properties.Settings.Default.destinationlist.Contains(Properties.Settings.Default.destination))
+            //{
+            //    Properties.Settings.Default.destinationlist.Add(Properties.Settings.Default.destination);
+            //    //this.cboDestination.Items.Add(Properties.Settings.Default.destination);
+            //    this.cboDestination.DataSource = null;
+            //    this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
 
-                this.cboDestination.Text = Properties.Settings.Default.destination;
-            }
+            //    this.cboDestination.Text = Properties.Settings.Default.destination;
+            //}
 
-            Properties.Settings.Default.Save();
+            //Properties.Settings.Default.Save();
 
             this.CopyTablesAsc();
         }
@@ -238,15 +239,26 @@ namespace Test.SqlCopy
         {
             //CopyManager manager = new CopyManager(this.Settings, new SqlData(Settings));
 
-            CopyManager manager = new CopyManager(this.Settings, new SqlData(this.Settings));
+            CopyManager manager = null;
 
-            
+            switch (this.Settings.Dbms)
+            {
+                case "Oracle":
+                    manager = new CopyManager(this.Settings, new OracleData(this.Settings));
+                    break;
+                default:
+                    manager = new CopyManager(this.Settings, new SqlData(this.Settings));
+                    break;
+            }
 
             BackgroundWorker worker = (BackgroundWorker)sender;
 
             try
             {
-                if (this.cbxDeleteRows.Checked) manager.PreCopy();
+                if (this.cbxDeleteRows.Checked)
+                {
+                    manager.PreCopy();
+                }
             }
             catch (Exception er)
             {
@@ -282,7 +294,10 @@ namespace Test.SqlCopy
 
             try
             {
-                if (this.cbxDeleteRows.Checked) manager.PostCopy();
+                if (this.cbxDeleteRows.Checked)
+                {
+                    manager.PostCopy();
+                }
             }
             catch (Exception er)
             {
@@ -510,7 +525,9 @@ namespace Test.SqlCopy
 
         private void cboSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.CurrentObj = this.list[this.cboSource.SelectedIndex];
+            //this.CurrentObj = this.list[this.cboSource.SelectedIndex];
+
+            this.Settings = this.list[this.cboSource.SelectedIndex];
         }
     }
 }
