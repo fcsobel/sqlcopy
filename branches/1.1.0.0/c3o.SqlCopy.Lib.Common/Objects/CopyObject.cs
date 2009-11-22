@@ -16,6 +16,7 @@ namespace c3o.SqlCopy.Objects
     [Serializable()]
     public class CopyObject
     {
+        public bool Selected { get; set; }
         public string Name { get; set; }
         public string Dbms { get; set; }
 

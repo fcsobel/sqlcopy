@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using c3o.SqlCopy.Data;
 
 namespace c3o.SqlCopy.Win.Service
 {
@@ -18,10 +19,17 @@ namespace c3o.SqlCopy.Win.Service
 
         protected override void OnStart(string[] args)
         {
+
         }
 
         protected override void OnStop()
         {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            CopyManager.RunCopyJobs();
         }
     }
 }

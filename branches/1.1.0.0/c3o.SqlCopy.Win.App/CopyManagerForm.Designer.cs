@@ -35,12 +35,13 @@
             this.bttnAdd = new System.Windows.Forms.Button();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.bttnCopy = new System.Windows.Forms.Button();
+            this.bttnDelete = new System.Windows.Forms.Button();
             this.colSelect = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDBMS = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDestination = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bttnCopy = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,7 +56,6 @@
             this.colDBMS,
             this.colSource,
             this.colDestination});
-            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(12, 39);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(733, 395);
@@ -104,11 +104,33 @@
             this.dataGridViewImageColumn2.Name = "dataGridViewImageColumn2";
             this.dataGridViewImageColumn2.ReadOnly = true;
             // 
+            // bttnCopy
+            // 
+            this.bttnCopy.Location = new System.Drawing.Point(12, 443);
+            this.bttnCopy.Name = "bttnCopy";
+            this.bttnCopy.Size = new System.Drawing.Size(75, 23);
+            this.bttnCopy.TabIndex = 4;
+            this.bttnCopy.Text = "Copy";
+            this.bttnCopy.UseVisualStyleBackColor = true;
+            this.bttnCopy.Click += new System.EventHandler(this.bttnCopy_Click);
+            // 
+            // bttnDelete
+            // 
+            this.bttnDelete.Location = new System.Drawing.Point(103, 443);
+            this.bttnDelete.Name = "bttnDelete";
+            this.bttnDelete.Size = new System.Drawing.Size(75, 23);
+            this.bttnDelete.TabIndex = 5;
+            this.bttnDelete.Text = "Delete";
+            this.bttnDelete.UseVisualStyleBackColor = true;
+            this.bttnDelete.Click += new System.EventHandler(this.bttnDelete_Click);
+            // 
             // colSelect
             // 
             this.colSelect.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colSelect.DataPropertyName = "Selected";
             this.colSelect.Frozen = true;
             this.colSelect.HeaderText = "";
+            this.colSelect.IndeterminateValue = "True";
             this.colSelect.Name = "colSelect";
             // 
             // colName
@@ -141,21 +163,12 @@
             this.colDestination.Name = "colDestination";
             this.colDestination.ReadOnly = true;
             // 
-            // bttnCopy
-            // 
-            this.bttnCopy.Location = new System.Drawing.Point(12, 443);
-            this.bttnCopy.Name = "bttnCopy";
-            this.bttnCopy.Size = new System.Drawing.Size(75, 23);
-            this.bttnCopy.TabIndex = 4;
-            this.bttnCopy.Text = "Copy";
-            this.bttnCopy.UseVisualStyleBackColor = true;
-            this.bttnCopy.Click += new System.EventHandler(this.bttnCopy_Click);
-            // 
             // CopyManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 476);
+            this.Controls.Add(this.bttnDelete);
             this.Controls.Add(this.bttnCopy);
             this.Controls.Add(this.bttnAdd);
             this.Controls.Add(this.label1);
@@ -179,11 +192,12 @@
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn2;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button bttnCopy;
+        private System.Windows.Forms.Button bttnDelete;
         private System.Windows.Forms.DataGridViewCheckBoxColumn colSelect;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDBMS;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDestination;
-        private System.Windows.Forms.Button bttnCopy;
     }
 }

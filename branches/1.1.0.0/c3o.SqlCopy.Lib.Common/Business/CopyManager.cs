@@ -29,6 +29,28 @@ namespace c3o.SqlCopy.Data
             //this.Db = db;
         }
 
+
+        public static void RunCopyJobs()
+        {
+            // Get jobs
+            List<CopyObject> list = SerializationHelper.Deserialize<List<CopyObject>>(@"config\list.xml");
+
+            foreach (CopyObject obj in list)
+            {
+                if (obj.Selected)
+                {
+                    CopyManager manager = new CopyManager(obj);
+
+                    // Run copy job
+                    manager.Copy();
+
+                    // Save Results
+                    SerializationHelper.Serialize<List<CopyObject>>(list, @"config\list.xml");
+
+                }
+            }
+        }
+
         public void Copy()
         {
             try

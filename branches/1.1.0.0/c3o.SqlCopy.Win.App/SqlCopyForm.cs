@@ -122,7 +122,7 @@ namespace c3o.SqlCopy
         public void SaveList()
         {
             // Save Objects to disk
-            SerializationHelper.Serialize<List<CopyObject>>(this.list, "list.xml");
+            SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
 
         }
 
@@ -157,7 +157,7 @@ namespace c3o.SqlCopy
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Save Objects to disk
-            SerializationHelper.Serialize<List<CopyObject>>(this.list, "list.xml");
+            SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
         }
 
         public void ShowProgress(object sender, ProgressChangedEventArgs e)
@@ -373,6 +373,7 @@ namespace c3o.SqlCopy
 
         private void SqlCopyForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            this.CurrentObj = this.Settings;
             this.SaveList();
         }
 
