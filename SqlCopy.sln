@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlCopy", "SqlCopy.csproj", "{A028C3DF-0DA2-4160-8FF5-CD83325518B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Win.App", "c3o.SqlCopy.Win.App\c3o.SqlCopy.Win.App.csproj", "{A028C3DF-0DA2-4160-8FF5-CD83325518B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Win.Service", "c3o.SqlCopy.Win.Service\c3o.SqlCopy.Win.Service.csproj", "{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Lib.Common", "c3o.SqlCopy.Lib.Common\c3o.SqlCopy.Lib.Common.csproj", "{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -17,6 +21,14 @@ Global
 		{A028C3DF-0DA2-4160-8FF5-CD83325518B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A028C3DF-0DA2-4160-8FF5-CD83325518B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A028C3DF-0DA2-4160-8FF5-CD83325518B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
