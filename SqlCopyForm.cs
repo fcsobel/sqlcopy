@@ -14,13 +14,35 @@ namespace Test.SqlCopy
     public partial class SqlCopyForm : Form
     {
         public List<CopyObject> list { get; set; }
-        public CopyObject CurrentObj { get; set; }
+        private CopyObject CurrentObj { get; set; }
+
+        private List<TableObject> Tables 
+        {
+            get
+            {
+                List<TableObject> list = new List<TableObject>();
+                foreach (DataGridViewRow row in this.dataGridView1.Rows)
+                {
+                    TableObject obj = (TableObject) row.DataBoundItem;
+                    obj.Selected = (bool)row.Cells[0].Value;
+                    list.Add(obj);
+                }
+                return list;
+            }
+            set
+            {
+                this.dataGridView1.AutoGenerateColumns = false;
+                this.dataGridView1.DataSource = value;
+            }
+        }
+
 
         public CopyObject Settings
         {
             get
             {
                 CopyObject obj = this.CurrentObj;
+                obj.Name = this.txtName.Text;
                 obj.Dbms = this.comboBox1.SelectedItem as string;
                 obj.BatchSize = this.BatchSize;
                 obj.BulkCopyTimeout = this.BulkCopyTimeout;
@@ -41,11 +63,13 @@ namespace Test.SqlCopy
                 obj.Source = this.Source;
                 obj.TableLock = cbxTableLock.Checked;
                 obj.UseInternalTransaction = false;
+                obj.Tables = this.Tables;   
                 return obj;
             }
             set
             {
                 this.CurrentObj = value;
+                this.txtName.Text = value.Name;
                 this.comboBox1.SelectedItem = value.Dbms;
                 this.txtBatchSize.Text = value.BatchSize.ToString();
                 this.txtTimeout.Text = value.BulkCopyTimeout.ToString();
@@ -56,156 +80,73 @@ namespace Test.SqlCopy
                 this.cbxTableLock.Checked = value.TableLock;
                 this.cbxDeleteRows.Checked = value.DeleteRows;
                 this.btnSql.Enabled = Properties.Settings.Default.DeleteRows;
-                this.cboSource.Text = value.Source;                
-                this.cboDestination.Text = value.Destination;
+                this.txtSource.Text = value.Source;
+                this.txtDestination.Text = value.Destination;
+                this.Tables = value.Tables;
+
             }
         }
-        
-        public string Source { get { return this.cboSource.Text; } }
-        public string Destination { get { return this.cboDestination.Text; } }
+
+        public string Source { get { return this.txtSource.Text; } }
+        public string Destination { get { return this.txtDestination.Text; } }
         public int BulkCopyTimeout { get { return int.Parse(this.txtTimeout.Text); } }
         public int BatchSize { get { return int.Parse(this.txtBatchSize.Text); } }
-
-        //private SqlBulkCopyOptions Options
-        //{
-        //    get
-        //    {
-        //        SqlBulkCopyOptions option = SqlBulkCopyOptions.Default;
-        //        if (cbxKeepIdentity.Checked)  option = option | SqlBulkCopyOptions.KeepIdentity;
-        //        if (cbxKeepNulls.Checked)    option = option | SqlBulkCopyOptions.KeepNulls;
-        //        if (cbxCheckConstraints.Checked) option = option | SqlBulkCopyOptions.CheckConstraints;
-        //        if (cbxFireTriggers.Checked) { option = option | SqlBulkCopyOptions.FireTriggers; }
-        //        if (cbxTableLock.Checked) { option = option | SqlBulkCopyOptions.TableLock; }
-        //        return option;
-        //    }
-        //}
-
 
         public SqlCopyForm()
         {
             InitializeComponent();
+        }
 
-            ////this.txtSource.Text = Properties.Settings.Default.source;
-            //this.cboDestination.Text = Properties.Settings.Default.destination;
-            //this.txtBatchSize.Text = Properties.Settings.Default.BatchSize.ToString();
-            //this.txtTimeout.Text = Properties.Settings.Default.Timeout.ToString();
-            //this.cbxCheckConstraints.Checked = Properties.Settings.Default.CheckConstraints;
-            //this.cbxFireTriggers.Checked = Properties.Settings.Default.FireTriggers;
-            //this.cbxKeepIdentity.Checked = Properties.Settings.Default.KeepIdentity;
-            //this.cbxKeepNulls.Checked = Properties.Settings.Default.KeepNulls;
-            //this.cbxTableLock.Checked = Properties.Settings.Default.TableLock;
-            //this.cbxDeleteRows.Checked = Properties.Settings.Default.DeleteRows;
-            //this.btnSql.Enabled = Properties.Settings.Default.DeleteRows;
-            
-            if (Properties.Settings.Default.sourcelist == null)
+
+        private void bttnRefresh_Click(object sender, EventArgs e)
+        {
+            CopyObject copy = this.Settings;
+
+            try
             {
-                Properties.Settings.Default.sourcelist = new System.Collections.Specialized.StringCollection();
-            }
-            //this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
+                CopyManager manager = null;
 
-            if (Properties.Settings.Default.destinationlist == null)
+                switch (this.Settings.Dbms)
+                {
+                    case "Oracle":
+                        manager = new CopyManager(copy, new OracleData(copy));
+                        break;
+                    default:
+                        manager = new CopyManager(copy, new SqlData(copy));
+                        break;
+                }
+
+                copy.Tables = manager.List();
+
+                this.Settings = copy;
+
+                // Save Objects to disk
+                this.SaveList();                
+            }
+            catch (Exception ex)
             {
-                Properties.Settings.Default.destinationlist = new System.Collections.Specialized.StringCollection();
+                MessageBox.Show(ex.Message, "Error Connecting to Source");
             }
-            this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
+        }
 
-            //this.cboSource.Text = Properties.Settings.Default.source;
-            //this.cboDestination.Text = Properties.Settings.Default.destination;
+        public void SaveList()
+        {
+            // Save Objects to disk
+            SerializationHelper.Serialize<List<CopyObject>>(this.list, "list.xml");
 
-            this.list = SerializationHelper.Deserialize<List<CopyObject>>("list.xml");
-
-            if (this.list == null)
-            {
-                this.list = new List<CopyObject>();
-            }
-
-            if (this.list.Count > 0)
-            {
-                this.Settings = list[0];
-                //this.CurrentObj = list[0];
-            }
-            else
-            {
-                this.Settings = new CopyObject();
-                this.list.Add(this.Settings);
-            }
-            ////this.list = new List<CopyObject>();
-            //this.CurrentObj = new CopyObject();
-            //this.CurrentObj.Source = "test";
-            //this.list.Add(CurrentObj);
-
-            this.cboSource.DisplayMember = "Source";
-            this.cboSource.DataSource = this.list;            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
             this.CurrentObj = this.Settings;
 
             // Save Objects to disk
             SerializationHelper.Serialize<List<CopyObject>>(this.list, "list.xml");
 
-
-            ////Properties.Settings.Default.destination = this.cboDestination.Text;
-            ////Properties.Settings.Default.Timeout = this.BulkCopyTimeout;
-            ////Properties.Settings.Default.BatchSize = this.BatchSize;
-            ////Properties.Settings.Default.CheckConstraints = this.cbxCheckConstraints.Checked;
-            ////Properties.Settings.Default.FireTriggers  = this.cbxFireTriggers.Checked;
-            ////Properties.Settings.Default.KeepIdentity = this.cbxKeepIdentity.Checked;
-            ////Properties.Settings.Default.KeepNulls = this.cbxKeepNulls.Checked ;
-            ////Properties.Settings.Default.TableLock = this.cbxTableLock.Checked ;
-            ////Properties.Settings.Default.DeleteRows = this.cbxDeleteRows.Checked;
-            
-            //if (!Properties.Settings.Default.destinationlist.Contains(Properties.Settings.Default.destination))
-            //{
-            //    Properties.Settings.Default.destinationlist.Add(Properties.Settings.Default.destination);
-            //    //this.cboDestination.Items.Add(Properties.Settings.Default.destination);
-            //    this.cboDestination.DataSource = null;
-            //    this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
-
-            //    this.cboDestination.Text = Properties.Settings.Default.destination;
-            //}
-
-            //Properties.Settings.Default.Save();
-
             this.CopyTablesAsc();
         }
 
-        ////Disable Constraints for all tables
-        ////exec sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"
-        ////exec sp_msforeachtable "ALTER TABLE ? DISABLE TRIGGER all"
-        //public void PreCopySql()
-        //{
-        //    using (SqlConnection destination = new SqlConnection(this.Destination))
-        //    {
-        //        //string sql = "exec sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? DISABLE TRIGGER all'; ";
-        //        string sql = Properties.Settings.Default.PreCopySql;
-
-        //        SqlCommand command = new SqlCommand(sql, destination);
-
-        //        destination.Open();
-        //        command.ExecuteNonQuery();
-        //    }
-        //}
-
-        ////Turn constraints and triggers back on
-        ////exec sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? CHECK CONSTRAINT all"
-        ////exec sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? ENABLE TRIGGER all"
-        //public void PostCopySql()
-        //{
-        //    using (SqlConnection destination = new SqlConnection(this.Destination))
-        //    {
-        //        //string sql = "exec sp_msforeachtable 'ALTER TABLE ? CHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? ENABLE TRIGGER all'; ";
-        //        string sql = Properties.Settings.Default.PostCopySql;
-                
-        //        SqlCommand command = new SqlCommand(sql, destination);
-
-        //        destination.Open();
-        //        command.ExecuteNonQuery();
-        //    }
-        //}
-
+ 
         public void CopyTablesAsc()
 		{
             this.backgroundWorker1.RunWorkerAsync();
@@ -220,34 +161,37 @@ namespace Test.SqlCopy
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
 
-            this.dataGridView1.FirstDisplayedScrollingRowIndex = e.ProgressPercentage;
+            //this.dataGridView1.FirstDisplayedScrollingRowIndex = e.ProgressPercentage;
 
-            if (e.UserState == null)
-            {
-                this.dataGridView1.Rows[e.ProgressPercentage].Cells[2].Value = "Success";
-            }
-            else
-            {
-                Exception er = (Exception) e.UserState;
+            //if (e.UserState == null)
+            //{
+            //    this.dataGridView1.Rows[e.ProgressPercentage].Cells[2].Value = "Success";
+            //}
+            //else
+            //{
+            //    Exception er = (Exception) e.UserState;
 
-                this.dataGridView1.Rows[e.ProgressPercentage].Cells[2].Value = er.Message;
-            }
+            //    this.dataGridView1.Rows[e.ProgressPercentage].Cells[2].Value = er.Message;
+            //}
+
+            //this.dataGridView1.Show();
+            this.dataGridView1.Refresh();
         }
 
         // Background Version
         public void CopyTables(object sender, DoWorkEventArgs e) 
         {
-            //CopyManager manager = new CopyManager(this.Settings, new SqlData(Settings));
+            CopyObject settings = this.Settings;
 
             CopyManager manager = null;
 
             switch (this.Settings.Dbms)
             {
                 case "Oracle":
-                    manager = new CopyManager(this.Settings, new OracleData(this.Settings));
+                    manager = new CopyManager(settings, new OracleData(settings));
                     break;
                 default:
-                    manager = new CopyManager(this.Settings, new SqlData(this.Settings));
+                    manager = new CopyManager(this.Settings, new SqlData(settings));
                     break;
             }
 
@@ -265,10 +209,8 @@ namespace Test.SqlCopy
                 MessageBox.Show(er.Message, "Pre SQL Error");
                 return;
             }
-            
-            //CopyData copy = new CopyData(this.Source, this.Destination, this.Options, this.BulkCopyTimeout, this.BatchSize, this.cbxDeleteRows.Checked);
 
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            foreach (TableObject obj in settings.Tables)
             {
                 if (worker.CancellationPending)
                 {
@@ -276,20 +218,20 @@ namespace Test.SqlCopy
                 }
                 try
                 {
-                    bool status = (bool) row.Cells[0].Value;
-                    if (status)
+                    if (obj.Selected)
                     {
-                        manager.Copy((string)row.Cells[1].Value);
-                        worker.ReportProgress(row.Index);
-                    }                    
+                        manager.Copy(obj.Name);
+                        worker.ReportProgress(0);
+                    }
                 }
                 catch (Exception er)
                 {
-                    worker.ReportProgress(row.Index, er);
+                    obj.Status = er.Message;
+                    worker.ReportProgress(0, er);
                 }
                 finally
                 {
-                }                
+                }
             }
 
             try
@@ -307,104 +249,74 @@ namespace Test.SqlCopy
         }
 
 
-        public void GetSqlTables()
-        {
-            CopyManager manager = new CopyManager(this.Settings, new SqlData(this.Settings));
+        //public void GetSqlTables()
+        //{
+        //    CopyManager manager = new CopyManager(this.Settings, new SqlData(this.Settings));
 
-            this.dataGridView1.Rows.Clear();
+        //    //this.dataGridView1.Rows.Clear();
+        //    this.dataGridView1.AutoGenerateColumns = false;
+        //    this.dataGridView1.DataSource = manager.List();
 
-            using (IDataReader dr = manager.List())
-            {
-                while (dr.Read())
-                {
-                    this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
-                }
-            }
+        //    //using (IDataReader dr = manager.List())
+        //    //{
+        //    //    while (dr.Read())
+        //    //    {
+        //    //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+        //    //    }
+        //    //}
 
-            //string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
+        //    //string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
 
-            //using (SqlConnection source = new SqlConnection(this.Source))
-            //{
-            //    SqlCommand command = new SqlCommand(sql, source);
-            //    source.Open();
-            //    IDataReader dr = command.ExecuteReader();
+        //    //using (SqlConnection source = new SqlConnection(this.Source))
+        //    //{
+        //    //    SqlCommand command = new SqlCommand(sql, source);
+        //    //    source.Open();
+        //    //    IDataReader dr = command.ExecuteReader();
 
-            //    while (dr.Read())
-            //    {
-            //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
-            //    }
-            //    dr.Close();
-            //}
-        }
+        //    //    while (dr.Read())
+        //    //    {
+        //    //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+        //    //    }
+        //    //    dr.Close();
+        //    //}
+        //}
 
-        public void GetOracleTables()
-        {
-            CopyManager manager = new CopyManager(this.Settings, new OracleData(this.Settings));
+        //public void GetOracleTables()
+        //{
+        //    CopyManager manager = new CopyManager(this.Settings, new OracleData(this.Settings));
 
-            this.dataGridView1.Rows.Clear();
+        //    //this.dataGridView1.Rows.Clear();
 
-            using (IDataReader dr = manager.List())
-            {
-                while (dr.Read())
-                {
-                    this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
-                }
-            }
+        //    this.dataGridView1.AutoGenerateColumns = false;
+        //    this.Settings.Tables = manager.List();
+        //    this.dataGridView1.DataSource = manager.List();
+            
 
-            //string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
+        //    //using (IDataReader dr = manager.List())
+        //    //{
+        //    //    while (dr.Read())
+        //    //    {
+        //    //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+        //    //    }
+        //    //}
 
-            //using (SqlConnection source = new SqlConnection(this.Source))
-            //{
-            //    SqlCommand command = new SqlCommand(sql, source);
-            //    source.Open();
-            //    IDataReader dr = command.ExecuteReader();
+        //    //string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
 
-            //    while (dr.Read())
-            //    {
-            //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
-            //    }
-            //    dr.Close();
-            //}
-        }
+        //    //using (SqlConnection source = new SqlConnection(this.Source))
+        //    //{
+        //    //    SqlCommand command = new SqlCommand(sql, source);
+        //    //    source.Open();
+        //    //    IDataReader dr = command.ExecuteReader();
 
+        //    //    while (dr.Read())
+        //    //    {
+        //    //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+        //    //    }
+        //    //    dr.Close();
+        //    //}
+        //}
 
-
-        private void bttnRefresh_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                switch (this.Settings.Dbms)
-                {
-                    case "Oracle":
-                        this.GetOracleTables();
-                        break;
-                    default:
-                        this.GetSqlTables();
-                        break;
-                }
-                               
-                
-
-                Properties.Settings.Default.source = this.cboSource.Text;
-
-                if (!Properties.Settings.Default.sourcelist.Contains(Properties.Settings.Default.source))
-                {
-                    this.cboSource.DataSource = null;
-                    Properties.Settings.Default.sourcelist.Add(Properties.Settings.Default.source);
-                    this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
-
-                    this.cboSource.Text = Properties.Settings.Default.source;
-                    //this.cboSource.Items.Add(Properties.Settings.Default.source);
-                }
-
-                Properties.Settings.Default.Save();
-            }
-            catch ( Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error Connecting to Source");
-            }
-        }
-
+        
         private void bttnSelectAll_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow row in this.dataGridView1.Rows)
@@ -436,49 +348,49 @@ namespace Test.SqlCopy
 
         }
 
-        private void cboSource_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Delete)
-            {
-                if (Properties.Settings.Default.sourcelist.Contains(this.cboSource.Text))
-                {
-                    if (MessageBox.Show(this.cboSource.Text, "Remove this entry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        // Remove the item
-                        Properties.Settings.Default.sourcelist.Remove(this.cboSource.Text);
+        //private void cboSource_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode == Keys.Delete)
+        //    {
+        //        if (Properties.Settings.Default.sourcelist.Contains(this.cboSource.Text))
+        //        {
+        //            if (MessageBox.Show(this.cboSource.Text, "Remove this entry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        //            {
+        //                // Remove the item
+        //                Properties.Settings.Default.sourcelist.Remove(this.cboSource.Text);
 
-                        // Reload the drop down
-                        this.cboSource.DataSource = null;
-                        this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
-                    }
+        //                // Reload the drop down
+        //                this.cboSource.DataSource = null;
+        //                this.cboSource.DataSource = Properties.Settings.Default.sourcelist;
+        //            }
 
-                    // Save users settings
-                    Properties.Settings.Default.Save();
-                }
-            }
-        }
+        //            // Save users settings
+        //            Properties.Settings.Default.Save();
+        //        }
+        //    }
+        //}
 
-        private void cboDestination_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Delete)
-            {
-                if (Properties.Settings.Default.destinationlist.Contains(this.cboDestination.Text))
-                {
-                    if (MessageBox.Show(this.cboDestination.Text, "Remove this entry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        // Remove the item
-                        Properties.Settings.Default.destinationlist.Remove(this.cboDestination.Text);
+        //private void cboDestination_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode == Keys.Delete)
+        //    {
+        //        if (Properties.Settings.Default.destinationlist.Contains(this.cboDestination.Text))
+        //        {
+        //            if (MessageBox.Show(this.cboDestination.Text, "Remove this entry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        //            {
+        //                // Remove the item
+        //                Properties.Settings.Default.destinationlist.Remove(this.cboDestination.Text);
 
-                        // Reload the drop down
-                        this.cboDestination.DataSource = null;
-                        this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
-                    }
+        //                // Reload the drop down
+        //                this.cboDestination.DataSource = null;
+        //                this.cboDestination.DataSource = Properties.Settings.Default.destinationlist;
+        //            }
 
-                    // Save users settings
-                    Properties.Settings.Default.Save();
-                }
-            }
-        }
+        //            // Save users settings
+        //            Properties.Settings.Default.Save();
+        //        }
+        //    }
+        //}
 
 
         private void cbxDeleteRows_Click(object sender, EventArgs e)
@@ -523,11 +435,27 @@ namespace Test.SqlCopy
           //  this.CurrentObj = this.list[this.cboSource.SelectedIndex];
         }
 
-        private void cboSource_SelectedIndexChanged(object sender, EventArgs e)
+        private void button1_Click_1(object sender, EventArgs e)
         {
-            //this.CurrentObj = this.list[this.cboSource.SelectedIndex];
-
-            this.Settings = this.list[this.cboSource.SelectedIndex];
+            this.Close();
         }
+
+        private void bttnSave_Click(object sender, EventArgs e)
+        {
+            this.SaveList();
+            this.Close();
+        }
+
+        private void SqlCopyForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.SaveList();
+        }
+
+        //private void cboSource_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    //this.CurrentObj = this.list[this.cboSource.SelectedIndex];
+
+        //    this.Settings = this.list[this.cboSource.SelectedIndex];
+        //}
     }
 }

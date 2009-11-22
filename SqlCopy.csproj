@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\CopyManager.cs" />
+    <Compile Include="Common\ObjectCopier.cs" />
     <Compile Include="Common\SerializationHelper.cs" />
     <Compile Include="SqlCopyFormOld.cs">
       <SubType>Form</SubType>

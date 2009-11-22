@@ -311,15 +311,17 @@ namespace Test.SqlCopy
         {
             CopyManager manager = new CopyManager(this.Settings, new SqlData(this.Settings));
 
-            this.dataGridView1.Rows.Clear();
+            //this.dataGridView1.Rows.Clear();
 
-            using (IDataReader dr = manager.List())
-            {
-                while (dr.Read())
-                {
-                    this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
-                }
-            }
+            this.dataGridView1.DataSource = manager.List();
+
+            //using (IDataReader dr = manager.List())
+            //{
+            //    while (dr.Read())
+            //    {
+            //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+            //    }
+            //}
 
             //string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
 
@@ -341,15 +343,17 @@ namespace Test.SqlCopy
         {
             CopyManager manager = new CopyManager(this.Settings, new OracleData(this.Settings));
 
-            this.dataGridView1.Rows.Clear();
+           // this.dataGridView1.Rows.Clear();
 
-            using (IDataReader dr = manager.List())
-            {
-                while (dr.Read())
-                {
-                    this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
-                }
-            }
+            this.dataGridView1.DataSource = manager.List();
+
+            //using (IDataReader dr = manager.List())
+            //{
+            //    while (dr.Read())
+            //    {
+            //        this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+            //    }
+            //}
 
             //string sql = @"SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables";
 
