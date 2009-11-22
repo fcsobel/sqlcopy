@@ -69,7 +69,19 @@
   <ItemGroup>
     <Compile Include="Business\CopyManager.cs" />
     <Compile Include="Common\SerializationHelper.cs" />
+    <Compile Include="SqlCopyFormOld.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlCopyFormOld.Designer.cs">
+      <DependentUpon>SqlCopyFormOld.cs</DependentUpon>
+    </Compile>
     <Compile Include="CopyData.cs" />
+    <Compile Include="CopyManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CopyManagerForm.Designer.cs">
+      <DependentUpon>CopyManagerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\IDbData.cs" />
     <Compile Include="Data\IOracleData.cs" />
     <Compile Include="Data\ISqlData.cs" />
@@ -84,6 +96,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="SqlCopyFormOld.resx">
+      <DependentUpon>SqlCopyFormOld.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CopyManagerForm.resx">
+      <DependentUpon>CopyManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SqlCopyForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SqlCopyForm.cs</DependentUpon>
@@ -123,6 +142,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="exec.ico" />
+    <None Include="Resources\control_play_blue.png" />
+    <None Include="Resources\pencil.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Data.Access.Components.2.8">

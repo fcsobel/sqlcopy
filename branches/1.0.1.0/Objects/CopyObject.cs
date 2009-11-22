@@ -7,6 +7,7 @@ namespace Test.SqlCopy.Objects
     [Serializable()]
     public class CopyObject
     {
+        public string Name { get; set; }
         public string Dbms { get; set; }
 
         public string Source { get; set; }
