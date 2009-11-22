@@ -24,7 +24,7 @@ namespace Test.SqlCopy
         {
             this.list = SerializationHelper.Deserialize<List<CopyObject>>("list.xml");
             this.dataGridView1.AutoGenerateColumns = false;
-            this.dataGridView1.DataSource = list;
+            this.dataGridView1.DataSource = this.list;
 
             this.template = SerializationHelper.Deserialize<List<CopyObject>>("template.xml");
             this.comboBox1.DisplayMember = "Name";
@@ -37,12 +37,37 @@ namespace Test.SqlCopy
         {
             SqlCopyForm form = new SqlCopyForm();
 
-            form.ShowDialog(this);
+            //form.Settings = this.list[this.dataGridView1.CurrentRow.Index];
+            form.Settings = (CopyObject) this.dataGridView1.CurrentRow.DataBoundItem;
+            form.list = this.list;
+            form.Show();
+            //form.ShowDialog(this);
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
+
+        private void bttnAdd_Click(object sender, EventArgs e)
+        {
+            CopyObject obj = ObjectCopier.Clone<CopyObject>(this.template[this.comboBox1.SelectedIndex]);
+
+            this.list.Add(obj);
+
+            this.dataGridView1.DataSource = list;
+            this.dataGridView1.Refresh();
+            //this.dataGridView1.AutoGenerateColumns = false;
+            //this.dataGridView1.DataSource = list;
+
+
+            this.Save();
+        }
+
+        public void Save()
+        {
+            SerializationHelper.Serialize<List<CopyObject>>(this.list, "list.xml");
+        }
+
     }
 }

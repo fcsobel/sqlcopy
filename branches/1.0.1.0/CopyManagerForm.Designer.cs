@@ -106,12 +106,13 @@
             // 
             // bttnAdd
             // 
-            this.bttnAdd.Location = new System.Drawing.Point(231, 10);
+            this.bttnAdd.Location = new System.Drawing.Point(231, 9);
             this.bttnAdd.Name = "bttnAdd";
             this.bttnAdd.Size = new System.Drawing.Size(75, 23);
             this.bttnAdd.TabIndex = 3;
             this.bttnAdd.Text = "Add";
             this.bttnAdd.UseVisualStyleBackColor = true;
+            this.bttnAdd.Click += new System.EventHandler(this.bttnAdd_Click);
             // 
             // dataGridViewImageColumn1
             // 

@@ -5,6 +5,15 @@ using System.Text;
 namespace Test.SqlCopy.Objects
 {
     [Serializable()]
+    public class TableObject
+    {
+        public string Name { get; set; }
+        public bool Selected { get; set; }
+        public string Status { get; set; }
+    }
+
+
+    [Serializable()]
     public class CopyObject
     {
         public string Name { get; set; }
@@ -54,6 +63,8 @@ namespace Test.SqlCopy.Objects
 
         //"select * from {0}"
         public string SelectSql { get; set; }
+
+        public List<TableObject> Tables { get; set; }
     }
 
 }

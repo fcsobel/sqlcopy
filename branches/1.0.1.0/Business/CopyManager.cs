@@ -28,9 +28,29 @@ namespace Test.SqlCopy.Data
             this.Db.Delete(table);
         }
 
-        public IDataReader List()
+        public List<TableObject> List()
         {
-            return this.Db.List();
+            //return this.Db.List();
+
+            List<TableObject> list = new List<TableObject>();
+
+            using (IDataReader dr = this.Db.List())
+            {
+                while (dr.Read())
+                {
+                    TableObject obj = new TableObject();
+
+                    obj.Name = dr["table_name"] as string;
+                    obj.Selected = false;
+                    obj.Status = "";
+
+                    list.Add(obj);
+                    //this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");
+                }
+            }
+
+            return list;
+
         }
 
         public void PostCopy()
