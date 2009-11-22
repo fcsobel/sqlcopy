@@ -22,11 +22,11 @@ namespace c3o.SqlCopy
 
         private void CopyManagerForm_Load(object sender, EventArgs e)
         {
-            this.list = SerializationHelper.Deserialize<List<CopyObject>>("list.xml");
+            this.list = SerializationHelper.Deserialize<List<CopyObject>>(@"config\list.xml");
             this.dataGridView1.AutoGenerateColumns = false;
             this.dataGridView1.DataSource = this.list;
 
-            this.template = SerializationHelper.Deserialize<List<CopyObject>>("template.xml");
+            this.template = SerializationHelper.Deserialize<List<CopyObject>>(@"config\template.xml");
             this.comboBox1.DisplayMember = "Name";
             this.comboBox1.DataSource = this.template;
 
@@ -55,8 +55,15 @@ namespace c3o.SqlCopy
 
             this.list.Add(obj);
 
+            //this.dataGridView1.Rows.Clear();
+            this.dataGridView1.DataSource = null;
             this.dataGridView1.DataSource = list;
-            this.dataGridView1.Refresh();
+
+            //this.dataGridView1.Refresh();
+
+            
+
+            //this.dataGridView1.Rows.Add(obj);
             //this.dataGridView1.AutoGenerateColumns = false;
             //this.dataGridView1.DataSource = list;
 
@@ -66,7 +73,7 @@ namespace c3o.SqlCopy
 
         public void Save()
         {
-            SerializationHelper.Serialize<List<CopyObject>>(this.list, "list.xml");
+            SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
         }
 
         private void bttnCopy_Click(object sender, EventArgs e)
@@ -79,15 +86,33 @@ namespace c3o.SqlCopy
                 if (selected)
                 {
                     CopyManager manager = new CopyManager(obj);
-
                     manager.Copy();
-
-                    //manager.
                 }
 
                 this.Save();
             }
         }
 
+        private void bttnDelete_Click(object sender, EventArgs e)
+        {
+            //this.dataGridView1.DataSource = null;
+
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                bool? selected = row.Cells[0].Value as bool?;
+                CopyObject obj = (CopyObject)row.DataBoundItem;
+                obj.Selected = selected.HasValue && selected.Value;
+
+            }
+
+            this.dataGridView1.DataSource = null;
+            
+            this.list.RemoveAll(item => item.Selected == true);            
+
+            this.dataGridView1.DataSource = list;
+
+            this.Save();
+
+        }
     }
 }

@@ -129,6 +129,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="exec.ico" />
+    <Content Include="config\list.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="config\template.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\control_play_blue.png" />
     <None Include="Resources\pencil.png" />
   </ItemGroup>
