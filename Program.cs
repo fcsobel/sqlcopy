@@ -14,7 +14,9 @@ namespace Test.SqlCopy
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new   SqlCopyForm());
+            //Application.Run(new   SqlCopyForm());
+
+            Application.Run(new CopyManagerForm());
         }
     }
 }
