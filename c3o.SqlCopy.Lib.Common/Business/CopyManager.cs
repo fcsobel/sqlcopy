@@ -38,21 +38,26 @@ namespace c3o.SqlCopy.Data
             // Get jobs
             List<CopyObject> list = SerializationHelper.Deserialize<List<CopyObject>>(path + @"\config\list.xml");
 
+            
+
+
             foreach (CopyObject obj in list)
             {
                 if (obj.Selected)
                 {
+                    // Clear status
+                    foreach (TableObject table in obj.Tables)
+                    {
+                        table.Status = "";
+                    }
+
                     CopyManager manager = new CopyManager(obj);
 
                     // Run copy job
                     manager.Copy();
 
                     // Save Results
-             
-
-
                     SerializationHelper.Serialize<List<CopyObject>>(list, path + @"\config\list.xml");
-
                 }
             }
         }
