@@ -22,6 +22,12 @@
         "Entry"
         {
         "MsmKey" = "8:_1894585774BCF1675032F22E883565F7"
+        "OwnerKey" = "8:_D0A0051D7CC745D3AA1B4862EF207140"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1894585774BCF1675032F22E883565F7"
         "OwnerKey" = "8:_4185360F766A490F81F7C8203DA7E84C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -39,8 +45,26 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_546D525E1BFAE1612D8E36C27DFD0C3F"
+        "OwnerKey" = "8:_D0A0051D7CC745D3AA1B4862EF207140"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D0A0051D7CC745D3AA1B4862EF207140"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_1894585774BCF1675032F22E883565F7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D0A0051D7CC745D3AA1B4862EF207140"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -109,6 +133,20 @@
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_32AF455F2E514D19B5B3B945415F814B"
+            {
+            "Name" = "8:Primary output from c3o.SqlCopy.Win.App (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_D0A0051D7CC745D3AA1B4862EF207140"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_19B7D246_34E5_42D8_9BED_F439621D7FED"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_3574DF1A9DFD4EE98341532A5B576C2A"
             {
             "Name" = "8:Primary output from c3o.SqlCopy.Win.Service (Active)"
@@ -120,6 +158,48 @@
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
             "Identifier" = "8:_C960F3A7_5C7B_4CF9_A84F_5BCB0BD0139A"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_44ADDFCD7A7A41EBA849A773683FA8EA"
+            {
+            "Name" = "8:Primary output from c3o.SqlCopy.Win.App (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_D0A0051D7CC745D3AA1B4862EF207140"
+            "FileType" = "3:2"
+            "InstallAction" = "3:3"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_50629F8C_4005_4049_83D0_AB99A546DC86"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_692D2A92D969494C9031E35AE11B493D"
+            {
+            "Name" = "8:Primary output from c3o.SqlCopy.Win.App (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_D0A0051D7CC745D3AA1B4862EF207140"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_D6368BC4_1080_4E8E_976C_911537599615"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_9025B76C902D427B9E7B462DDF62D441"
+            {
+            "Name" = "8:Primary output from c3o.SqlCopy.Win.App (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_D0A0051D7CC745D3AA1B4862EF207140"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_E5210418_DCCB_4D55_AFE8_F6365B082918"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -293,7 +373,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:c3o.SqlCopy.Setup"
         "ProductCode" = "8:{FA4948CC-27BC-4F6C-98CD-A5158E976FB7}"
-        "PackageCode" = "8:{6A1F2392-7600-46E7-98F5-68DED0FC488E}"
+        "PackageCode" = "8:{7579515F-85DA-4E47-AAAB-6533382AC5FF}"
         "UpgradeCode" = "8:{2CD9524B-D364-408F-BC4B-D4B556B0A8B5}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -834,6 +914,62 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D0A0051D7CC745D3AA1B4862EF207140"
+            {
+            "SourcePath" = "8:..\\c3o.SqlCopy.Win.App\\obj\\Debug\\SimpleSqlCopy.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C48BB927283745389186B58B77D7ABF5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{A028C3DF-0DA2-4160-8FF5-CD83325518B5}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FE7BED938C7C426D943EA8ECAEC977B2"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C48BB927283745389186B58B77D7ABF5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{A028C3DF-0DA2-4160-8FF5-CD83325518B5}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
