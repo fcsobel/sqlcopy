@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
 using c3o.SqlCopy.Objects;
+using System.IO;
 
 namespace c3o.SqlCopy.Data
 {
@@ -32,8 +33,10 @@ namespace c3o.SqlCopy.Data
 
         public static void RunCopyJobs()
         {
+            string path = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName;
+
             // Get jobs
-            List<CopyObject> list = SerializationHelper.Deserialize<List<CopyObject>>(@"config\list.xml");
+            List<CopyObject> list = SerializationHelper.Deserialize<List<CopyObject>>(path + @"\config\list.xml");
 
             foreach (CopyObject obj in list)
             {
@@ -45,7 +48,10 @@ namespace c3o.SqlCopy.Data
                     manager.Copy();
 
                     // Save Results
-                    SerializationHelper.Serialize<List<CopyObject>>(list, @"config\list.xml");
+             
+
+
+                    SerializationHelper.Serialize<List<CopyObject>>(list, path + @"\config\list.xml");
 
                 }
             }
