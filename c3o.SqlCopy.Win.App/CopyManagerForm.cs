@@ -87,6 +87,7 @@ namespace c3o.SqlCopy
                 {
                     CopyManager manager = new CopyManager(obj);
                     manager.Copy();
+                    manager.Log();
                 }
 
                 this.Save();

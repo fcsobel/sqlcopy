@@ -145,7 +145,7 @@
             // 
             // colDBMS
             // 
-            this.colDBMS.DataPropertyName = "dbms";
+            this.colDBMS.DataPropertyName = "SourceType";
             this.colDBMS.HeaderText = "DBMS";
             this.colDBMS.Name = "colDBMS";
             // 
