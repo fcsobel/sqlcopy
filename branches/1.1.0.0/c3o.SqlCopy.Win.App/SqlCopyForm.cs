@@ -43,7 +43,7 @@ namespace c3o.SqlCopy
             {
                 CopyObject obj = this.CurrentObj;
                 obj.Name = this.txtName.Text;
-                obj.Dbms = this.comboBox1.SelectedItem as string;
+                obj.SourceType = (DBMS) this.comboBox1.SelectedItem;
                 obj.BatchSize = this.BatchSize;
                 obj.BulkCopyTimeout = this.BulkCopyTimeout;
                 obj.CheckConstraints = this.cbxCheckConstraints.Checked;
@@ -70,7 +70,7 @@ namespace c3o.SqlCopy
             {
                 this.CurrentObj = value;
                 this.txtName.Text = value.Name;
-                this.comboBox1.SelectedItem = value.Dbms;
+                this.comboBox1.SelectedItem = value.SourceType;
                 this.txtBatchSize.Text = value.BatchSize.ToString();
                 this.txtTimeout.Text = value.BulkCopyTimeout.ToString();
                 this.cbxCheckConstraints.Checked = value.CheckConstraints;
@@ -95,6 +95,8 @@ namespace c3o.SqlCopy
         public SqlCopyForm()
         {
             InitializeComponent();
+
+            this.comboBox1.DataSource = System.Enum.GetValues(typeof(DBMS));
         }
 
 

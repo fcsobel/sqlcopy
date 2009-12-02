@@ -18,14 +18,19 @@ namespace c3o.SqlCopy.Objects
     {
         public bool Selected { get; set; }
         public string Name { get; set; }
-        public string Dbms { get; set; }
 
+        public DBMS SourceType { get; set; }
         public string Source { get; set; }
+
+        public DBMS DestinationType { get; set; }
         public string Destination { get; set; }
+
         public int BatchSize { get; set;}
         public int BulkCopyOptions { get; set; }
         public int BulkCopyTimeout { get; set; }
         public int NotifyAfter { get; set; }
+        public int LogLimit { get; set; }
+
         //public string DestinationTableName { get; set; }
         public bool Default { get; set; }
         public bool UseInternalTransaction { get; set; }  
@@ -68,6 +73,12 @@ namespace c3o.SqlCopy.Objects
         public string SelectSql { get; set; }
 
         public List<TableObject> Tables { get; set; }
+    }
+
+    public enum DBMS
+    {
+        Oracle,
+        SqlServer
     }
 
 }

@@ -27,7 +27,7 @@ namespace c3o.SqlCopy.Data
                 if (settings.CheckConstraints) option = option | SqlBulkCopyOptions.CheckConstraints;
                 if (settings.FireTriggers) { option = option | SqlBulkCopyOptions.FireTriggers; }
                 if (settings.TableLock) { option = option | SqlBulkCopyOptions.TableLock; }
-                return option;
+                return option;                
             }
         }
 

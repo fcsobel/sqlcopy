@@ -17,9 +17,9 @@ namespace c3o.SqlCopy.Data
         {
             this.Settings = settings;
 
-            switch (settings.Dbms)
+            switch (settings.SourceType)
             {
-                case "Oracle":
+                case DBMS.Oracle:
                     this.Db = new OracleData(settings);
                     break;
                 default:
@@ -38,9 +38,6 @@ namespace c3o.SqlCopy.Data
             // Get jobs
             List<CopyObject> list = SerializationHelper.Deserialize<List<CopyObject>>(path + @"\config\list.xml");
 
-            
-
-
             foreach (CopyObject obj in list)
             {
                 if (obj.Selected)
@@ -56,11 +53,43 @@ namespace c3o.SqlCopy.Data
                     // Run copy job
                     manager.Copy();
 
+                    // Log the copy
+                    manager.Log();
+
                     // Save Results
                     SerializationHelper.Serialize<List<CopyObject>>(list, path + @"\config\list.xml");
                 }
             }
         }
+
+
+        public void Log()
+        {
+            string file = String.Format(@"{0}\log\{1}.xml", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName, this.Settings.Name);
+
+            List<CopyObject> list = null;
+
+            // Get log
+            if (File.Exists(file))
+            {
+                list = SerializationHelper.Deserialize<List<CopyObject>>(file);
+            }
+            else
+            {
+                list = new List<CopyObject>();
+            }
+
+            list.Insert(0, this.Settings);
+
+            if (this.Settings.LogLimit > 0 && list.Count > this.Settings.LogLimit)
+            {
+                list.RemoveRange(this.Settings.LogLimit, list.Count - this.Settings.LogLimit);
+            }
+
+            // Save Results
+            SerializationHelper.Serialize<List<CopyObject>>(list, file);
+        }
+
 
         public void Copy()
         {
