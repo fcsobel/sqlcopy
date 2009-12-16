@@ -2,12 +2,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A028C3DF-0DA2-4160-8FF5-CD83325518B5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test.SqlCopy</RootNamespace>
+    <RootNamespace>c3o.SqlCopy</RootNamespace>
     <AssemblyName>SimpleSqlCopy</AssemblyName>
     <ApplicationIcon>exec.ico</ApplicationIcon>
     <TargetZone>LocalIntranet</TargetZone>
@@ -39,6 +39,7 @@
     <ApplicationRevision>23</ApplicationRevision>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,7 +59,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86" />
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -66,7 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CopyData.cs" />
+    <Compile Include="CopyManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CopyManagerForm.Designer.cs">
+      <DependentUpon>CopyManagerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SqlCopyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +85,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CopyManagerForm.resx">
+      <DependentUpon>CopyManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SqlCopyForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SqlCopyForm.cs</DependentUpon>
@@ -114,6 +127,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="exec.ico" />
+    <Content Include="config\list.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="config\template.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Jobs\Copy of Sql Server Sample 1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Jobs\Sql Server Sample 1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Log\Copy of Sql Server Sample 1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\control_play_blue.png" />
+    <None Include="Resources\pencil.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Data.Access.Components.2.8">
@@ -126,6 +156,12 @@
       <ProductName>.NET Framework 2.0</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\c3o.SqlCopy.Lib.Common\c3o.SqlCopy.Lib.Common.csproj">
+      <Project>{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}</Project>
+      <Name>c3o.SqlCopy.Lib.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

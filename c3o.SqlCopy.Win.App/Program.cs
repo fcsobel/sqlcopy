@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Test.SqlCopy
+namespace c3o.SqlCopy
 {
     static class Program
     {
@@ -14,7 +14,9 @@ namespace Test.SqlCopy
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new   SqlCopyForm());
+            //Application.Run(new   SqlCopyForm());
+
+            Application.Run(new CopyManagerForm());
         }
     }
 }

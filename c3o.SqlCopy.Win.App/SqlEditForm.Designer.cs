@@ -1,4 +1,4 @@
-namespace Test.SqlCopy
+namespace c3o.SqlCopy
 {
     partial class SqlEditForm
     {
