@@ -8,6 +8,7 @@ namespace c3o.SqlCopy.Data
     public interface IDbData
     {
         void Copy(string table);
+        void Copy(string table, IDbData source);
         void Delete(string table);
         int ExecuteNonQuery(string db, string sql);
         System.Data.IDataReader ExecuteReader(string db, string sql);

@@ -10,25 +10,32 @@ namespace c3o.SqlCopy.Data
 {
     public class CopyManager
     {
-        private IDbData Db;
+        private IDbData Source;
+        private IDbData Destination;
         private CopyObject Settings {get; set;}
 
         public CopyManager(CopyObject settings)
         {
             this.Settings = settings;
+            this.Source = GetDb(settings, settings.SourceType);
+            this.Destination = GetDb(settings, settings.DestinationType);
 
-            switch (settings.SourceType)
+            //this.Db = db;
+        }
+
+        public static IDbData GetDb(CopyObject obj, DBMS dmbs)
+        {
+            switch (dmbs)
             {
                 case DBMS.Oracle:
-                    this.Db = new OracleData(settings);
-                    break;
+                    return new OracleData(obj);
                 default:
-                    this.Db = new SqlData(settings);
-                    break;
+                    return new SqlData(obj);
             }
 
             //this.Db = db;
         }
+
 
 
         public static void RunCopyJobs()
@@ -129,15 +136,27 @@ namespace c3o.SqlCopy.Data
             }
         }
 
-        public void Copy(string table)
+
+        public static void Copy(CopyObject settings, string table)
         {
-            this.Db.Copy(table);
+            IDbData source = GetDb(settings, settings.SourceType);
+            IDbData dest = GetDb(settings, settings.DestinationType);
+
+            dest.Copy(table, source);
         }
 
-        public void Delete(string table)
+        public void Copy(string table)
         {
-            this.Db.Delete(table);
+            //this.Db.Copy(table);
+            this.Destination.Copy(table, this.Source);
+
+            //dest.Copy(table, source);
         }
+
+        //public void Delete(string table)
+        //{
+        //    this.Destination.Delete(table);
+        //}
 
         public List<TableObject> List()
         {
@@ -145,7 +164,7 @@ namespace c3o.SqlCopy.Data
 
             List<TableObject> list = new List<TableObject>();
 
-            using (IDataReader dr = this.Db.List())
+            using (IDataReader dr = this.Source.List())
             {
                 while (dr.Read())
                 {
@@ -166,12 +185,12 @@ namespace c3o.SqlCopy.Data
 
         public void PostCopy()
         {
-            this.Db.PostCopy();
+            this.Destination.PostCopy();
         }
 
         public void PreCopy()
         {
-            this.Db.PreCopy();
+            this.Destination.PreCopy();
         }
     }
 }

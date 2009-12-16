@@ -13,7 +13,7 @@ namespace c3o.SqlCopy
 {
     public partial class SqlCopyForm : Form
     {
-        public List<CopyObject> list { get; set; }
+        //public List<CopyObject> list { get; set; }
         private CopyObject CurrentObj { get; set; }
 
         private List<TableObject> Tables 
@@ -41,29 +41,63 @@ namespace c3o.SqlCopy
         {
             get
             {
+                DBMS dbms = (DBMS)this.comboBox1.SelectedItem;
+
+                if (this.CurrentObj == null)
+                {
+                    List<CopyObject> templates = SerializationHelper.Deserialize<List<CopyObject>>(@"config\template.xml");
+                    if (templates != null && templates.Count > 0)
+                    {
+                        this.CurrentObj = templates.Find(hit => hit.SourceType == dbms);
+                        
+                        //CopyObject temmp = templates.Find(hit => hit.SourceType == obj.SourceType);
+
+                        //if (temmp != null)
+                        //{
+                        //    if (string.IsNullOrEmpty(obj.DeleteSql)) obj.DeleteSql = temmp.DeleteSql;
+                        //    if (string.IsNullOrEmpty(obj.ListSql)) obj.ListSql = temmp.ListSql;
+                        //    if (string.IsNullOrEmpty(obj.PostCopySql)) obj.PostCopySql = temmp.PostCopySql;
+                        //    if (string.IsNullOrEmpty(obj.PreCopySql)) obj.PreCopySql = temmp.PreCopySql;
+                        //    if (string.IsNullOrEmpty(obj.SelectSql)) obj.SelectSql = temmp.SelectSql;
+                        //}
+                    }
+                }
+
                 CopyObject obj = this.CurrentObj;
-                obj.Name = this.txtName.Text;
-                obj.SourceType = (DBMS) this.comboBox1.SelectedItem;
-                obj.BatchSize = this.BatchSize;
-                obj.BulkCopyTimeout = this.BulkCopyTimeout;
-                obj.CheckConstraints = this.cbxCheckConstraints.Checked;
-                obj.DeleteRows = this.cbxDeleteRows.Checked;
-                //obj.DeleteSql = "";
-                obj.Destination = this.Destination;
-                //obj.DestinationPartitionName = "";
-                //obj.DestinationTableName = "";
-                obj.FireTriggers = this.cbxFireTriggers.Checked;
-                obj.KeepIdentity = this.cbxKeepIdentity.Checked;
-                obj.KeepNulls = this.cbxKeepNulls.Checked;
-                //obj.ListSql = "";
-                obj.NotifyAfter = 0;
-                //obj.PostCopySql = "";
-                //obj.PreCopySql = "";
-                //obj.SelectSql = "";
-                obj.Source = this.Source;
-                obj.TableLock = cbxTableLock.Checked;
-                obj.UseInternalTransaction = false;
-                obj.Tables = this.Tables;   
+
+                if (obj != null)
+                {
+
+                    obj.Name = this.txtName.Text;
+                    obj.SourceType = (DBMS)this.comboBox1.SelectedItem;
+                    obj.DestinationType = (DBMS)this.cboDestintaion.SelectedItem;
+                    obj.BatchSize = this.BatchSize;
+                    obj.BulkCopyTimeout = this.BulkCopyTimeout;
+                    obj.CheckConstraints = this.cbxCheckConstraints.Checked;
+                    obj.DeleteRows = this.cbxDeleteRows.Checked;
+
+                    obj.Destination = this.Destination;
+                    //obj.DestinationPartitionName = "";
+                    //obj.DestinationTableName = "";
+
+                    obj.FireTriggers = this.cbxFireTriggers.Checked;
+                    obj.KeepIdentity = this.cbxKeepIdentity.Checked;
+                    obj.KeepNulls = this.cbxKeepNulls.Checked;
+                    obj.NotifyAfter = 0;
+
+                    //obj.ListSql = "";
+                    //obj.PostCopySql = "";
+                    //obj.PreCopySql = "";
+                    //obj.SelectSql = "";
+                    //obj.DeleteSql = "";
+
+                    obj.Source = this.Source;
+                    obj.TableLock = cbxTableLock.Checked;
+                    obj.UseInternalTransaction = false;
+                    obj.Tables = this.Tables;
+                }
+
+
                 return obj;
             }
             set
@@ -71,6 +105,7 @@ namespace c3o.SqlCopy
                 this.CurrentObj = value;
                 this.txtName.Text = value.Name;
                 this.comboBox1.SelectedItem = value.SourceType;
+                this.cboDestintaion.SelectedItem = value.DestinationType;
                 this.txtBatchSize.Text = value.BatchSize.ToString();
                 this.txtTimeout.Text = value.BulkCopyTimeout.ToString();
                 this.cbxCheckConstraints.Checked = value.CheckConstraints;
@@ -82,6 +117,11 @@ namespace c3o.SqlCopy
                // this.btnSql.Enabled = Properties.Settings.Default.DeleteRows;
                 this.txtSource.Text = value.Source;
                 this.txtDestination.Text = value.Destination;
+
+                //this.comboBox1.SelectedItem = obj.SourceType = (DBMS)this.comboBox1.SelectedItem;
+
+                //this.comboBox1.DataSource = System.Enum.GetValues(typeof(DBMS));
+
                 this.Tables = value.Tables;
 
             }
@@ -97,6 +137,7 @@ namespace c3o.SqlCopy
             InitializeComponent();
 
             this.comboBox1.DataSource = System.Enum.GetValues(typeof(DBMS));
+            this.cboDestintaion.DataSource = System.Enum.GetValues(typeof(DBMS));
         }
 
 
@@ -113,7 +154,7 @@ namespace c3o.SqlCopy
                 this.Settings = copy;
 
                 // Save Objects to disk
-                this.SaveList();                
+                //this.SaveList();                
             }
             catch (Exception ex)
             {
@@ -121,16 +162,16 @@ namespace c3o.SqlCopy
             }
         }
 
-        public void SaveList()
-        {
-            // Save Objects to disk
-            SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
+        //public void SaveList()
+        //{
+        //    // Save Objects to disk
+        //    SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
 
-        }
+        //}
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.CurrentObj = this.Settings;
+            //this.CurrentObj = this.Settings;
 
             CopyObject settings = this.Settings;
 
@@ -159,7 +200,7 @@ namespace c3o.SqlCopy
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Save Objects to disk
-            SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
+            //SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
         }
 
         public void ShowProgress(object sender, ProgressChangedEventArgs e)
@@ -369,16 +410,39 @@ namespace c3o.SqlCopy
 
         private void bttnSave_Click(object sender, EventArgs e)
         {
-            this.SaveList();
+            //this.SaveList();
             this.Close();
         }
 
         private void SqlCopyForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.CurrentObj = this.Settings;
-            this.SaveList();
+            //this.CurrentObj = this.Settings;
+            //this.SaveList();
         }
 
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            this.openFileDialog1.ShowDialog();
+        }
 
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            this.Settings = SerializationHelper.Deserialize<CopyObject>(this.openFileDialog1.FileName);
+
+            //SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
+
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.saveFileDialog1.ShowDialog();
+            
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);        
+        }
     }
 }

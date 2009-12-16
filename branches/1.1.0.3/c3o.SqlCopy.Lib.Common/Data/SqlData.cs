@@ -82,6 +82,23 @@ namespace c3o.SqlCopy.Data
         }
 
 
+        public void Copy(string table, IDbData source)
+        {
+            if (settings.DeleteRows) this.Delete(table);
+
+            using (IDataReader dr = source.Select(table))
+            {
+                using (SqlBulkCopy copy = new SqlBulkCopy(settings.Destination, this.Options))
+                {
+                    copy.BulkCopyTimeout = settings.BulkCopyTimeout;
+                    copy.BatchSize = settings.BatchSize;
+                    copy.DestinationTableName = table;
+                    copy.WriteToServer(dr);
+                }
+            }
+        }
+
+
         public IDataReader ExecuteReader(string db, string sql)
         {            
             SqlConnection connection = new SqlConnection(db);

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <ArrayOfCopyObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <CopyObject>
-    <Name>Sql Server</Name>
-    <Dbms>Sql Server</Dbms>
+    <Name>SqlServer</Name>
+	  <SourceType>SqlServer</SourceType>
     <Source>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.fnoodle;Integrated Security=True</Source>
     <Destination>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.sqlcopy;Integrated Security=True</Destination>
     <BatchSize>0</BatchSize>
@@ -26,7 +26,7 @@
   </CopyObject>
   <CopyObject>
     <Name>Oracle</Name>
-    <Dbms>Oracle</Dbms>
+	  <SourceType>Oracle</SourceType>
     <Source>Data Source=stldadv1;Persist Security Info=True;User ID=sch_gateway;Password=sch_gateway;</Source>
     <Destination>Data Source=stldadv1;Persist Security Info=True;User ID=sch_pivit_web;Password=sch_pivit_web;</Destination>
     <BatchSize>0</BatchSize>
