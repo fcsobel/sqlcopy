@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <ArrayOfCopyObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Sql Server Sample 1</Name>
-    <Dbms>Sql Server</Dbms>
+    <SourceType>SqlServer</SourceType>
     <Source>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.fnoodle;Integrated Security=True</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.sqlcopy;Integrated Security=True</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
-    <BulkCopyTimeout>30</BulkCopyTimeout> 
+    <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -232,14 +235,17 @@
     </Tables>
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Oracle Sample 1</Name>
-    <Dbms>Oracle</Dbms>
+    <SourceType>Oracle</SourceType>
     <Source>Data Source=stldadv1;Persist Security Info=True;User ID=sch_gateway;Password=sch_gateway;</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=stldadv1;Persist Security Info=True;User ID=sch_pivit_web;Password=sch_pivit_web;</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -538,14 +544,17 @@
     </Tables>
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Sql Server</Name>
-    <Dbms>Sql Server</Dbms>
+    <SourceType>SqlServer</SourceType>
     <Source>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.fnoodle;Integrated Security=True</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.sqlcopy;Integrated Security=True</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -563,14 +572,17 @@
     <Tables />
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Oracle</Name>
-    <Dbms>Oracle</Dbms>
+    <SourceType>Oracle</SourceType>
     <Source>Data Source=stldadv1;Persist Security Info=True;User ID=sch_gateway;Password=sch_gateway;</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=stldadv1;Persist Security Info=True;User ID=sch_pivit_web;Password=sch_pivit_web;</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -588,14 +600,17 @@
     <Tables />
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Sql Server</Name>
-    <Dbms>Sql Server</Dbms>
+    <SourceType>Oracle</SourceType>
     <Source>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.fnoodle;Integrated Security=True</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.sqlcopy;Integrated Security=True</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -613,14 +628,17 @@
     <Tables />
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Oracle</Name>
-    <Dbms>Oracle</Dbms>
+    <SourceType>Oracle</SourceType>
     <Source>Data Source=stldadv1;Persist Security Info=True;User ID=sch_gateway;Password=sch_gateway;</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=stldadv1;Persist Security Info=True;User ID=sch_pivit_web;Password=sch_pivit_web;</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -638,14 +656,17 @@
     <Tables />
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Sql Server</Name>
-    <Dbms>Sql Server</Dbms>
+    <SourceType>Oracle</SourceType>
     <Source>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.fnoodle;Integrated Security=True</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.sqlcopy;Integrated Security=True</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -663,14 +684,17 @@
     <Tables />
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Oracle</Name>
-    <Dbms>Oracle</Dbms>
+    <SourceType>Oracle</SourceType>
     <Source>Data Source=stldadv1;Persist Security Info=True;User ID=sch_gateway;Password=sch_gateway;</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=stldadv1;Persist Security Info=True;User ID=sch_pivit_web;Password=sch_pivit_web;</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -688,14 +712,17 @@
     <Tables />
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Sql Server</Name>
-    <Dbms>Sql Server</Dbms>
+    <SourceType>Oracle</SourceType>
     <Source>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.fnoodle;Integrated Security=True</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.sqlcopy;Integrated Security=True</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
@@ -919,14 +946,17 @@
     </Tables>
   </CopyObject>
   <CopyObject>
+    <Selected>false</Selected>
     <Name>Oracle</Name>
-    <Dbms>Oracle</Dbms>
+    <SourceType>Oracle</SourceType>
     <Source>Data Source=stldadv1;Persist Security Info=True;User ID=sch_gateway;Password=sch_gateway;</Source>
+    <DestinationType>Oracle</DestinationType>
     <Destination>Data Source=stldadv1;Persist Security Info=True;User ID=sch_pivit_web;Password=sch_pivit_web;</Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
     <NotifyAfter>0</NotifyAfter>
+    <LogLimit>0</LogLimit>
     <Default>false</Default>
     <UseInternalTransaction>false</UseInternalTransaction>
     <DestinationPartitionName />
