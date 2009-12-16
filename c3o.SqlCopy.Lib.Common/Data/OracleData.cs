@@ -77,6 +77,24 @@ namespace c3o.SqlCopy
         }
 
 
+        public void Copy(string table, IDbData source)
+        {
+            // Delete data
+            if (settings.DeleteRows) this.Delete(table);
+
+            using (IDataReader dr = source.Select(table))
+            {
+                using (OracleBulkCopy copy = new OracleBulkCopy(settings.Destination, this.Options))
+                {
+                    copy.BulkCopyTimeout = settings.BulkCopyTimeout;
+                    copy.BatchSize = settings.BatchSize;
+                    copy.DestinationTableName = table;
+                    copy.WriteToServer(dr);
+                }
+            }
+        }
+
+
         public IDataReader ExecuteReader(string db, string sql)
         {
             OracleConnection connection = new OracleConnection(db);

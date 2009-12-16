@@ -126,6 +126,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config\sql server.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="config\oracle.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="exec.ico" />
     <Content Include="config\list.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -136,9 +142,11 @@
     <Content Include="Jobs\Copy of Sql Server Sample 1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Jobs\NewJob1.xml" />
     <Content Include="Jobs\Sql Server Sample 1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Jobs\TestJob1.xml" />
     <Content Include="Log\Copy of Sql Server Sample 1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

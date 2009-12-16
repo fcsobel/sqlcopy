@@ -77,8 +77,8 @@ namespace c3o.SqlCopy.Objects
 
     public enum DBMS
     {
-        Oracle,
-        SqlServer
+        SqlServer,
+        Oracle
     }
 
 }

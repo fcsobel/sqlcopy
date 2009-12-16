@@ -39,7 +39,7 @@ namespace c3o.SqlCopy
 
             //form.Settings = this.list[this.dataGridView1.CurrentRow.Index];
             form.Settings = (CopyObject) this.dataGridView1.CurrentRow.DataBoundItem;
-            form.list = this.list;
+            //form.list = this.list;
             //form.Show();
             form.ShowDialog(this);
         }
