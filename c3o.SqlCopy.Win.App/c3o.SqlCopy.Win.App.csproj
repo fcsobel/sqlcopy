@@ -12,34 +12,37 @@
     <ApplicationIcon>exec.ico</ApplicationIcon>
     <TargetZone>LocalIntranet</TargetZone>
     <GenerateManifests>true</GenerateManifests>
-    <ManifestCertificateThumbprint>D23ACC8C24AC780E852BB4B23C063167C45DA7E1</ManifestCertificateThumbprint>
-    <ManifestKeyFile>Test.SqlCopy_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>97D40DB12F7A78F4027807592525F8B60B0EE62E</ManifestCertificateThumbprint>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
     <SignManifests>true</SignManifests>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>C:\Temp\SqlCopy\</PublishUrl>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>C:\Temp\SqlCopy-new\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Background</UpdateMode>
     <UpdateInterval>1</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>true</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://projects.c3o.com/install/SqlCopy/</InstallUrl>
     <SupportUrl>http://projects.c3o.com/forums/default.aspx</SupportUrl>
     <ProductName>Simple SQL Copy</ProductName>
     <PublisherName>c3o</PublisherName>
+    <CreateWebPageOnPublish>false</CreateWebPageOnPublish>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>31</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>true</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <ApplicationRevision>23</ApplicationRevision>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -150,6 +153,7 @@
     <Content Include="Log\Copy of Sql Server Sample 1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="c3o.SqlCopy.Win.App_TemporaryKey.pfx" />
     <None Include="Resources\control_play_blue.png" />
     <None Include="Resources\pencil.png" />
   </ItemGroup>
@@ -159,13 +163,37 @@
       <ProductName>Microsoft Data Access Components 2.8</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 2.0</ProductName>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
       <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\c3o.SqlCopy.Console.App\c3o.SqlCopy.Console.App.csproj">
+      <Project>{DF43D7D7-01C8-488A-8687-7B423816DBA8}</Project>
+      <Name>c3o.SqlCopy.Console.App</Name>
+    </ProjectReference>
     <ProjectReference Include="..\c3o.SqlCopy.Lib.Common\c3o.SqlCopy.Lib.Common.csproj">
       <Project>{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}</Project>
       <Name>c3o.SqlCopy.Lib.Common</Name>
