@@ -17,7 +17,7 @@ namespace c3o.SqlCopy.Objects
     public class CopyObject
     {
         public bool Selected { get; set; }
-        public string Name { get; set; }
+        //public string FileName { get; set; }
 
         public DBMS SourceType { get; set; }
         public string Source { get; set; }

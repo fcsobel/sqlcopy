@@ -8,11 +8,27 @@ using System.Text;
 using System.Windows.Forms;
 using c3o.SqlCopy.Objects;
 using c3o.SqlCopy.Data;
+using System.IO;
 
 namespace c3o.SqlCopy
 {
     public partial class SqlCopyForm : Form
     {
+        public string _FileName;
+        public string FileName 
+        {
+            get 
+            {
+                return this._FileName;
+            }
+            set 
+            {
+                this._FileName = value;
+                this.Text = string.Format("Copy Window - {0}", value); 
+            }
+        }
+
+        
         //public List<CopyObject> list { get; set; }
         private CopyObject CurrentObj { get; set; }
 
@@ -45,21 +61,27 @@ namespace c3o.SqlCopy
 
                 if (this.CurrentObj == null)
                 {
-                    List<CopyObject> templates = SerializationHelper.Deserialize<List<CopyObject>>(@"config\template.xml");
-                    if (templates != null && templates.Count > 0)
-                    {
-                        this.CurrentObj = templates.Find(hit => hit.SourceType == dbms);
-                        
-                        //CopyObject temmp = templates.Find(hit => hit.SourceType == obj.SourceType);
+                    string templateFile = string.Format(@"{0}\config\template.xml", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName );
 
-                        //if (temmp != null)
-                        //{
-                        //    if (string.IsNullOrEmpty(obj.DeleteSql)) obj.DeleteSql = temmp.DeleteSql;
-                        //    if (string.IsNullOrEmpty(obj.ListSql)) obj.ListSql = temmp.ListSql;
-                        //    if (string.IsNullOrEmpty(obj.PostCopySql)) obj.PostCopySql = temmp.PostCopySql;
-                        //    if (string.IsNullOrEmpty(obj.PreCopySql)) obj.PreCopySql = temmp.PreCopySql;
-                        //    if (string.IsNullOrEmpty(obj.SelectSql)) obj.SelectSql = temmp.SelectSql;
-                        //}
+                    if (File.Exists(templateFile))
+                    {
+                        List<CopyObject> templates = SerializationHelper.Deserialize<List<CopyObject>>(templateFile);
+
+                        if (templates != null && templates.Count > 0)
+                        {
+                            this.CurrentObj = templates.Find(hit => hit.SourceType == dbms);
+
+                            //CopyObject temmp = templates.Find(hit => hit.SourceType == obj.SourceType);
+
+                            //if (temmp != null)
+                            //{
+                            //    if (string.IsNullOrEmpty(obj.DeleteSql)) obj.DeleteSql = temmp.DeleteSql;
+                            //    if (string.IsNullOrEmpty(obj.ListSql)) obj.ListSql = temmp.ListSql;
+                            //    if (string.IsNullOrEmpty(obj.PostCopySql)) obj.PostCopySql = temmp.PostCopySql;
+                            //    if (string.IsNullOrEmpty(obj.PreCopySql)) obj.PreCopySql = temmp.PreCopySql;
+                            //    if (string.IsNullOrEmpty(obj.SelectSql)) obj.SelectSql = temmp.SelectSql;
+                            //}
+                        }
                     }
                 }
 
@@ -68,7 +90,7 @@ namespace c3o.SqlCopy
                 if (obj != null)
                 {
 
-                    obj.Name = this.txtName.Text;
+                    //obj.FileName = this.FileName;
                     obj.SourceType = (DBMS)this.comboBox1.SelectedItem;
                     obj.DestinationType = (DBMS)this.cboDestintaion.SelectedItem;
                     obj.BatchSize = this.BatchSize;
@@ -103,7 +125,7 @@ namespace c3o.SqlCopy
             set
             {
                 this.CurrentObj = value;
-                this.txtName.Text = value.Name;
+                //this.FileName = value.FileName;
                 this.comboBox1.SelectedItem = value.SourceType;
                 this.cboDestintaion.SelectedItem = value.DestinationType;
                 this.txtBatchSize.Text = value.BatchSize.ToString();
@@ -427,7 +449,9 @@ namespace c3o.SqlCopy
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            this.Settings = SerializationHelper.Deserialize<CopyObject>(this.openFileDialog1.FileName);
+            this.FileName = this.openFileDialog1.FileName;
+
+            this.Settings = SerializationHelper.Deserialize<CopyObject>(this.FileName);
 
             //SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
 
@@ -436,13 +460,33 @@ namespace c3o.SqlCopy
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.saveFileDialog1.ShowDialog();
-            
+            this.Save();
         }
+
+
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
+            this.FileName = this.saveFileDialog1.FileName;
+
             SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);        
+        }
+
+        private void Save()
+        {
+            if (string.IsNullOrEmpty(this.FileName))
+            {
+                this.saveFileDialog1.ShowDialog();
+            }
+            else
+            {
+                SerializationHelper.Serialize<CopyObject>(this.Settings, this.FileName);        
+            }
+        }
+
+        private void bttnSaveAs_Click(object sender, EventArgs e)
+        {
+            this.saveFileDialog1.ShowDialog();
         }
     }
 }
