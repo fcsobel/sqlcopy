@@ -15,17 +15,17 @@
     <ManifestCertificateThumbprint>97D40DB12F7A78F4027807592525F8B60B0EE62E</ManifestCertificateThumbprint>
     <ManifestKeyFile>
     </ManifestKeyFile>
-    <SignManifests>true</SignManifests>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SignManifests>false</SignManifests>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <PublishUrl>C:\Temp\SqlCopy-new\</PublishUrl>
+    <PublishUrl>C:\Temp\SqlCopy\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
+    <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Background</UpdateMode>
     <UpdateInterval>1</UpdateInterval>
@@ -33,12 +33,13 @@
     <UpdatePeriodically>true</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://projects.c3o.com/install/SqlCopy/</InstallUrl>
     <SupportUrl>http://projects.c3o.com/forums/default.aspx</SupportUrl>
     <ProductName>Simple SQL Copy</ProductName>
     <PublisherName>c3o</PublisherName>
     <CreateWebPageOnPublish>false</CreateWebPageOnPublish>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>31</ApplicationRevision>
+    <ApplicationRevision>40</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
