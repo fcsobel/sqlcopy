@@ -72,7 +72,7 @@ namespace c3o.SqlCopy.Data
 
         public void Log()
         {
-            string file = String.Format(@"{0}\log\{1}.xml", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName, this.Settings.Name);
+            string file = String.Format(@"{0}\log\{1}", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName, "hardcoded.xml");
 
             List<CopyObject> list = null;
 
