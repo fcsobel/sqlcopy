@@ -3,8 +3,8 @@
   <CopyObject>
     <Name>SqlServer</Name>
 	  <SourceType>SqlServer</SourceType>
-    <Source>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.fnoodle;Integrated Security=True</Source>
-    <Destination>Data Source=.\sqlexpress;Initial Catalog=c3o.shared.0.0.0.1.sqlcopy;Integrated Security=True</Destination>
+    <Source></Source>
+    <Destination></Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
@@ -27,8 +27,8 @@
   <CopyObject>
     <Name>Oracle</Name>
 	  <SourceType>Oracle</SourceType>
-    <Source>Data Source=stldadv1;Persist Security Info=True;User ID=sch_gateway;Password=sch_gateway;</Source>
-    <Destination>Data Source=stldadv1;Persist Security Info=True;User ID=sch_pivit_web;Password=sch_pivit_web;</Destination>
+    <Source></Source>
+    <Destination></Destination>
     <BatchSize>0</BatchSize>
     <BulkCopyOptions>0</BulkCopyOptions>
     <BulkCopyTimeout>30</BulkCopyTimeout>
