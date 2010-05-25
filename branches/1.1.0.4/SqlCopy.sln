@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Win.App", "c3o.SqlCopy.Win.App\c3o.SqlCopy.Win.App.csproj", "{A028C3DF-0DA2-4160-8FF5-CD83325518B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Win.Service", "c3o.SqlCopy.Win.Service\c3o.SqlCopy.Win.Service.csproj", "{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Lib.Common", "c3o.SqlCopy.Lib.Common\c3o.SqlCopy.Lib.Common.csproj", "{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "c3o.SqlCopy.Setup", "c3o.SqlCopy.Setup\c3o.SqlCopy.Setup.vdproj", "{992A4ECB-B89F-4D5A-AC8C-86C4038018D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Console.App", "c3o.SqlCopy.Console.App\c3o.SqlCopy.Console.App.csproj", "{DF43D7D7-01C8-488A-8687-7B423816DBA8}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A028C3DF-0DA2-4160-8FF5-CD83325518B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A028C3DF-0DA2-4160-8FF5-CD83325518B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A028C3DF-0DA2-4160-8FF5-CD83325518B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A028C3DF-0DA2-4160-8FF5-CD83325518B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F5B91AE-DE0E-4CCE-90C6-2A5D8179A6FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{992A4ECB-B89F-4D5A-AC8C-86C4038018D3}.Debug|Any CPU.ActiveCfg = Debug
+		{992A4ECB-B89F-4D5A-AC8C-86C4038018D3}.Release|Any CPU.ActiveCfg = Release
+		{DF43D7D7-01C8-488A-8687-7B423816DBA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF43D7D7-01C8-488A-8687-7B423816DBA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF43D7D7-01C8-488A-8687-7B423816DBA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF43D7D7-01C8-488A-8687-7B423816DBA8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
