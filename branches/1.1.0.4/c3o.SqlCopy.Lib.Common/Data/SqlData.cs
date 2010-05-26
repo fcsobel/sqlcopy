@@ -36,9 +36,35 @@ namespace c3o.SqlCopy.Data
             return this.ExecuteReader(this.settings.Source, this.settings.ListSql);
         }
 
+
+        private string GetSelectSql(string table)
+        {
+            string sql = @"select column_name 
+                            from INFORMATION_SCHEMA.COLUMNS 
+                            where   '[' + table_schema + '].[' + table_name + ']' = '{0}'
+                                    and not columnproperty(object_id(table_name), COLUMN_NAME, 'IsComputed') = 1";
+
+            List<string> columns = new List<string>();
+            using (IDataReader dr = this.ExecuteReader(this.settings.Source, string.Format(sql, table)))
+            {
+                while (dr.Read())
+                {
+                    columns.Add(string.Format("[{0}]", dr["COLUMN_NAME"]));
+                }
+            }
+
+            sql = string.Format("select {1} from {0}", table, string.Join(",", columns.ToArray()));
+
+            return sql;
+        }
+
+
         public IDataReader Select(string table)
         {
-            return this.ExecuteReader(this.settings.Source, string.Format(settings.SelectSql, table));
+            string sql = this.GetSelectSql(table);
+
+            //return this.ExecuteReader(this.settings.Source, string.Format(settings.SelectSql, table));
+            return this.ExecuteReader(this.settings.Source, string.Format(sql));
         }
 
         public void Delete(string table)
