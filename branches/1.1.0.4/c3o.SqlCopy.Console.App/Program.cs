@@ -12,6 +12,8 @@ namespace c3o.SqlCopy.Console.App
     {
         static void Main(string[] args)
         {
+            int exitCode = 0;
+
             if (args.Length > 0)
             {
                 string filename = args[0];
@@ -24,9 +26,6 @@ namespace c3o.SqlCopy.Console.App
                     {
                         CopyManager manager = new CopyManager(obj);
                         {
-                            //manager.Copy();
-
-
                             try
                             {
                                 manager.PreCopy();
@@ -52,9 +51,8 @@ namespace c3o.SqlCopy.Console.App
                                 {
                                     table.Status = er.Message;
                                     System.Console.WriteLine("Error " + table.Name);
+                                    exitCode = -1;
                                 }
-
-                                
                             }
 
                             try
@@ -64,11 +62,24 @@ namespace c3o.SqlCopy.Console.App
                             catch (Exception er)
                             {
                                 obj.PostCopyStatus = er.Message;
+                                exitCode = -1;
                             }
+
                         }
                     }
                 }
+                else
+                {
+                    exitCode = -4;
+                }
             }
+            else
+            {
+                exitCode = -3;
+            }
+
+            Environment.Exit(exitCode);
         }
+        
     }
 }
