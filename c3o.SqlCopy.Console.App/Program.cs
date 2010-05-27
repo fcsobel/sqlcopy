@@ -43,7 +43,7 @@ namespace c3o.SqlCopy.Console.App
                                 {
                                     if (table.Selected)
                                     {
-                                        manager.Copy(table.Name);
+                                        manager.Copy(table);
                                         table.Status = "Success";
                                         System.Console.WriteLine("Success " + table.Name);
                                     }

@@ -36,6 +36,10 @@ namespace c3o.SqlCopy.Data
             //this.Db = db;
         }
 
+        public string GetSelectSql(TableObject table)
+        {
+            return this.Source.GetSelectSql(table);
+        }
 
 
         public static void RunCopyJobs()
@@ -116,7 +120,7 @@ namespace c3o.SqlCopy.Data
                 {
                     if (obj.Selected)
                     {
-                        this.Copy(obj.Name);
+                        this.Copy(obj);
                         obj.Status = "Success";
                     }
                 }
@@ -137,7 +141,7 @@ namespace c3o.SqlCopy.Data
         }
 
 
-        public static void Copy(CopyObject settings, string table)
+        public static void Copy(CopyObject settings, TableObject table)
         {
             IDbData source = GetDb(settings, settings.SourceType);
             IDbData dest = GetDb(settings, settings.DestinationType);
@@ -145,10 +149,10 @@ namespace c3o.SqlCopy.Data
             dest.Copy(table, source);
         }
 
-        public void Copy(string table)
+        public void Copy(TableObject obj)
         {
             //this.Db.Copy(table);
-            this.Destination.Copy(table, this.Source);
+            this.Destination.Copy(obj, this.Source);
 
             //dest.Copy(table, source);
         }

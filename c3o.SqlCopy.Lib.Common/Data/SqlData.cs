@@ -37,29 +37,38 @@ namespace c3o.SqlCopy.Data
         }
 
 
-        private string GetSelectSql(string table)
+        
+        public string GetSelectSql(TableObject table)
         {
-            string sql = @"select column_name 
+            if (!string.IsNullOrEmpty(table.Sql))
+            {
+                return table.Sql.Replace("\r\n", "\n").Replace("\n", "\r\n");
+            }
+            else
+            {
+                string sql = @"select column_name 
                             from INFORMATION_SCHEMA.COLUMNS 
                             where   '[' + table_schema + '].[' + table_name + ']' = '{0}'
                                     and not columnproperty(object_id(table_name), COLUMN_NAME, 'IsComputed') = 1";
 
-            List<string> columns = new List<string>();
-            using (IDataReader dr = this.ExecuteReader(this.settings.Source, string.Format(sql, table)))
-            {
-                while (dr.Read())
+                List<string> columns = new List<string>();
+                using (IDataReader dr = this.ExecuteReader(this.settings.Source, string.Format(sql, table.Name)))
                 {
-                    columns.Add(string.Format("[{0}]", dr["COLUMN_NAME"]));
+                    while (dr.Read())
+                    {
+                        columns.Add(string.Format("[{0}]", dr["COLUMN_NAME"]));
+                    }
                 }
+
+
+                sql = string.Format("select \r\n{1} \r\nfrom {0}", table.Name, string.Join(",\r\n", columns.ToArray()));
+
+                return sql;
             }
-
-            sql = string.Format("select {1} from {0}", table, string.Join(",", columns.ToArray()));
-
-            return sql;
         }
 
 
-        public IDataReader Select(string table)
+        public IDataReader Select(TableObject table)
         {
             string sql = this.GetSelectSql(table);
 
@@ -67,9 +76,9 @@ namespace c3o.SqlCopy.Data
             return this.ExecuteReader(this.settings.Source, string.Format(sql));
         }
 
-        public void Delete(string table)
+        public void Delete(TableObject table)
         {
-            this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table));
+            this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table.Name));
         }
 
         public void PreCopy()
@@ -91,7 +100,7 @@ namespace c3o.SqlCopy.Data
         }
 
 
-        public void Copy(string table)
+        public void Copy(TableObject table)
         {
             if (settings.DeleteRows) this.Delete(table);
 
@@ -101,14 +110,14 @@ namespace c3o.SqlCopy.Data
                 {
                     copy.BulkCopyTimeout = settings.BulkCopyTimeout;
                     copy.BatchSize = settings.BatchSize;
-                    copy.DestinationTableName = table;
+                    copy.DestinationTableName = table.Name;
                     copy.WriteToServer(dr);
                 }
             }
         }
 
 
-        public void Copy(string table, IDbData source)
+        public void Copy(TableObject table, IDbData source)
         {
             if (settings.DeleteRows) this.Delete(table);
 
@@ -118,7 +127,7 @@ namespace c3o.SqlCopy.Data
                 {
                     copy.BulkCopyTimeout = settings.BulkCopyTimeout;
                     copy.BatchSize = settings.BatchSize;
-                    copy.DestinationTableName = table;
+                    copy.DestinationTableName = table.Name;
                     copy.WriteToServer(dr);
                 }
             }

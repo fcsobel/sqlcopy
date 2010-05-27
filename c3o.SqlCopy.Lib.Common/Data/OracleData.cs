@@ -32,14 +32,14 @@ namespace c3o.SqlCopy
             return this.ExecuteReader(this.settings.Source, this.settings.ListSql);
         }
 
-        public IDataReader Select(string table)
+        public IDataReader Select(TableObject table)
         {
-            return this.ExecuteReader(this.settings.Source, string.Format(settings.SelectSql, table));
+            return this.ExecuteReader(this.settings.Source, string.Format(settings.SelectSql, table.Name));
         }
 
-        public void Delete(string table)
+        public void Delete(TableObject table)
         {
-            this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table));
+            this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table.Name));
         }
 
         public void PreCopy()
@@ -58,7 +58,7 @@ namespace c3o.SqlCopy
             }
         }
 
-        public void Copy(string table)
+        public void Copy(TableObject table)
         {
             // Delete data
             if (settings.DeleteRows) this.Delete(table);
@@ -70,14 +70,14 @@ namespace c3o.SqlCopy
                 {
                     copy.BulkCopyTimeout = settings.BulkCopyTimeout;
                     copy.BatchSize = settings.BatchSize;
-                    copy.DestinationTableName = table;
+                    copy.DestinationTableName = table.Name;
                     copy.WriteToServer(dr);
                 }
             }
         }
 
 
-        public void Copy(string table, IDbData source)
+        public void Copy(TableObject table, IDbData source)
         {
             // Delete data
             if (settings.DeleteRows) this.Delete(table);
@@ -88,7 +88,7 @@ namespace c3o.SqlCopy
                 {
                     copy.BulkCopyTimeout = settings.BulkCopyTimeout;
                     copy.BatchSize = settings.BatchSize;
-                    copy.DestinationTableName = table;
+                    copy.DestinationTableName = table.Name;
                     copy.WriteToServer(dr);
                 }
             }
@@ -111,6 +111,20 @@ namespace c3o.SqlCopy
                 OracleCommand command = new OracleCommand(sql, connection);
                 connection.Open();
                 return command.ExecuteNonQuery();
+            }
+        }
+
+
+        public string GetSelectSql(TableObject table)
+        {
+            if (!string.IsNullOrEmpty(table.Sql))
+            {                
+                return table.Sql.Replace("\r\n", "\n").Replace("\n", "\r\n");
+            }
+            else
+            {
+
+                return string.Format(settings.SelectSql, table.Name);
             }
         }
     }
