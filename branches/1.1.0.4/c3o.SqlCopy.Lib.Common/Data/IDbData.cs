@@ -7,15 +7,16 @@ namespace c3o.SqlCopy.Data
 {
     public interface IDbData
     {
-        void Copy(string table);
-        void Copy(string table, IDbData source);
-        void Delete(string table);
+        void Copy(TableObject obj);
+        void Copy(TableObject table, IDbData source);
+        void Delete(TableObject table);
         int ExecuteNonQuery(string db, string sql);
-        System.Data.IDataReader ExecuteReader(string db, string sql);
-        System.Data.IDataReader List();
+        IDataReader ExecuteReader(string db, string sql);
+        IDataReader List();
         void PostCopy();
         void PreCopy();
-        System.Data.IDataReader Select(string table);
-        c3o.SqlCopy.Objects.CopyObject settings { get; set; }
+        System.Data.IDataReader Select(TableObject table);
+        CopyObject settings { get; set; }
+        string GetSelectSql(TableObject table);
     }
 }

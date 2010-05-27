@@ -41,9 +41,6 @@ namespace c3o.SqlCopy
             this.bttnFlipSelect = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtTimeout = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -66,6 +63,10 @@ namespace c3o.SqlCopy
             this.cboDestintaion = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.bttnSaveAs = new System.Windows.Forms.Button();
+            this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -184,8 +185,8 @@ namespace c3o.SqlCopy
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.CopyTables);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.worker_RunWorkerCompleted);
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ShowProgress);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.worker_RunWorkerCompleted);
             // 
             // dataGridView1
             // 
@@ -198,35 +199,14 @@ namespace c3o.SqlCopy
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Copy,
             this.table_name,
-            this.status});
+            this.status,
+            this.bttnSql});
             this.dataGridView1.Location = new System.Drawing.Point(79, 102);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(646, 566);
             this.dataGridView1.TabIndex = 3;
-            // 
-            // Copy
-            // 
-            this.Copy.DataPropertyName = "Selected";
-            this.Copy.HeaderText = "";
-            this.Copy.Name = "Copy";
-            this.Copy.Width = 30;
-            // 
-            // table_name
-            // 
-            this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.table_name.DataPropertyName = "Name";
-            this.table_name.HeaderText = "Table Name";
-            this.table_name.Name = "table_name";
-            this.table_name.ReadOnly = true;
-            // 
-            // status
-            // 
-            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.status.DataPropertyName = "Status";
-            this.status.HeaderText = "Status";
-            this.status.Name = "status";
-            this.status.ReadOnly = true;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // txtTimeout
             // 
@@ -448,6 +428,37 @@ namespace c3o.SqlCopy
             this.bttnSaveAs.UseVisualStyleBackColor = true;
             this.bttnSaveAs.Click += new System.EventHandler(this.bttnSaveAs_Click);
             // 
+            // Copy
+            // 
+            this.Copy.DataPropertyName = "Selected";
+            this.Copy.HeaderText = "";
+            this.Copy.Name = "Copy";
+            this.Copy.Width = 30;
+            // 
+            // table_name
+            // 
+            this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.table_name.DataPropertyName = "Name";
+            this.table_name.HeaderText = "Table Name";
+            this.table_name.Name = "table_name";
+            this.table_name.ReadOnly = true;
+            // 
+            // status
+            // 
+            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.status.DataPropertyName = "Status";
+            this.status.HeaderText = "Status";
+            this.status.Name = "status";
+            this.status.ReadOnly = true;
+            // 
+            // bttnSql
+            // 
+            this.bttnSql.FillWeight = 30F;
+            this.bttnSql.HeaderText = "SQL";
+            this.bttnSql.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
+            this.bttnSql.Name = "bttnSql";
+            this.bttnSql.Width = 30;
+            // 
             // SqlCopyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -484,11 +495,12 @@ namespace c3o.SqlCopy
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label6);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SqlCopyForm";
             this.Text = "Copy Window";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SqlCopyForm_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -524,9 +536,6 @@ namespace c3o.SqlCopy
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox txtSource;
         private System.Windows.Forms.TextBox txtDestination;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Copy;
-        private System.Windows.Forms.DataGridViewTextBoxColumn table_name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.Button bttnOpen;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button bttnSave;
@@ -534,6 +543,10 @@ namespace c3o.SqlCopy
         private System.Windows.Forms.ComboBox cboDestintaion;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button bttnSaveAs;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Copy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn table_name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn status;
+        private System.Windows.Forms.DataGridViewImageColumn bttnSql;
     }
 }
 

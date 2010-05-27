@@ -22,5 +22,17 @@ namespace c3o.SqlCopy.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FileName {
+            get {
+                return ((string)(this["FileName"]));
+            }
+            set {
+                this["FileName"] = value;
+            }
+        }
     }
 }

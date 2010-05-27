@@ -10,6 +10,7 @@ namespace c3o.SqlCopy.Objects
         public string Name { get; set; }
         public bool Selected { get; set; }
         public string Status { get; set; }
+        public string Sql { get; set; }
     }
 
 

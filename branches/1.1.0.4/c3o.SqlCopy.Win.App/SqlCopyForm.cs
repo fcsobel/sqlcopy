@@ -160,6 +160,8 @@ namespace c3o.SqlCopy
 
             this.comboBox1.DataSource = System.Enum.GetValues(typeof(DBMS));
             this.cboDestintaion.DataSource = System.Enum.GetValues(typeof(DBMS));
+
+
         }
 
 
@@ -208,7 +210,7 @@ namespace c3o.SqlCopy
 
             // this.dataGridView1.Refresh();
 
-            // Copy tables
+            // Copy tables  
             this.CopyTablesAsc();
 
           }
@@ -294,7 +296,7 @@ namespace c3o.SqlCopy
                 {
                     if (obj.Selected)
                     {
-                        manager.Copy(obj.Name);
+                        manager.Copy(obj);
                         obj.Status = "Success";
                         worker.ReportProgress(0, row);
                     }
@@ -384,7 +386,13 @@ namespace c3o.SqlCopy
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            string filename = Properties.Settings.Default.FileName;
 
+            if (!string.IsNullOrEmpty(filename))
+            {
+                this.FileName = filename;
+                this.Settings = SerializationHelper.Deserialize<CopyObject>(this.FileName);
+            }
         }
 
         private void cbxDeleteRows_Click(object sender, EventArgs e)
@@ -453,6 +461,9 @@ namespace c3o.SqlCopy
 
             this.Settings = SerializationHelper.Deserialize<CopyObject>(this.FileName);
 
+            Properties.Settings.Default.FileName = this.FileName;
+            Properties.Settings.Default.Save();
+
             //SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
 
 
@@ -469,7 +480,11 @@ namespace c3o.SqlCopy
         {
             this.FileName = this.saveFileDialog1.FileName;
 
-            SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);        
+            SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);
+
+            Properties.Settings.Default.FileName = this.FileName;
+            Properties.Settings.Default.Save();
+
         }
 
         private void Save()
@@ -488,5 +503,36 @@ namespace c3o.SqlCopy
         {
             this.saveFileDialog1.ShowDialog();
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 3)
+            {
+                DataGridViewRow row = this.dataGridView1.Rows[e.RowIndex];
+
+                TableObject obj = (TableObject)row.DataBoundItem;
+
+                if (obj != null)
+                {
+                    TableEditForm form = new TableEditForm();
+                    form.Table = obj;
+                    form.Settings = this.Settings;
+                    form.ShowDialog(this);
+                }
+            }
+        }
+
+        //private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        //{
+        //     DataGridViewRow row = this.dataGridView1.Rows[e.RowIndex];
+             
+        //    TableObject obj = (TableObject)row.DataBoundItem;
+
+        //    if (obj != null)
+        //    {
+        //        MessageBox.Show(obj.Name);
+        //    }
+            
+        //}
     }
 }
