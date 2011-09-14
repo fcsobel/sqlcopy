@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using c3o.SqlCopy.Objects;
 using c3o.SqlCopy.Data;
 using System.IO;
+using System.Linq;
 
 namespace c3o.SqlCopy
 {
@@ -173,7 +174,7 @@ namespace c3o.SqlCopy
             {
                 CopyManager manager = new CopyManager(copy);
 
-                copy.Tables = manager.List();
+				copy.Tables = manager.List().OrderBy(x => x.Name).ToList();
 
                 this.Settings = copy;
 
@@ -506,20 +507,45 @@ namespace c3o.SqlCopy
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 3)
-            {
-                DataGridViewRow row = this.dataGridView1.Rows[e.RowIndex];
+			if (e.RowIndex == -1)
+			{
+				CopyObject obj = this.Settings;
 
-                TableObject obj = (TableObject)row.DataBoundItem;
+				obj.Tables = obj.Tables.OrderBy(x => x.Name).ToList();
 
-                if (obj != null)
-                {
-                    TableEditForm form = new TableEditForm();
-                    form.Table = obj;
-                    form.Settings = this.Settings;
-                    form.ShowDialog(this);
-                }
-            }
+				switch (e.ColumnIndex)
+				{ 
+					case 1:
+						obj.Tables = obj.Tables.OrderBy(x => x.Name).ToList();
+						break;
+					//case 1:
+					//    obj.Tables.OrderBy(x => x.);
+					//    break;
+					//case 2:
+					//    obj.Tables.OrderBy(x => x);
+					//    break;
+
+				}
+
+				this.Settings = obj;
+			}
+			else
+			{
+				if (e.ColumnIndex == 3)
+				{
+					DataGridViewRow row = this.dataGridView1.Rows[e.RowIndex];
+
+					TableObject obj = (TableObject)row.DataBoundItem;
+
+					if (obj != null)
+					{
+						TableEditForm form = new TableEditForm();
+						form.Table = obj;
+						form.Settings = this.Settings;
+						form.ShowDialog(this);
+					}
+				}
+			}
         }
 
         //private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
