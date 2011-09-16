@@ -20,7 +20,7 @@
     <DeleteRows>true</DeleteRows>
     <PreCopySql>exec sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? DISABLE TRIGGER all'; </PreCopySql>
     <PostCopySql>exec sp_msforeachtable 'ALTER TABLE ? CHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? ENABLE TRIGGER all'; </PostCopySql>
-    <ListSql>SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables</ListSql>
+    <ListSql>SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables where table_type = 'BASE TABLE'</ListSql>
     <DeleteSql>delete from {0}</DeleteSql>
     <SelectSql>select * from {0}</SelectSql>
   </CopyObject>

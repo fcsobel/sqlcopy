@@ -41,6 +41,10 @@ namespace c3o.SqlCopy
 			this.bttnFlipSelect = new System.Windows.Forms.Button();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
 			this.txtTimeout = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
@@ -63,10 +67,6 @@ namespace c3o.SqlCopy
 			this.cboDestintaion = new System.Windows.Forms.ComboBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.bttnSaveAs = new System.Windows.Forms.Button();
-			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -206,7 +206,39 @@ namespace c3o.SqlCopy
 			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dataGridView1.Size = new System.Drawing.Size(646, 566);
 			this.dataGridView1.TabIndex = 3;
+			this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
 			this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+			// 
+			// Copy
+			// 
+			this.Copy.DataPropertyName = "Selected";
+			this.Copy.HeaderText = "";
+			this.Copy.Name = "Copy";
+			this.Copy.Width = 30;
+			// 
+			// table_name
+			// 
+			this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.table_name.DataPropertyName = "Name";
+			this.table_name.HeaderText = "Table Name";
+			this.table_name.Name = "table_name";
+			this.table_name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// status
+			// 
+			this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.status.DataPropertyName = "Status";
+			this.status.HeaderText = "Status";
+			this.status.Name = "status";
+			this.status.ReadOnly = true;
+			// 
+			// bttnSql
+			// 
+			this.bttnSql.FillWeight = 30F;
+			this.bttnSql.HeaderText = "SQL";
+			this.bttnSql.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
+			this.bttnSql.Name = "bttnSql";
+			this.bttnSql.Width = 30;
 			// 
 			// txtTimeout
 			// 
@@ -427,37 +459,6 @@ namespace c3o.SqlCopy
 			this.bttnSaveAs.Text = "Save As...";
 			this.bttnSaveAs.UseVisualStyleBackColor = true;
 			this.bttnSaveAs.Click += new System.EventHandler(this.bttnSaveAs_Click);
-			// 
-			// Copy
-			// 
-			this.Copy.DataPropertyName = "Selected";
-			this.Copy.HeaderText = "";
-			this.Copy.Name = "Copy";
-			this.Copy.Width = 30;
-			// 
-			// table_name
-			// 
-			this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.table_name.DataPropertyName = "Name";
-			this.table_name.HeaderText = "Table Name";
-			this.table_name.Name = "table_name";
-			this.table_name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			// 
-			// status
-			// 
-			this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.status.DataPropertyName = "Status";
-			this.status.HeaderText = "Status";
-			this.status.Name = "status";
-			this.status.ReadOnly = true;
-			// 
-			// bttnSql
-			// 
-			this.bttnSql.FillWeight = 30F;
-			this.bttnSql.HeaderText = "SQL";
-			this.bttnSql.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
-			this.bttnSql.Name = "bttnSql";
-			this.bttnSql.Width = 30;
 			// 
 			// SqlCopyForm
 			// 
