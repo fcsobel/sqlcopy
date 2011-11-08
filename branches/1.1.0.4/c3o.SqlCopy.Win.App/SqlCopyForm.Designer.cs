@@ -373,7 +373,6 @@ namespace c3o.SqlCopy
 			// comboBox1
 			// 
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.Enabled = false;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new System.Drawing.Point(79, 43);
 			this.comboBox1.Name = "comboBox1";
@@ -433,7 +432,6 @@ namespace c3o.SqlCopy
 			// 
 			this.cboDestintaion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.cboDestintaion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboDestintaion.Enabled = false;
 			this.cboDestintaion.FormattingEnabled = true;
 			this.cboDestintaion.Location = new System.Drawing.Point(79, 726);
 			this.cboDestintaion.Name = "cboDestintaion";
