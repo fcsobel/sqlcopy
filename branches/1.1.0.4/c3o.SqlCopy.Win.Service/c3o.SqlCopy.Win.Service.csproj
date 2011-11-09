@@ -137,7 +137,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="c3o.SqlCopy.Win.Service_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
