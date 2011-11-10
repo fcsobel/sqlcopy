@@ -405,7 +405,7 @@ namespace c3o.SqlCopy
 		{
 			string filename = Properties.Settings.Default.FileName;
 
-			if (!string.IsNullOrEmpty(filename))
+			if (!string.IsNullOrEmpty(filename) && File.Exists(filename))
 			{
 				this.FileName = filename;
 				this.Settings = CopyObject.Read(this.FileName);
