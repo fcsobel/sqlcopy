@@ -44,13 +44,13 @@ namespace c3o.SqlCopy.Console.App
                                     {
                                         manager.Copy(table);
                                         table.Status = "Success";
-                                        System.Console.WriteLine("Success " + table.Name);
+										System.Console.WriteLine("Success " + table.FullName);
                                     }
                                 }
                                 catch (Exception er)
                                 {
                                     table.Status = er.Message;
-                                    System.Console.WriteLine("Error " + table.Name);
+									System.Console.WriteLine("Error " + table.FullName);
                                     exitCode = -1;
                                 }
                             }

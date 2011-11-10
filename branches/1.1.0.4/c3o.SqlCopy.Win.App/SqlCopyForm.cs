@@ -58,36 +58,50 @@ namespace c3o.SqlCopy
 		}
 
 
+		public CopyObject GetDbms(DBMS dbms)
+		{
+			string templateFile = string.Format(@"{0}\config\template.xml", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName);
+			if (File.Exists(templateFile))
+			{
+				List<CopyObject> templates = SerializationHelper.Deserialize<List<CopyObject>>(templateFile);
+				
+				if (templates != null && templates.Count > 0)
+				{
+					return templates.Find(hit => hit.SourceType == dbms);
+				}
+				else
+				{
+					throw new Exception(string.Format("DBMS: {0} not found in {1}", dbms, templateFile));
+				}
+			}
+			else
+			{
+				throw new Exception(string.Format("File not found: {0}", templateFile));
+			}
+		}
+
+
 		public CopyObject Settings
 		{
 			get
 			{
-				DBMS dbms = (DBMS)this.comboBox1.SelectedItem;
+				DBMS dbms = (DBMS)this.cboSource.SelectedItem;
 
 				if (this.CurrentObj == null)
 				{
-					string templateFile = string.Format(@"{0}\config\template.xml", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName );
+					this.CurrentObj = this.GetDbms(dbms);
 
-					if (File.Exists(templateFile))
-					{
-						List<CopyObject> templates = SerializationHelper.Deserialize<List<CopyObject>>(templateFile);
+					//string templateFile = string.Format(@"{0}\config\template.xml", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName );
 
-						if (templates != null && templates.Count > 0)
-						{
-							this.CurrentObj = templates.Find(hit => hit.SourceType == dbms);
+					//if (File.Exists(templateFile))
+					//{
+					//    List<CopyObject> templates = SerializationHelper.Deserialize<List<CopyObject>>(templateFile);
 
-							//CopyObject temmp = templates.Find(hit => hit.SourceType == obj.SourceType);
-
-							//if (temmp != null)
-							//{
-							//    if (string.IsNullOrEmpty(obj.DeleteSql)) obj.DeleteSql = temmp.DeleteSql;
-							//    if (string.IsNullOrEmpty(obj.ListSql)) obj.ListSql = temmp.ListSql;
-							//    if (string.IsNullOrEmpty(obj.PostCopySql)) obj.PostCopySql = temmp.PostCopySql;
-							//    if (string.IsNullOrEmpty(obj.PreCopySql)) obj.PreCopySql = temmp.PreCopySql;
-							//    if (string.IsNullOrEmpty(obj.SelectSql)) obj.SelectSql = temmp.SelectSql;
-							//}
-						}
-					}
+					//    if (templates != null && templates.Count > 0)
+					//    {
+					//        this.CurrentObj = templates.Find(hit => hit.SourceType == dbms);
+					//    }
+					//}
 				}
 
 				CopyObject obj = this.CurrentObj;
@@ -96,13 +110,13 @@ namespace c3o.SqlCopy
 				{
 
 					//obj.FileName = this.FileName;
-					obj.SourceType = (DBMS)this.comboBox1.SelectedItem;
+					obj.SourceType = (DBMS)this.cboSource.SelectedItem;
 					obj.DestinationType = (DBMS)this.cboDestintaion.SelectedItem;
 					obj.BatchSize = this.BatchSize;
 					obj.BulkCopyTimeout = this.BulkCopyTimeout;
 					obj.CheckConstraints = this.cbxCheckConstraints.Checked;
 					obj.DeleteRows = this.cbxDeleteRows.Checked;
-
+					obj.IncludeSchema = this.cbxSchema.Checked;
 					obj.Destination = this.Destination;
 					//obj.DestinationPartitionName = "";
 					//obj.DestinationTableName = "";
@@ -131,7 +145,7 @@ namespace c3o.SqlCopy
 			{
 				this.CurrentObj = value;
 				//this.FileName = value.FileName;
-				this.comboBox1.SelectedItem = value.SourceType;
+				this.cboSource.SelectedItem = value.SourceType;
 				this.cboDestintaion.SelectedItem = value.DestinationType;
 				this.txtBatchSize.Text = value.BatchSize.ToString();
 				this.txtTimeout.Text = value.BulkCopyTimeout.ToString();
@@ -141,6 +155,7 @@ namespace c3o.SqlCopy
 				this.cbxKeepNulls.Checked = value.KeepNulls;
 				this.cbxTableLock.Checked = value.TableLock;
 				this.cbxDeleteRows.Checked = value.DeleteRows;
+				this.cbxSchema.Checked = value.IncludeSchema;
 			   // this.btnSql.Enabled = Properties.Settings.Default.DeleteRows;
 				this.txtSource.Text = value.Source;
 				this.txtDestination.Text = value.Destination;
@@ -163,7 +178,7 @@ namespace c3o.SqlCopy
 		{
 			InitializeComponent();
 
-			this.comboBox1.DataSource = System.Enum.GetValues(typeof(DBMS));
+			this.cboSource.DataSource = System.Enum.GetValues(typeof(DBMS));
 			this.cboDestintaion.DataSource = System.Enum.GetValues(typeof(DBMS));
 
 
@@ -181,11 +196,11 @@ namespace c3o.SqlCopy
 
 				if (this.sortName)
 				{
-					copy.Tables = manager.List().OrderBy(x => x.Name).ToList();
+					copy.Tables = manager.List().OrderBy(x => x.Schema).OrderBy(x => x.Name).ToList();
 				}
 				else
 				{
-					copy.Tables = manager.List().OrderByDescending(x => x.Name).ToList();
+					copy.Tables = manager.List().OrderByDescending(x => x.Schema).OrderByDescending(x => x.Name).ToList();
 				}
 				this.sortName = !this.sortName;
 
@@ -232,7 +247,7 @@ namespace c3o.SqlCopy
  
 		public void CopyTablesAsc()
 		{
-			this.backgroundWorker1.RunWorkerAsync();
+			this.backgroundWorker1.RunWorkerAsync(this.Settings);
 		}
 
 		void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -254,7 +269,7 @@ namespace c3o.SqlCopy
 				   // this.dataGridView1.FirstDisplayedScrollingRowIndex = row.Index;
 					//this.dataGridView1.Refresh();
 					
-					this.dataGridView1.CurrentCell = row.Cells[2];
+					this.dataGridView1.CurrentCell = row.Cells[3];
 					this.dataGridView1.UpdateCellValue(2, row.Index);
 				}
 			}
@@ -279,7 +294,9 @@ namespace c3o.SqlCopy
 		// Background Version
 		public void CopyTables(object sender, DoWorkEventArgs e) 
 		{
-			CopyObject settings = this.Settings;
+			//CopyObject settings = this.Settings;
+
+			CopyObject settings = e.Argument as CopyObject;
 
 			CopyManager manager = new CopyManager(settings); ;
 
@@ -405,7 +422,9 @@ namespace c3o.SqlCopy
 			if (!string.IsNullOrEmpty(filename))
 			{
 				this.FileName = filename;
-				this.Settings = SerializationHelper.Deserialize<CopyObject>(this.FileName);
+				//this.Settings = SerializationHelper.Deserialize<CopyObject>(this.FileName);
+				this.Settings = this.ReadFile(this.FileName);
+
 			}
 		}
 
@@ -469,11 +488,25 @@ namespace c3o.SqlCopy
 			this.openFileDialog1.ShowDialog();
 		}
 
+		private CopyObject ReadFile(string filename)
+		{
+			CopyObject obj = SerializationHelper.Deserialize<CopyObject>(this.FileName);
+
+			if (obj.Tables != null && obj.Tables.Count > 0)
+			{
+				foreach (TableObject t in obj.Tables) { t.Parent = obj; }
+			}
+
+			return obj;
+		}
+
+
 		private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
 		{
 			this.FileName = this.openFileDialog1.FileName;
 
-			this.Settings = SerializationHelper.Deserialize<CopyObject>(this.FileName);
+			//this.Settings = SerializationHelper.Deserialize<CopyObject>(this.FileName);
+			this.Settings = this.ReadFile(this.FileName);
 
 			Properties.Settings.Default.FileName = this.FileName;
 			Properties.Settings.Default.Save();
@@ -557,22 +590,73 @@ namespace c3o.SqlCopy
 						else { obj.Tables = obj.Tables.OrderBy(x => x.Selected).ToList(); }
 						this.sortChecked = !this.sortChecked;
 						break;
-					case 1:	// name
+					case 1:	// schema
+						if (this.sortName) { obj.Tables = obj.Tables.OrderByDescending(x => x.Schema).ToList(); }
+						else { obj.Tables = obj.Tables.OrderBy(x => x.Schema).ToList(); }
+						this.sortName = !this.sortName;
+						break;
+					case 2:	// name
 						if (this.sortName) { obj.Tables = obj.Tables.OrderByDescending(x => x.Name).ToList(); }
 						else { obj.Tables = obj.Tables.OrderBy(x => x.Name).ToList(); }
 						this.sortName = !this.sortName;
 						break;
-					case 2: // status
+					case 3: // status
 						if (this.sortStatus) { obj.Tables = obj.Tables.OrderByDescending(x => x.Status).ToList(); }
 						else { obj.Tables = obj.Tables.OrderBy(x => x.Status).ToList(); }
 						this.sortStatus = !this.sortStatus;
 						break;
 				}
-				
-				
 				this.Settings = obj;
 			}
 		}
+
+		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			DBMS dbms = (DBMS)this.cboSource.SelectedItem;
+
+			// load dbms tenplate values from xml
+			CopyObject template = this.GetDbms(dbms);
+			
+			if (template != null && this.CurrentObj != null)
+			{
+				this.CurrentObj.SelectSql = template.SelectSql;
+				this.CurrentObj.ListSql = template.ListSql;
+				this.CurrentObj.SchemaFormat = template.SchemaFormat;
+			}
+		}
+
+		private void cboDestintaion_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			DBMS dbms = (DBMS)this.cboDestintaion.SelectedItem;
+
+			// load dbms tenplate values from xml
+			CopyObject template = this.GetDbms(dbms);
+
+			if (template != null && this.CurrentObj != null)
+			{
+				this.CurrentObj.PostCopySql = template.PostCopySql;
+				this.CurrentObj.PreCopySql = template.PreCopySql;
+				this.CurrentObj.DeleteSql = template.DeleteSql;
+			}
+		}
+
+		private void bttnSwitch_Click(object sender, EventArgs e)
+		{
+			// get sources
+			string source = this.txtSource.Text;
+			DBMS dbms = (DBMS)this.cboSource.SelectedItem;
+
+			// set source 
+			this.txtSource.Text = this.txtDestination.Text;
+			this.cboSource.SelectedItem = this.cboDestintaion.SelectedItem;
+
+			// set dest
+			this.txtDestination.Text = source;
+			this.cboDestintaion.SelectedItem = dbms;
+		}
+
+
+		
 
 		//private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
 		//{

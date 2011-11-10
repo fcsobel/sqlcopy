@@ -42,6 +42,7 @@ namespace c3o.SqlCopy
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.table_Schema = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
@@ -57,7 +58,7 @@ namespace c3o.SqlCopy
 			this.cbxDeleteRows = new System.Windows.Forms.CheckBox();
 			this.btnSql = new System.Windows.Forms.Button();
 			this.label8 = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.cboSource = new System.Windows.Forms.ComboBox();
 			this.txtSource = new System.Windows.Forms.TextBox();
 			this.txtDestination = new System.Windows.Forms.TextBox();
 			this.bttnOpen = new System.Windows.Forms.Button();
@@ -67,6 +68,8 @@ namespace c3o.SqlCopy
 			this.cboDestintaion = new System.Windows.Forms.ComboBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.bttnSaveAs = new System.Windows.Forms.Button();
+			this.cbxSchema = new System.Windows.Forms.CheckBox();
+			this.bttnSwitch = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -198,6 +201,7 @@ namespace c3o.SqlCopy
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Copy,
+            this.table_Schema,
             this.table_name,
             this.status,
             this.bttnSql});
@@ -216,11 +220,18 @@ namespace c3o.SqlCopy
 			this.Copy.Name = "Copy";
 			this.Copy.Width = 30;
 			// 
+			// table_Schema
+			// 
+			this.table_Schema.DataPropertyName = "Schema";
+			this.table_Schema.HeaderText = "Schema";
+			this.table_Schema.Name = "table_Schema";
+			this.table_Schema.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
 			// table_name
 			// 
 			this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.table_name.DataPropertyName = "Name";
-			this.table_name.HeaderText = "Table Name";
+			this.table_name.HeaderText = "Table";
 			this.table_name.Name = "table_name";
 			this.table_name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
@@ -370,14 +381,15 @@ namespace c3o.SqlCopy
 			this.label8.Text = "DBMS:";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// comboBox1
+			// cboSource
 			// 
-			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(79, 43);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(147, 21);
-			this.comboBox1.TabIndex = 0;
+			this.cboSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboSource.FormattingEnabled = true;
+			this.cboSource.Location = new System.Drawing.Point(79, 43);
+			this.cboSource.Name = "cboSource";
+			this.cboSource.Size = new System.Drawing.Size(147, 21);
+			this.cboSource.TabIndex = 0;
+			this.cboSource.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
 			// 
 			// txtSource
 			// 
@@ -437,6 +449,7 @@ namespace c3o.SqlCopy
 			this.cboDestintaion.Name = "cboDestintaion";
 			this.cboDestintaion.Size = new System.Drawing.Size(147, 21);
 			this.cboDestintaion.TabIndex = 35;
+			this.cboDestintaion.SelectedIndexChanged += new System.EventHandler(this.cboDestintaion_SelectedIndexChanged);
 			// 
 			// label10
 			// 
@@ -458,11 +471,33 @@ namespace c3o.SqlCopy
 			this.bttnSaveAs.UseVisualStyleBackColor = true;
 			this.bttnSaveAs.Click += new System.EventHandler(this.bttnSaveAs_Click);
 			// 
+			// cbxSchema
+			// 
+			this.cbxSchema.AutoSize = true;
+			this.cbxSchema.Location = new System.Drawing.Point(243, 47);
+			this.cbxSchema.Name = "cbxSchema";
+			this.cbxSchema.Size = new System.Drawing.Size(103, 17);
+			this.cbxSchema.TabIndex = 39;
+			this.cbxSchema.Text = "Include Schema";
+			this.cbxSchema.UseVisualStyleBackColor = true;
+			// 
+			// bttnSwitch
+			// 
+			this.bttnSwitch.Location = new System.Drawing.Point(1, 362);
+			this.bttnSwitch.Name = "bttnSwitch";
+			this.bttnSwitch.Size = new System.Drawing.Size(75, 23);
+			this.bttnSwitch.TabIndex = 40;
+			this.bttnSwitch.Text = "Switch";
+			this.bttnSwitch.UseVisualStyleBackColor = true;
+			this.bttnSwitch.Click += new System.EventHandler(this.bttnSwitch_Click);
+			// 
 			// SqlCopyForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(742, 796);
+			this.Controls.Add(this.bttnSwitch);
+			this.Controls.Add(this.cbxSchema);
 			this.Controls.Add(this.bttnSaveAs);
 			this.Controls.Add(this.cboDestintaion);
 			this.Controls.Add(this.label10);
@@ -470,7 +505,7 @@ namespace c3o.SqlCopy
 			this.Controls.Add(this.bttnOpen);
 			this.Controls.Add(this.txtDestination);
 			this.Controls.Add(this.txtSource);
-			this.Controls.Add(this.comboBox1);
+			this.Controls.Add(this.cboSource);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.btnSql);
 			this.Controls.Add(this.cbxDeleteRows);
@@ -532,7 +567,7 @@ namespace c3o.SqlCopy
         private System.Windows.Forms.CheckBox cbxDeleteRows;
         private System.Windows.Forms.Button btnSql;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cboSource;
         private System.Windows.Forms.TextBox txtSource;
         private System.Windows.Forms.TextBox txtDestination;
         private System.Windows.Forms.Button bttnOpen;
@@ -542,10 +577,13 @@ namespace c3o.SqlCopy
         private System.Windows.Forms.ComboBox cboDestintaion;
         private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Button bttnSaveAs;
+		private System.Windows.Forms.CheckBox cbxSchema;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn Copy;
+		private System.Windows.Forms.DataGridViewTextBoxColumn table_Schema;
 		private System.Windows.Forms.DataGridViewTextBoxColumn table_name;
 		private System.Windows.Forms.DataGridViewTextBoxColumn status;
 		private System.Windows.Forms.DataGridViewImageColumn bttnSql;
+		private System.Windows.Forms.Button bttnSwitch;
     }
 }
 
