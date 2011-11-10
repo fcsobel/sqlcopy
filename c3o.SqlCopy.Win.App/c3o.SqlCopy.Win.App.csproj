@@ -174,16 +174,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config\sql server.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="config\oracle.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="exec.ico" />
-    <Content Include="config\list.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="config\template.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
