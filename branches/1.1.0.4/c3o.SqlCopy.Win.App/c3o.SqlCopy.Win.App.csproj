@@ -197,6 +197,7 @@
     <Content Include="Log\Copy of Sql Server Sample 1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\right-arrow-switch48.png" />
     <None Include="Resources\control_play_blue.png" />
     <None Include="Resources\pencil.png" />
   </ItemGroup>

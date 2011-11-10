@@ -483,11 +483,11 @@ namespace c3o.SqlCopy
 			// 
 			// bttnSwitch
 			// 
-			this.bttnSwitch.Location = new System.Drawing.Point(1, 362);
+			this.bttnSwitch.Image = ((System.Drawing.Image)(resources.GetObject("bttnSwitch.Image")));
+			this.bttnSwitch.Location = new System.Drawing.Point(4, 354);
 			this.bttnSwitch.Name = "bttnSwitch";
-			this.bttnSwitch.Size = new System.Drawing.Size(75, 23);
+			this.bttnSwitch.Size = new System.Drawing.Size(68, 40);
 			this.bttnSwitch.TabIndex = 40;
-			this.bttnSwitch.Text = "Switch";
 			this.bttnSwitch.UseVisualStyleBackColor = true;
 			this.bttnSwitch.Click += new System.EventHandler(this.bttnSwitch_Click);
 			// 

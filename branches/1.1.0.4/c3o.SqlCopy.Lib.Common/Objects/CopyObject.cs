@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace c3o.SqlCopy.Objects
 {
@@ -35,11 +36,9 @@ namespace c3o.SqlCopy.Objects
 				else
 				{
 					return this.Name;
-
 				}
 			}
-		}
-		
+		}		
 		public TableObject() { }
 		public TableObject(CopyObject parent) { this.Parent = parent; }
 
@@ -49,25 +48,6 @@ namespace c3o.SqlCopy.Objects
 	[Serializable()]
 	public class CopyObject
 	{
-		//public string GetTableName(string schema, string table)
-		//{
-		//    if (this.IncludeSchema)
-		//    {
-		//        if (string.IsNullOrEmpty(this.SchemaFormat))
-		//        {
-		//            return string.Format("{0}.{1}", schema, table);
-		//        }
-		//        else
-		//        {
-		//            return string.Format(this.SchemaFormat, schema, table);
-		//        }
-		//    }
-		//    else
-		//    {
-		//        return table;
-		//    }
-		//}
-
 		public bool Selected { get; set; }
 		//public string FileName { get; set; }
 
@@ -128,6 +108,40 @@ namespace c3o.SqlCopy.Objects
 		public string SelectSql { get; set; }
 
 		public List<TableObject> Tables { get; set; }
+
+		public static CopyObject Read(string filename)
+		{
+			CopyObject obj = SerializationHelper.Deserialize<CopyObject>(filename);
+
+			if (obj.Tables != null && obj.Tables.Count > 0)
+			{
+				foreach (TableObject t in obj.Tables) { t.Parent = obj; }
+			}
+			return obj;
+		}
+
+
+		public static CopyObject GetTemplate(DBMS dbms)
+		{
+			string templateFile = string.Format(@"{0}\config\template.xml", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName);
+			if (File.Exists(templateFile))
+			{
+				List<CopyObject> templates = SerializationHelper.Deserialize<List<CopyObject>>(templateFile);
+
+				if (templates != null && templates.Count > 0)
+				{
+					return templates.Find(hit => hit.SourceType == dbms);
+				}
+				else
+				{
+					throw new Exception(string.Format("DBMS: {0} not found in {1}", dbms, templateFile));
+				}
+			}
+			else
+			{
+				throw new Exception(string.Format("File not found: {0}", templateFile));
+			}
+		}
 	}
 
 	public enum DBMS
@@ -135,5 +149,8 @@ namespace c3o.SqlCopy.Objects
 		SqlServer,
 		Oracle
 	}
+
+
+
 
 }
