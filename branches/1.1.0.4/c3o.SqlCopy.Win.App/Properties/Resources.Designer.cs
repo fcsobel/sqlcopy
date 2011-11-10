@@ -73,5 +73,26 @@ namespace c3o.SqlCopy.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;ArrayOfCopyObject xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;CopyObject&gt;
+        ///    &lt;Name&gt;SqlServer&lt;/Name&gt;
+        ///	  &lt;SourceType&gt;SqlServer&lt;/SourceType&gt;
+        ///    &lt;Source&gt;&lt;/Source&gt;
+        ///    &lt;Destination&gt;&lt;/Destination&gt;
+        ///    &lt;BatchSize&gt;0&lt;/BatchSize&gt;
+        ///    &lt;BulkCopyOptions&gt;0&lt;/BulkCopyOptions&gt;
+        ///    &lt;BulkCopyTimeout&gt;30&lt;/BulkCopyTimeout&gt;
+        ///    &lt;NotifyAfter&gt;0&lt;/NotifyAfter&gt;
+        ///    &lt;Default&gt;false&lt;/Default&gt;
+        ///    &lt;UseInternalTransaction&gt;false&lt;/UseInternalTrans [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string template {
+            get {
+                return ResourceManager.GetString("template", resourceCulture);
+            }
+        }
     }
 }
