@@ -46,24 +46,45 @@ namespace c3o.SqlCopy.Data
             }
             else
             {
-                string sql = @"select column_name 
+				List<string> columns = new List<string>();
+
+				if (settings.IncludeSchema)
+				{
+					//				                            where   '[' + table_schema + '].[' + table_name + ']' = '[{0}].[{1}]'
+					string sql = @"select column_name 
                             from INFORMATION_SCHEMA.COLUMNS 
-                            where   '[' + table_schema + '].[' + table_name + ']' = '{0}'
+							where   table_schema  = '{0}' 
+									and table_name = '{1}'
                                     and not columnproperty(object_id(table_name), COLUMN_NAME, 'IsComputed') = 1";
 
-                List<string> columns = new List<string>();
-                using (IDataReader dr = this.ExecuteReader(this.settings.Source, string.Format(sql, table.Name)))
-                {
-                    while (dr.Read())
-                    {
-                        columns.Add(string.Format("[{0}]", dr["COLUMN_NAME"]));
-                    }
-                }
 
+					using (IDataReader dr = this.ExecuteReader(this.settings.Source, string.Format(sql, table.Schema, table.Name)))
+					{
+						while (dr.Read())
+						{
+							columns.Add(string.Format("[{0}]", dr["COLUMN_NAME"]));
+						}
+					}
+				}
+				else
+				{
+					string sql = @"select column_name 
+                            from INFORMATION_SCHEMA.COLUMNS 
+							where   table_name  = '{0}' 
+                                    and not columnproperty(object_id(table_name), COLUMN_NAME, 'IsComputed') = 1";
 
-                sql = string.Format("select \r\n{1} \r\nfrom {0}", table.Name, string.Join(",\r\n", columns.ToArray()));
+					using (IDataReader dr = this.ExecuteReader(this.settings.Source, string.Format(sql, table.Name)))
+					{
+						while (dr.Read())
+						{
+							columns.Add(string.Format("[{0}]", dr["COLUMN_NAME"]));
+						}
+					}
+				}
 
-                return sql;
+				string select = string.Format("select \r\n{1} \r\nfrom {0}", table.FullName, string.Join(",\r\n", columns.ToArray()));
+
+				return select;
             }
         }
 
@@ -78,7 +99,7 @@ namespace c3o.SqlCopy.Data
 
         public void Delete(TableObject table)
         {
-            this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table.Name));
+			this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table.FullName));
         }
 
         public void PreCopy()
@@ -110,7 +131,7 @@ namespace c3o.SqlCopy.Data
                 {
                     copy.BulkCopyTimeout = settings.BulkCopyTimeout;
                     copy.BatchSize = settings.BatchSize;
-                    copy.DestinationTableName = table.Name;
+					copy.DestinationTableName = table.FullName;
                     copy.WriteToServer(dr);
                 }
             }
@@ -127,7 +148,7 @@ namespace c3o.SqlCopy.Data
                 {
                     copy.BulkCopyTimeout = settings.BulkCopyTimeout;
                     copy.BatchSize = settings.BatchSize;
-                    copy.DestinationTableName = table.Name;
+					copy.DestinationTableName = table.FullName;
                     copy.WriteToServer(dr);
                 }
             }
