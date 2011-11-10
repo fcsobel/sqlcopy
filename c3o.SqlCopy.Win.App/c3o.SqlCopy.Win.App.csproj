@@ -155,6 +155,7 @@
       <SubType>Designer</SubType>
     </None>
     <BaseApplicationManifest Include="Properties\app.manifest" />
+    <None Include="powershell\sqlcopy1.ps1" />
     <None Include="Properties\DataSources\Test.SqlCopy.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -184,17 +185,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="config\template.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Jobs\Copy of Sql Server Sample 1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Jobs\NewJob1.xml" />
-    <Content Include="Jobs\Sql Server Sample 1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Jobs\TestJob1.xml" />
-    <Content Include="Log\Copy of Sql Server Sample 1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\right-arrow-switch48.png" />
@@ -242,6 +232,10 @@
       <Project>{19CF4B40-7AB4-4810-8E2F-8FBDA3B05A3D}</Project>
       <Name>c3o.SqlCopy.Lib.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Jobs\" />
+    <Folder Include="Log\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
