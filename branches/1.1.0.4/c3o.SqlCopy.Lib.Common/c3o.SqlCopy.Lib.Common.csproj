@@ -107,8 +107,6 @@
     <Compile Include="Common\ObjectCopier.cs" />
     <Compile Include="Common\SerializationHelper.cs" />
     <Compile Include="Data\IDbData.cs" />
-    <Compile Include="Data\IOracleData.cs" />
-    <Compile Include="Data\ISqlData.cs" />
     <Compile Include="Data\OracleData.cs" />
     <Compile Include="Data\SqlData.cs" />
     <Compile Include="Objects\CopyObject.cs" />
