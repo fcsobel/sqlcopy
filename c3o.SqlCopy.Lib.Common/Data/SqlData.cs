@@ -82,7 +82,7 @@ namespace c3o.SqlCopy.Data
 					}
 				}
 
-				string select = string.Format("select \r\n{1} \r\nfrom {0}", table.FullName, string.Join(",\r\n", columns.ToArray()));
+				string select = string.Format("select \r\n{1} \r\nfrom [{0}]", table.FullName, string.Join(",\r\n", columns.ToArray()));
 
 				return select;
 			}
@@ -148,7 +148,7 @@ namespace c3o.SqlCopy.Data
 				{
 					copy.BulkCopyTimeout = settings.BulkCopyTimeout;
 					copy.BatchSize = settings.BatchSize;
-					copy.DestinationTableName = table.FullName;
+					copy.DestinationTableName = "[" + table.FullName + "]";
 					copy.WriteToServer(dr);
 				}
 			}
