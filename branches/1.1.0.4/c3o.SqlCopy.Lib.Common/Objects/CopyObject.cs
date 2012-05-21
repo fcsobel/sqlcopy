@@ -149,8 +149,4 @@ namespace c3o.SqlCopy.Objects
 		SqlServer,
 		Oracle
 	}
-
-
-
-
 }

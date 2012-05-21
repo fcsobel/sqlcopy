@@ -82,7 +82,7 @@ namespace c3o.SqlCopy
 			this.btnCopy.TabIndex = 17;
 			this.btnCopy.Text = "Copy Data";
 			this.btnCopy.UseVisualStyleBackColor = true;
-			this.btnCopy.Click += new System.EventHandler(this.button1_Click);
+			this.btnCopy.Click += new System.EventHandler(this.bttnCopy_Click);
 			// 
 			// label1
 			// 
@@ -423,7 +423,6 @@ namespace c3o.SqlCopy
 			// 
 			// openFileDialog1
 			// 
-			this.openFileDialog1.FileName = "";
 			this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
 			// 
 			// bttnSave
