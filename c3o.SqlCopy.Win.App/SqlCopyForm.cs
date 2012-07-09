@@ -137,7 +137,19 @@ namespace c3o.SqlCopy
 			this.cboDestintaion.DataSource = System.Enum.GetValues(typeof(DBMS));
 		}
 
-		
+		public SqlCopyForm(string[] args)
+		{
+			InitializeComponent();
+
+			this.cboSource.DataSource = System.Enum.GetValues(typeof(DBMS));
+			this.cboDestintaion.DataSource = System.Enum.GetValues(typeof(DBMS));
+
+			// load file
+			if (args != null && args.Length > 0)
+			{
+				LoadFile(args[0]);
+			}
+		}		
 
 		private void bttnRefresh_Click(object sender, EventArgs e)
 		{
@@ -388,7 +400,24 @@ namespace c3o.SqlCopy
 
 		private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
 		{
-			this.FileName = this.openFileDialog1.FileName;
+			this.LoadFile(this.openFileDialog1.FileName);
+			//this.FileName = this.openFileDialog1.FileName;
+
+			//this.Settings = CopyObject.Read(this.FileName);
+
+			//// get latest template values
+			//this.RefreshSource();
+			//this.RefreshDestination();
+
+			//Properties.Settings.Default.FileName = this.FileName;
+			//Properties.Settings.Default.Save();
+
+			////SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
+		}
+
+		private void LoadFile(string filename)
+		{
+			this.FileName = filename;
 
 			this.Settings = CopyObject.Read(this.FileName);
 
@@ -399,8 +428,9 @@ namespace c3o.SqlCopy
 			Properties.Settings.Default.FileName = this.FileName;
 			Properties.Settings.Default.Save();
 
-			//SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
+			//SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");		
 		}
+
 
 		private void button2_Click(object sender, EventArgs e)
 		{
