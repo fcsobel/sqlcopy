@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<ArrayOfCopyObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CopyObject>
+    <Name>SqlServer</Name>
+	  <SourceType>SqlServer</SourceType>
+    <Source></Source>
+    <Destination></Destination>
+    <BatchSize>0</BatchSize>
+    <BulkCopyOptions>0</BulkCopyOptions>
+    <BulkCopyTimeout>30</BulkCopyTimeout>
+    <NotifyAfter>0</NotifyAfter>
+    <Default>false</Default>
+    <UseInternalTransaction>false</UseInternalTransaction>
+    <DestinationPartitionName />
+    <CheckConstraints>true</CheckConstraints>
+    <FireTriggers>true</FireTriggers>
+    <KeepIdentity>true</KeepIdentity>
+    <KeepNulls>true</KeepNulls>
+    <TableLock>false</TableLock>
+    <DeleteRows>true</DeleteRows>
+    <PreCopySql>exec sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? DISABLE TRIGGER all'; </PreCopySql>
+    <PostCopySql>exec sp_msforeachtable 'ALTER TABLE ? CHECK CONSTRAINT all'; exec sp_msforeachtable 'ALTER TABLE ? ENABLE TRIGGER all'; </PostCopySql>
+		<ListSql>SELECT table_schema, table_name FROM information_schema.tables where table_type = 'BASE TABLE'</ListSql>
+    <ListSql-old>SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables where table_type = 'BASE TABLE'</ListSql-old>
+    <DeleteSql>delete from [{0}]</DeleteSql>
+    <SelectSql>select * from [{0}]</SelectSql>
+  </CopyObject>
+  <CopyObject>
+    <Name>Oracle</Name>
+	  <SourceType>Oracle</SourceType>
+    <Source></Source>
+    <Destination></Destination>
+    <BatchSize>0</BatchSize>
+    <BulkCopyOptions>0</BulkCopyOptions>
+    <BulkCopyTimeout>30</BulkCopyTimeout>
+    <NotifyAfter>0</NotifyAfter>
+    <Default>false</Default>
+    <UseInternalTransaction>false</UseInternalTransaction>
+    <DestinationPartitionName />
+    <CheckConstraints>false</CheckConstraints>
+    <FireTriggers>false</FireTriggers>
+    <KeepIdentity>true</KeepIdentity>
+    <KeepNulls>true</KeepNulls>
+    <TableLock>false</TableLock>
+    <DeleteRows>false</DeleteRows>
+    <PreCopySql />
+    <PostCopySql />
+    <ListSql>select owner as table_schema, object_name as table_name from all_objects where object_type in ('TABLE', 'VIEW') and owner not in ('SYS', 'OUTLN', 'SYSTEM') and temporary = 'N'</ListSql>
+    <DeleteSql>delete from {0}</DeleteSql>
+    <SelectSql>select * from {0}</SelectSql>
+  </CopyObject>
+</ArrayOfCopyObject>
