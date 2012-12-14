@@ -19,8 +19,6 @@ namespace c3o.SqlCopy.Data
 			this.Settings = settings;
 			this.Source = GetDb(settings, settings.SourceType);
 			this.Destination = GetDb(settings, settings.DestinationType);
-
-			//this.Db = db;
 		}
 
 		public static IDbData GetDb(CopyObject obj, DBMS dmbs)
@@ -32,8 +30,6 @@ namespace c3o.SqlCopy.Data
 				default:
 					return new SqlData(obj);
 			}
-
-			//this.Db = db;
 		}
 
 		public string GetSelectSql(TableObject table)
@@ -153,8 +149,6 @@ namespace c3o.SqlCopy.Data
 		{
 			//this.Db.Copy(table);
 			this.Destination.Copy(obj, this.Source);
-
-			//dest.Copy(table, source);
 		}
 
 		//public void Delete(string table)

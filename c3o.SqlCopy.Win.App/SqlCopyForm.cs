@@ -57,30 +57,6 @@ namespace c3o.SqlCopy
 			}
 		}
 
-
-		//public CopyObject GetDbms(DBMS dbms)
-		//{
-		//    string templateFile = string.Format(@"{0}\config\template.xml", new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName);
-		//    if (File.Exists(templateFile))
-		//    {
-		//        List<CopyObject> templates = SerializationHelper.Deserialize<List<CopyObject>>(templateFile);
-				
-		//        if (templates != null && templates.Count > 0)
-		//        {
-		//            return templates.Find(hit => hit.SourceType == dbms);
-		//        }
-		//        else
-		//        {
-		//            throw new Exception(string.Format("DBMS: {0} not found in {1}", dbms, templateFile));
-		//        }
-		//    }
-		//    else
-		//    {
-		//        throw new Exception(string.Format("File not found: {0}", templateFile));
-		//    }
-		//}
-
-
 		public CopyObject Settings
 		{
 			get
@@ -114,19 +90,11 @@ namespace c3o.SqlCopy
 					obj.KeepNulls = this.cbxKeepNulls.Checked;
 					obj.NotifyAfter = 0;
 
-					//obj.ListSql = "";
-					//obj.PostCopySql = "";
-					//obj.PreCopySql = "";
-					//obj.SelectSql = "";
-					//obj.DeleteSql = "";
-
 					obj.Source = this.Source;
 					obj.TableLock = cbxTableLock.Checked;
 					obj.UseInternalTransaction = false;
 					obj.Tables = this.Tables;
 				}
-
-
 				return obj;
 			}
 			set
@@ -149,7 +117,6 @@ namespace c3o.SqlCopy
 				this.txtDestination.Text = value.Destination;
 
 				//this.comboBox1.SelectedItem = obj.SourceType = (DBMS)this.comboBox1.SelectedItem;
-
 				//this.comboBox1.DataSource = System.Enum.GetValues(typeof(DBMS));
 
 				this.Tables = value.Tables;
@@ -170,7 +137,19 @@ namespace c3o.SqlCopy
 			this.cboDestintaion.DataSource = System.Enum.GetValues(typeof(DBMS));
 		}
 
-		
+		public SqlCopyForm(string[] args)
+		{
+			InitializeComponent();
+
+			this.cboSource.DataSource = System.Enum.GetValues(typeof(DBMS));
+			this.cboDestintaion.DataSource = System.Enum.GetValues(typeof(DBMS));
+
+			// load file
+			if (args != null && args.Length > 0)
+			{
+				LoadFile(args[0]);
+			}
+		}		
 
 		private void bttnRefresh_Click(object sender, EventArgs e)
 		{
@@ -201,24 +180,17 @@ namespace c3o.SqlCopy
 			}
 		}
 
-		//public void SaveList()
-		//{
-		//    // Save Objects to disk
-		//    SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
-
-		//}
-
-		private void button1_Click(object sender, EventArgs e)
+		
+		private void bttnCopy_Click(object sender, EventArgs e)
 		{
 			//this.CurrentObj = this.Settings;
 
 			CopyObject settings = this.Settings;
 
-			foreach(TableObject obj in settings.Tables)
+			foreach (TableObject obj in settings.Tables)
 			{
 				obj.Status = "";
 			}
-
 			
 			this.dataGridView1.FirstDisplayedScrollingRowIndex = 0;
 			this.Tables = settings.Tables;
@@ -227,8 +199,7 @@ namespace c3o.SqlCopy
 
 			// Copy tables  
 			this.CopyTablesAsc();
-
-		  }
+		}
 
  
 		public void CopyTablesAsc()
@@ -252,29 +223,10 @@ namespace c3o.SqlCopy
 
 				if (row != null)
 				{
-				   // this.dataGridView1.FirstDisplayedScrollingRowIndex = row.Index;
-					//this.dataGridView1.Refresh();
-					
 					this.dataGridView1.CurrentCell = row.Cells[3];
 					this.dataGridView1.UpdateCellValue(2, row.Index);
 				}
 			}
-
-			//this.dataGridView1.FirstDisplayedScrollingRowIndex = e.ProgressPercentage;
-
-			//if (e.UserState == null)
-			//{
-			//    this.dataGridView1.Rows[e.ProgressPercentage].Cells[2].Value = "Success";
-			//}
-			//else
-			//{
-			//    Exception er = (Exception) e.UserState;
-
-			//    this.dataGridView1.Rows[e.ProgressPercentage].Cells[2].Value = er.Message;
-			//}
-
-			//this.dataGridView1.Show();
-			//this.dataGridView1.Refresh();
 		}
 
 		// Background Version
@@ -327,34 +279,7 @@ namespace c3o.SqlCopy
 				finally
 				{
 				}
-
-
 			}
-
-			//foreach (TableObject obj in settings.Tables)
-			//{
-			//    if (worker.CancellationPending)
-			//    {
-			//        break;
-			//    }
-			//    try
-			//    {
-			//        if (obj.Selected)
-			//        {
-			//            manager.Copy(obj.Name);
-			//            obj.Status = "Success";
-			//            worker.ReportProgress(0);
-			//        }
-			//    }
-			//    catch (Exception er)
-			//    {
-			//        obj.Status = er.Message;
-			//        worker.ReportProgress(0, er);
-			//    }
-			//    finally
-			//    {
-			//    }
-			//}
 
 			try
 			{
@@ -369,10 +294,7 @@ namespace c3o.SqlCopy
 				return;
 			}
 		}
-
-
-	   
-
+		
 
 		
 		private void bttnSelectAll_Click(object sender, EventArgs e)
@@ -478,7 +400,24 @@ namespace c3o.SqlCopy
 
 		private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
 		{
-			this.FileName = this.openFileDialog1.FileName;
+			this.LoadFile(this.openFileDialog1.FileName);
+			//this.FileName = this.openFileDialog1.FileName;
+
+			//this.Settings = CopyObject.Read(this.FileName);
+
+			//// get latest template values
+			//this.RefreshSource();
+			//this.RefreshDestination();
+
+			//Properties.Settings.Default.FileName = this.FileName;
+			//Properties.Settings.Default.Save();
+
+			////SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
+		}
+
+		private void LoadFile(string filename)
+		{
+			this.FileName = filename;
 
 			this.Settings = CopyObject.Read(this.FileName);
 
@@ -489,8 +428,9 @@ namespace c3o.SqlCopy
 			Properties.Settings.Default.FileName = this.FileName;
 			Properties.Settings.Default.Save();
 
-			//SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
+			//SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");		
 		}
+
 
 		private void button2_Click(object sender, EventArgs e)
 		{
@@ -640,7 +580,6 @@ namespace c3o.SqlCopy
 			this.txtDestination.Text = source;
 			this.cboDestintaion.SelectedItem = dbms;
 		}
-
 			
 
 		//private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -652,8 +591,7 @@ namespace c3o.SqlCopy
 		//    if (obj != null)
 		//    {
 		//        MessageBox.Show(obj.Name);
-		//    }
-			
+		//    }			
 		//}
 	}
 }
