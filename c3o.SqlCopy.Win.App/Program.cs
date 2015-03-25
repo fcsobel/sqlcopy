@@ -17,6 +17,7 @@ namespace c3o.SqlCopy
             Application.Run(new   SqlCopyForm());
 
             //Application.Run(new CopyManagerForm());
+			//test
         }
     }
 }
