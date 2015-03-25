@@ -14,7 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <ManifestCertificateThumbprint>97D40DB12F7A78F4027807592525F8B60B0EE62E</ManifestCertificateThumbprint>
     <ManifestKeyFile>c3o.SqlCopy.Win.Service_TemporaryKey.pfx</ManifestKeyFile>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
     <SignManifests>true</SignManifests>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <FileUpgradeFlags>
@@ -91,6 +91,12 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -141,6 +147,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="c3o.SqlCopy.Win.Service_TemporaryKey.pfx" />
+    <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
