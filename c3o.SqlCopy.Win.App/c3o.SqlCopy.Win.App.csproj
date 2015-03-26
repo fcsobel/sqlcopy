@@ -155,7 +155,6 @@
       <SubType>Designer</SubType>
     </None>
     <BaseApplicationManifest Include="Properties\app.manifest" />
-    <None Include="powershell\sqlcopy1.ps1" />
     <None Include="Properties\DataSources\Test.SqlCopy.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
