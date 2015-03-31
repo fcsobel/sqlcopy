@@ -82,7 +82,7 @@ namespace c3o.SqlCopy
 			this.btnCopy.TabIndex = 17;
 			this.btnCopy.Text = "Copy Data";
 			this.btnCopy.UseVisualStyleBackColor = true;
-			this.btnCopy.Click += new System.EventHandler(this.button1_Click);
+			this.btnCopy.Click += new System.EventHandler(this.bttnCopy_Click);
 			// 
 			// label1
 			// 
@@ -434,7 +434,7 @@ namespace c3o.SqlCopy
 			this.bttnSave.TabIndex = 34;
 			this.bttnSave.Text = "Save";
 			this.bttnSave.UseVisualStyleBackColor = true;
-			this.bttnSave.Click += new System.EventHandler(this.button2_Click);
+			this.bttnSave.Click += new System.EventHandler(this.bttnSave_Click);
 			// 
 			// saveFileDialog1
 			// 
@@ -534,7 +534,7 @@ namespace c3o.SqlCopy
 			this.Name = "SqlCopyForm";
 			this.Text = "Copy Window";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SqlCopyForm_FormClosing);
-			this.Load += new System.EventHandler(this.Form1_Load);
+			this.Load += new System.EventHandler(this.CopyForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();

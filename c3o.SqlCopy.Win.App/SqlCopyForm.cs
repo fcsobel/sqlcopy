@@ -208,18 +208,15 @@ namespace c3o.SqlCopy
 
 		//}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void bttnCopy_Click(object sender, EventArgs e)
 		{
-			//this.CurrentObj = this.Settings;
-
 			CopyObject settings = this.Settings;
 
-			foreach(TableObject obj in settings.Tables)
+			foreach (TableObject obj in settings.Tables)
 			{
 				obj.Status = "";
 			}
 
-			
 			this.dataGridView1.FirstDisplayedScrollingRowIndex = 0;
 			this.Tables = settings.Tables;
 
@@ -227,8 +224,8 @@ namespace c3o.SqlCopy
 
 			// Copy tables  
 			this.CopyTablesAsc();
+		}
 
-		  }
 
  
 		public void CopyTablesAsc()
@@ -276,6 +273,7 @@ namespace c3o.SqlCopy
 			//this.dataGridView1.Show();
 			//this.dataGridView1.Refresh();
 		}
+
 
 		// Background Version
 		public void CopyTables(object sender, DoWorkEventArgs e) 
@@ -401,7 +399,8 @@ namespace c3o.SqlCopy
 			}
 		}
 
-		private void Form1_Load(object sender, EventArgs e)
+
+		private void CopyForm_Load(object sender, EventArgs e)
 		{
 			string filename = Properties.Settings.Default.FileName;
 
@@ -454,16 +453,16 @@ namespace c3o.SqlCopy
 		}
 
 
-		private void button1_Click_1(object sender, EventArgs e)
-		{
-			this.Close();
-		}
+		//private void bttnClose_Click(object sender, EventArgs e)
+		//{
+		//	this.Close();
+		//}
 
-		private void bttnSave_Click(object sender, EventArgs e)
-		{
-			//this.SaveList();
-			this.Close();
-		}
+		//private void bttnSave_Click(object sender, EventArgs e)
+		//{
+		//	//this.SaveList();
+		//	this.Close();
+		//}
 
 		private void SqlCopyForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -491,42 +490,89 @@ namespace c3o.SqlCopy
 
 			//SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
 		}
+						
 
-		private void button2_Click(object sender, EventArgs e)
+		/// <summary>
+		/// Save current data to xml file
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void bttnSave_Click(object sender, EventArgs e)
 		{
-			this.Save();
-		}
-
-
-		private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
-		{
-			this.FileName = this.saveFileDialog1.FileName;
-
-			SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);
-
-			Properties.Settings.Default.FileName = this.FileName;
-			Properties.Settings.Default.Save();
-
-		}
-
-		private void Save()
-		{
+			//this.Save();
 			if (string.IsNullOrEmpty(this.FileName))
 			{
 				this.saveFileDialog1.ShowDialog();
 			}
 			else
 			{
-				SerializationHelper.Serialize<CopyObject>(this.Settings, this.FileName);        
+				this.SaveAs(this.FileName);
+				//SerializationHelper.Serialize<CopyObject>(this.Settings, this.FileName);        
 			}
 		}
 
+
+		///// <summary>
+		///// Save current data to xml file
+		///// </summary>
+		//private void Save()
+		//{
+		//	if (string.IsNullOrEmpty(this.FileName))
+		//	{
+		//		this.saveFileDialog1.ShowDialog();
+		//	}
+		//	else
+		//	{
+		//		this.SaveAs(this.FileName);
+		//		//SerializationHelper.Serialize<CopyObject>(this.Settings, this.FileName);        
+		//	}
+		//}
+
+
+		/// <summary>
+		/// Save As XML dialog
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void bttnSaveAs_Click(object sender, EventArgs e)
 		{
 			this.saveFileDialog1.ShowDialog();
 		}
 
-			
+		
+		private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+		{
+			this.SaveAs(this.saveFileDialog1.FileName);
+			// set file name 
+			//this.FileName = this.saveFileDialog1.FileName;
+
+			// save 
+			//SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);
+
+			// set file in settings
+			//Properties.Settings.Default.FileName = this.FileName;
+			//Properties.Settings.Default.Save();
+		}
+
+
+		/// <summary>
+		/// Save as file and remember settings
+		/// </summary>
+		/// <param name="filename"></param>
+		private void SaveAs(string filename)
+		{ 
+			// set file name 
+			this.FileName = this.saveFileDialog1.FileName;
+
+			// save 
+			SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);
+
+			// set file in settings
+			Properties.Settings.Default.FileName = this.FileName;
+			Properties.Settings.Default.Save();
+		}
+
+
 
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -585,47 +631,14 @@ namespace c3o.SqlCopy
 			}
 		}
 
-		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			this.RefreshSource();
-		}
-
-		private void cboDestintaion_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			this.RefreshDestination();
-		}
-
-		public void RefreshSource()
-		{
-			DBMS dbms = (DBMS)this.cboSource.SelectedItem;
-
-			// load dbms tenplate values from xml
-			CopyObject template = CopyObject.GetTemplate(dbms);
-
-			if (template != null && this.CurrentObj != null)
-			{
-				this.CurrentObj.SelectSql = template.SelectSql;
-				this.CurrentObj.ListSql = template.ListSql;
-				this.CurrentObj.SchemaFormat = template.SchemaFormat;
-			}
-		}
-
-		public void RefreshDestination()
-		{
-			DBMS dbms = (DBMS)this.cboDestintaion.SelectedItem;
-
-			// load dbms tenplate values from xml
-			CopyObject template = CopyObject.GetTemplate(dbms);
-
-			if (template != null && this.CurrentObj != null)
-			{
-				this.CurrentObj.PostCopySql = template.PostCopySql;
-				this.CurrentObj.PreCopySql = template.PreCopySql;
-				this.CurrentObj.DeleteSql = template.DeleteSql;
-			}
 		
-		}
 
+
+		/// <summary>
+		/// Switch Source and Destination
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void bttnSwitch_Click(object sender, EventArgs e)
 		{
 			// get sources
@@ -642,7 +655,6 @@ namespace c3o.SqlCopy
 		}
 
 			
-
 		//private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
 		//{
 		//     DataGridViewRow row = this.dataGridView1.Rows[e.RowIndex];
@@ -655,5 +667,64 @@ namespace c3o.SqlCopy
 		//    }
 			
 		//}
+
+		/// <summary>
+		/// Load source on dropdown selection
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.RefreshSource();
+		}
+
+		/// <summary>
+		/// Load Destination on dropdown selection
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void cboDestintaion_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.RefreshDestination();
+		}
+
+		/// <summary>
+		/// Load Source from XML for current selection
+		/// </summary>
+		public void RefreshSource()
+		{
+			DBMS dbms = (DBMS)this.cboSource.SelectedItem;
+
+			// load dbms tenplate values from xml
+			CopyObject template = CopyObject.GetTemplate(dbms);
+
+			if (template != null && this.CurrentObj != null)
+			{
+				this.CurrentObj.SelectSql = template.SelectSql;
+				this.CurrentObj.ListSql = template.ListSql;
+				this.CurrentObj.SchemaFormat = template.SchemaFormat;
+			}
+		}
+
+		/// <summary>
+		/// Load Destination from XML based on current selection
+		/// </summary>
+		public void RefreshDestination()
+		{
+			DBMS dbms = (DBMS)this.cboDestintaion.SelectedItem;
+
+			// load dbms template values from xml
+			CopyObject template = CopyObject.GetTemplate(dbms);
+
+			if (template != null && this.CurrentObj != null)
+			{
+				this.CurrentObj.PostCopySql = template.PostCopySql;
+				this.CurrentObj.PreCopySql = template.PreCopySql;
+				this.CurrentObj.DeleteSql = template.DeleteSql;
+			}
+		
+		}
+
+
 	}
 }
