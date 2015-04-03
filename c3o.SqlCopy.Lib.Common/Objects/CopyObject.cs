@@ -29,15 +29,35 @@ namespace c3o.SqlCopy.Objects
 		[XmlIgnore]
 		public BackgroundWorker Worker { get; set; }
 
+		[XmlIgnore]
+		int Percentage { get { return (int) Math.Round((decimal) (this.Copied / this.Count), 0) * 100; } }
+		
 		public void ShowProgress()
 		{
-			if (Row != null)
-			{
-				var parent = Row.DataGridView;
-				parent.CurrentCell = Row.Cells[3];
-				parent.UpdateCellValue(2, Row.Index);				
-			}
+			//int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
+			Worker.ReportProgress(this.Percentage, this);
+
+			////if (Row != null)
+			////{
+			////	int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
+			////	Row.Cells[5].Value = i;
+			////	var parent = Row.DataGridView;
+			////	parent.CurrentCell = Row.Cells[3];
+			////	parent.UpdateCellValue(2, Row.Index);		
+			////}
 		}
+
+		//public void OnShowProgress()
+		//{
+		//	if (Row != null)
+		//	{
+		//		int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
+		//		Row.Cells[5].Value = i;
+		//		var parent = Row.DataGridView;
+		//		parent.CurrentCell = Row.Cells[3];
+		//		parent.UpdateCellValue(2, Row.Index);		
+		//	}
+		//}
 
 		[XmlIgnore]
 		public string FullName 
@@ -64,21 +84,21 @@ namespace c3o.SqlCopy.Objects
 
 		public void OnRowsCopied(object sender, OracleRowsCopiedEventArgs e)
 		{
-			this.Copied += e.RowsCopied;
+			this.Copied = e.RowsCopied;
 			this.Status = string.Format("Copying {0} out of {1}" , this.Copied, this.Count);
 			this.ShowProgress();
 		}
 
 		public void OnRowsCopied(object sender, SqlRowsCopiedEventArgs e)
 		{
-			this.Copied += e.RowsCopied;
+			this.Copied = e.RowsCopied;
 			this.Status = string.Format("Copying {0} out of {1}" , this.Copied, this.Count);
 			this.ShowProgress();
 		}
 
 		public void OnRowsCopied(object sender, RowsCopiedEventArgs e)
 		{
-			this.Copied += e.RowsCopied;
+			this.Copied = e.RowsCopied;
 			this.Status = "Copying " + this.Copied.ToString();
 			this.ShowProgress();
 		}

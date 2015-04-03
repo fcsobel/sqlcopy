@@ -41,11 +41,6 @@ namespace c3o.SqlCopy
 			this.bttnFlipSelect = new System.Windows.Forms.Button();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.table_Schema = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
 			this.txtTimeout = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
@@ -70,15 +65,22 @@ namespace c3o.SqlCopy
 			this.bttnSaveAs = new System.Windows.Forms.Button();
 			this.cbxSchema = new System.Windows.Forms.CheckBox();
 			this.bttnSwitch = new System.Windows.Forms.Button();
+			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.table_Schema = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
+			this.Progress = new c3o.SqlCopy.DataGridViewProgressColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnCopy
 			// 
 			this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnCopy.Location = new System.Drawing.Point(650, 755);
+			this.btnCopy.Location = new System.Drawing.Point(867, 929);
+			this.btnCopy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.btnCopy.Name = "btnCopy";
-			this.btnCopy.Size = new System.Drawing.Size(75, 23);
+			this.btnCopy.Size = new System.Drawing.Size(100, 28);
 			this.btnCopy.TabIndex = 17;
 			this.btnCopy.Text = "Copy Data";
 			this.btnCopy.UseVisualStyleBackColor = true;
@@ -87,9 +89,10 @@ namespace c3o.SqlCopy
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(26, 71);
+			this.label1.Location = new System.Drawing.Point(35, 87);
+			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(44, 13);
+			this.label1.Size = new System.Drawing.Size(57, 17);
 			this.label1.TabIndex = 3;
 			this.label1.Text = "Source:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -98,18 +101,20 @@ namespace c3o.SqlCopy
 			// 
 			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(11, 761);
+			this.label2.Location = new System.Drawing.Point(15, 937);
+			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(63, 13);
+			this.label2.Size = new System.Drawing.Size(83, 17);
 			this.label2.TabIndex = 4;
 			this.label2.Text = "Destination:";
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(28, 101);
+			this.label3.Location = new System.Drawing.Point(37, 124);
+			this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(42, 13);
+			this.label3.Size = new System.Drawing.Size(55, 17);
 			this.label3.TabIndex = 6;
 			this.label3.Text = "Tables:";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -117,9 +122,10 @@ namespace c3o.SqlCopy
 			// bttnRefresh
 			// 
 			this.bttnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.bttnRefresh.Location = new System.Drawing.Point(650, 71);
+			this.bttnRefresh.Location = new System.Drawing.Point(867, 87);
+			this.bttnRefresh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.bttnRefresh.Name = "bttnRefresh";
-			this.bttnRefresh.Size = new System.Drawing.Size(75, 23);
+			this.bttnRefresh.Size = new System.Drawing.Size(100, 28);
 			this.bttnRefresh.TabIndex = 2;
 			this.bttnRefresh.Text = "Refresh";
 			this.bttnRefresh.UseVisualStyleBackColor = true;
@@ -131,9 +137,10 @@ namespace c3o.SqlCopy
 			this.cbxKeepIdentity.AutoSize = true;
 			this.cbxKeepIdentity.Checked = true;
 			this.cbxKeepIdentity.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbxKeepIdentity.Location = new System.Drawing.Point(327, 683);
+			this.cbxKeepIdentity.Location = new System.Drawing.Point(436, 841);
+			this.cbxKeepIdentity.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.cbxKeepIdentity.Name = "cbxKeepIdentity";
-			this.cbxKeepIdentity.Size = new System.Drawing.Size(88, 17);
+			this.cbxKeepIdentity.Size = new System.Drawing.Size(112, 21);
 			this.cbxKeepIdentity.TabIndex = 8;
 			this.cbxKeepIdentity.Text = "Keep Identity";
 			this.cbxKeepIdentity.UseVisualStyleBackColor = true;
@@ -144,9 +151,10 @@ namespace c3o.SqlCopy
 			this.cbxKeepNulls.AutoSize = true;
 			this.cbxKeepNulls.Checked = true;
 			this.cbxKeepNulls.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbxKeepNulls.Location = new System.Drawing.Point(327, 706);
+			this.cbxKeepNulls.Location = new System.Drawing.Point(436, 869);
+			this.cbxKeepNulls.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.cbxKeepNulls.Name = "cbxKeepNulls";
-			this.cbxKeepNulls.Size = new System.Drawing.Size(77, 17);
+			this.cbxKeepNulls.Size = new System.Drawing.Size(98, 21);
 			this.cbxKeepNulls.TabIndex = 9;
 			this.cbxKeepNulls.Text = "Keep Nulls";
 			this.cbxKeepNulls.UseVisualStyleBackColor = true;
@@ -154,9 +162,10 @@ namespace c3o.SqlCopy
 			// bttnSelectAll
 			// 
 			this.bttnSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.bttnSelectAll.Location = new System.Drawing.Point(79, 680);
+			this.bttnSelectAll.Location = new System.Drawing.Point(105, 837);
+			this.bttnSelectAll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.bttnSelectAll.Name = "bttnSelectAll";
-			this.bttnSelectAll.Size = new System.Drawing.Size(75, 23);
+			this.bttnSelectAll.Size = new System.Drawing.Size(100, 28);
 			this.bttnSelectAll.TabIndex = 4;
 			this.bttnSelectAll.Text = "Select All";
 			this.bttnSelectAll.UseVisualStyleBackColor = true;
@@ -165,9 +174,10 @@ namespace c3o.SqlCopy
 			// bttnDeselectAll
 			// 
 			this.bttnDeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.bttnDeselectAll.Location = new System.Drawing.Point(160, 680);
+			this.bttnDeselectAll.Location = new System.Drawing.Point(213, 837);
+			this.bttnDeselectAll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.bttnDeselectAll.Name = "bttnDeselectAll";
-			this.bttnDeselectAll.Size = new System.Drawing.Size(75, 23);
+			this.bttnDeselectAll.Size = new System.Drawing.Size(100, 28);
 			this.bttnDeselectAll.TabIndex = 5;
 			this.bttnDeselectAll.Text = "Deselect All";
 			this.bttnDeselectAll.UseVisualStyleBackColor = true;
@@ -176,9 +186,10 @@ namespace c3o.SqlCopy
 			// bttnFlipSelect
 			// 
 			this.bttnFlipSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.bttnFlipSelect.Location = new System.Drawing.Point(241, 680);
+			this.bttnFlipSelect.Location = new System.Drawing.Point(321, 837);
+			this.bttnFlipSelect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.bttnFlipSelect.Name = "bttnFlipSelect";
-			this.bttnFlipSelect.Size = new System.Drawing.Size(65, 23);
+			this.bttnFlipSelect.Size = new System.Drawing.Size(87, 28);
 			this.bttnFlipSelect.TabIndex = 6;
 			this.bttnFlipSelect.Text = "Flip";
 			this.bttnFlipSelect.UseVisualStyleBackColor = true;
@@ -204,14 +215,277 @@ namespace c3o.SqlCopy
             this.table_Schema,
             this.table_name,
             this.status,
-            this.bttnSql});
-			this.dataGridView1.Location = new System.Drawing.Point(79, 102);
+            this.bttnSql,
+            this.Progress});
+			this.dataGridView1.Location = new System.Drawing.Point(105, 126);
+			this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dataGridView1.Size = new System.Drawing.Size(646, 566);
+			this.dataGridView1.Size = new System.Drawing.Size(861, 697);
 			this.dataGridView1.TabIndex = 3;
 			this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
 			this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+			// 
+			// txtTimeout
+			// 
+			this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtTimeout.Location = new System.Drawing.Point(831, 838);
+			this.txtTimeout.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.txtTimeout.Name = "txtTimeout";
+			this.txtTimeout.Size = new System.Drawing.Size(67, 22);
+			this.txtTimeout.TabIndex = 14;
+			this.txtTimeout.Text = "30";
+			this.txtTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label4
+			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(769, 842);
+			this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(63, 17);
+			this.label4.TabIndex = 18;
+			this.label4.Text = "Timeout:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label5
+			// 
+			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(900, 842);
+			this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(61, 17);
+			this.label5.TabIndex = 19;
+			this.label5.Text = "seconds";
+			// 
+			// txtBatchSize
+			// 
+			this.txtBatchSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtBatchSize.Location = new System.Drawing.Point(831, 870);
+			this.txtBatchSize.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.txtBatchSize.Name = "txtBatchSize";
+			this.txtBatchSize.Size = new System.Drawing.Size(67, 22);
+			this.txtBatchSize.TabIndex = 15;
+			this.txtBatchSize.Text = "0";
+			this.txtBatchSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label6
+			// 
+			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(751, 874);
+			this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(79, 17);
+			this.label6.TabIndex = 21;
+			this.label6.Text = "Batch Size:";
+			// 
+			// label7
+			// 
+			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(900, 874);
+			this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(37, 17);
+			this.label7.TabIndex = 22;
+			this.label7.Text = "rows";
+			// 
+			// cbxCheckConstraints
+			// 
+			this.cbxCheckConstraints.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.cbxCheckConstraints.AutoSize = true;
+			this.cbxCheckConstraints.Location = new System.Drawing.Point(568, 841);
+			this.cbxCheckConstraints.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxCheckConstraints.Name = "cbxCheckConstraints";
+			this.cbxCheckConstraints.Size = new System.Drawing.Size(144, 21);
+			this.cbxCheckConstraints.TabIndex = 11;
+			this.cbxCheckConstraints.Text = "Check Constraints";
+			this.cbxCheckConstraints.UseVisualStyleBackColor = true;
+			this.cbxCheckConstraints.Click += new System.EventHandler(this.cbxDeleteRows_Click);
+			// 
+			// cbxFireTriggers
+			// 
+			this.cbxFireTriggers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.cbxFireTriggers.AutoSize = true;
+			this.cbxFireTriggers.Location = new System.Drawing.Point(568, 869);
+			this.cbxFireTriggers.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxFireTriggers.Name = "cbxFireTriggers";
+			this.cbxFireTriggers.Size = new System.Drawing.Size(111, 21);
+			this.cbxFireTriggers.TabIndex = 12;
+			this.cbxFireTriggers.Text = "Fire Triggers";
+			this.cbxFireTriggers.UseVisualStyleBackColor = true;
+			this.cbxFireTriggers.Click += new System.EventHandler(this.cbxDeleteRows_Click);
+			// 
+			// cbxTableLock
+			// 
+			this.cbxTableLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.cbxTableLock.AutoSize = true;
+			this.cbxTableLock.Location = new System.Drawing.Point(568, 897);
+			this.cbxTableLock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxTableLock.Name = "cbxTableLock";
+			this.cbxTableLock.Size = new System.Drawing.Size(100, 21);
+			this.cbxTableLock.TabIndex = 13;
+			this.cbxTableLock.Text = "Table Lock";
+			this.cbxTableLock.UseVisualStyleBackColor = true;
+			// 
+			// cbxDeleteRows
+			// 
+			this.cbxDeleteRows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.cbxDeleteRows.AutoSize = true;
+			this.cbxDeleteRows.Location = new System.Drawing.Point(436, 897);
+			this.cbxDeleteRows.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxDeleteRows.Name = "cbxDeleteRows";
+			this.cbxDeleteRows.Size = new System.Drawing.Size(109, 21);
+			this.cbxDeleteRows.TabIndex = 10;
+			this.cbxDeleteRows.Text = "Delete Rows";
+			this.cbxDeleteRows.UseVisualStyleBackColor = true;
+			this.cbxDeleteRows.Click += new System.EventHandler(this.cbxDeleteRows_Click);
+			// 
+			// btnSql
+			// 
+			this.btnSql.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btnSql.Enabled = false;
+			this.btnSql.Location = new System.Drawing.Point(321, 892);
+			this.btnSql.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.btnSql.Name = "btnSql";
+			this.btnSql.Size = new System.Drawing.Size(87, 28);
+			this.btnSql.TabIndex = 7;
+			this.btnSql.Text = "SQL";
+			this.btnSql.UseVisualStyleBackColor = true;
+			this.btnSql.Click += new System.EventHandler(this.btnSql_Click);
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(41, 57);
+			this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(51, 17);
+			this.label8.TabIndex = 30;
+			this.label8.Text = "DBMS:";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// cboSource
+			// 
+			this.cboSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboSource.FormattingEnabled = true;
+			this.cboSource.Location = new System.Drawing.Point(105, 53);
+			this.cboSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cboSource.Name = "cboSource";
+			this.cboSource.Size = new System.Drawing.Size(195, 24);
+			this.cboSource.TabIndex = 0;
+			this.cboSource.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+			// 
+			// txtSource
+			// 
+			this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtSource.Location = new System.Drawing.Point(105, 90);
+			this.txtSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.txtSource.Name = "txtSource";
+			this.txtSource.Size = new System.Drawing.Size(752, 22);
+			this.txtSource.TabIndex = 1;
+			this.txtSource.Text = "Data Source=.\\sqlexpress;Initial Catalog=<source>;Integrated Security=True";
+			// 
+			// txtDestination
+			// 
+			this.txtDestination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtDestination.Location = new System.Drawing.Point(105, 932);
+			this.txtDestination.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.txtDestination.Name = "txtDestination";
+			this.txtDestination.Size = new System.Drawing.Size(752, 22);
+			this.txtDestination.TabIndex = 16;
+			this.txtDestination.Text = "Data Source=.\\sqlexpress;Initial Catalog=<destination>;Integrated Security=True";
+			// 
+			// bttnOpen
+			// 
+			this.bttnOpen.Location = new System.Drawing.Point(105, 15);
+			this.bttnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnOpen.Name = "bttnOpen";
+			this.bttnOpen.Size = new System.Drawing.Size(100, 28);
+			this.bttnOpen.TabIndex = 33;
+			this.bttnOpen.Text = "Open...";
+			this.bttnOpen.UseVisualStyleBackColor = true;
+			this.bttnOpen.Click += new System.EventHandler(this.button1_Click_2);
+			// 
+			// openFileDialog1
+			// 
+			this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+			// 
+			// bttnSave
+			// 
+			this.bttnSave.Location = new System.Drawing.Point(212, 15);
+			this.bttnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnSave.Name = "bttnSave";
+			this.bttnSave.Size = new System.Drawing.Size(100, 28);
+			this.bttnSave.TabIndex = 34;
+			this.bttnSave.Text = "Save";
+			this.bttnSave.UseVisualStyleBackColor = true;
+			this.bttnSave.Click += new System.EventHandler(this.bttnSave_Click);
+			// 
+			// saveFileDialog1
+			// 
+			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
+			// 
+			// cboDestintaion
+			// 
+			this.cboDestintaion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.cboDestintaion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboDestintaion.FormattingEnabled = true;
+			this.cboDestintaion.Location = new System.Drawing.Point(105, 894);
+			this.cboDestintaion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cboDestintaion.Name = "cboDestintaion";
+			this.cboDestintaion.Size = new System.Drawing.Size(195, 24);
+			this.cboDestintaion.TabIndex = 35;
+			this.cboDestintaion.SelectedIndexChanged += new System.EventHandler(this.cboDestintaion_SelectedIndexChanged);
+			// 
+			// label10
+			// 
+			this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label10.AutoSize = true;
+			this.label10.Location = new System.Drawing.Point(44, 897);
+			this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(51, 17);
+			this.label10.TabIndex = 36;
+			this.label10.Text = "DBMS:";
+			// 
+			// bttnSaveAs
+			// 
+			this.bttnSaveAs.Location = new System.Drawing.Point(320, 15);
+			this.bttnSaveAs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnSaveAs.Name = "bttnSaveAs";
+			this.bttnSaveAs.Size = new System.Drawing.Size(100, 28);
+			this.bttnSaveAs.TabIndex = 38;
+			this.bttnSaveAs.Text = "Save As...";
+			this.bttnSaveAs.UseVisualStyleBackColor = true;
+			this.bttnSaveAs.Click += new System.EventHandler(this.bttnSaveAs_Click);
+			// 
+			// cbxSchema
+			// 
+			this.cbxSchema.AutoSize = true;
+			this.cbxSchema.Location = new System.Drawing.Point(324, 58);
+			this.cbxSchema.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxSchema.Name = "cbxSchema";
+			this.cbxSchema.Size = new System.Drawing.Size(130, 21);
+			this.cbxSchema.TabIndex = 39;
+			this.cbxSchema.Text = "Include Schema";
+			this.cbxSchema.UseVisualStyleBackColor = true;
+			// 
+			// bttnSwitch
+			// 
+			this.bttnSwitch.Image = ((System.Drawing.Image)(resources.GetObject("bttnSwitch.Image")));
+			this.bttnSwitch.Location = new System.Drawing.Point(5, 436);
+			this.bttnSwitch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnSwitch.Name = "bttnSwitch";
+			this.bttnSwitch.Size = new System.Drawing.Size(91, 49);
+			this.bttnSwitch.TabIndex = 40;
+			this.bttnSwitch.UseVisualStyleBackColor = true;
+			this.bttnSwitch.Click += new System.EventHandler(this.bttnSwitch_Click);
 			// 
 			// Copy
 			// 
@@ -251,251 +525,16 @@ namespace c3o.SqlCopy
 			this.bttnSql.Name = "bttnSql";
 			this.bttnSql.Width = 30;
 			// 
-			// txtTimeout
+			// Progress
 			// 
-			this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtTimeout.Location = new System.Drawing.Point(623, 681);
-			this.txtTimeout.Name = "txtTimeout";
-			this.txtTimeout.Size = new System.Drawing.Size(51, 20);
-			this.txtTimeout.TabIndex = 14;
-			this.txtTimeout.Text = "30";
-			this.txtTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// label4
-			// 
-			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(577, 684);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(48, 13);
-			this.label4.TabIndex = 18;
-			this.label4.Text = "Timeout:";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label5
-			// 
-			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(675, 684);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(47, 13);
-			this.label5.TabIndex = 19;
-			this.label5.Text = "seconds";
-			// 
-			// txtBatchSize
-			// 
-			this.txtBatchSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtBatchSize.Location = new System.Drawing.Point(623, 707);
-			this.txtBatchSize.Name = "txtBatchSize";
-			this.txtBatchSize.Size = new System.Drawing.Size(51, 20);
-			this.txtBatchSize.TabIndex = 15;
-			this.txtBatchSize.Text = "0";
-			this.txtBatchSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// label6
-			// 
-			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(563, 710);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(61, 13);
-			this.label6.TabIndex = 21;
-			this.label6.Text = "Batch Size:";
-			// 
-			// label7
-			// 
-			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(675, 710);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(29, 13);
-			this.label7.TabIndex = 22;
-			this.label7.Text = "rows";
-			// 
-			// cbxCheckConstraints
-			// 
-			this.cbxCheckConstraints.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.cbxCheckConstraints.AutoSize = true;
-			this.cbxCheckConstraints.Location = new System.Drawing.Point(426, 683);
-			this.cbxCheckConstraints.Name = "cbxCheckConstraints";
-			this.cbxCheckConstraints.Size = new System.Drawing.Size(112, 17);
-			this.cbxCheckConstraints.TabIndex = 11;
-			this.cbxCheckConstraints.Text = "Check Constraints";
-			this.cbxCheckConstraints.UseVisualStyleBackColor = true;
-			this.cbxCheckConstraints.Click += new System.EventHandler(this.cbxDeleteRows_Click);
-			// 
-			// cbxFireTriggers
-			// 
-			this.cbxFireTriggers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.cbxFireTriggers.AutoSize = true;
-			this.cbxFireTriggers.Location = new System.Drawing.Point(426, 706);
-			this.cbxFireTriggers.Name = "cbxFireTriggers";
-			this.cbxFireTriggers.Size = new System.Drawing.Size(84, 17);
-			this.cbxFireTriggers.TabIndex = 12;
-			this.cbxFireTriggers.Text = "Fire Triggers";
-			this.cbxFireTriggers.UseVisualStyleBackColor = true;
-			this.cbxFireTriggers.Click += new System.EventHandler(this.cbxDeleteRows_Click);
-			// 
-			// cbxTableLock
-			// 
-			this.cbxTableLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.cbxTableLock.AutoSize = true;
-			this.cbxTableLock.Location = new System.Drawing.Point(426, 729);
-			this.cbxTableLock.Name = "cbxTableLock";
-			this.cbxTableLock.Size = new System.Drawing.Size(80, 17);
-			this.cbxTableLock.TabIndex = 13;
-			this.cbxTableLock.Text = "Table Lock";
-			this.cbxTableLock.UseVisualStyleBackColor = true;
-			// 
-			// cbxDeleteRows
-			// 
-			this.cbxDeleteRows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.cbxDeleteRows.AutoSize = true;
-			this.cbxDeleteRows.Location = new System.Drawing.Point(327, 729);
-			this.cbxDeleteRows.Name = "cbxDeleteRows";
-			this.cbxDeleteRows.Size = new System.Drawing.Size(87, 17);
-			this.cbxDeleteRows.TabIndex = 10;
-			this.cbxDeleteRows.Text = "Delete Rows";
-			this.cbxDeleteRows.UseVisualStyleBackColor = true;
-			this.cbxDeleteRows.Click += new System.EventHandler(this.cbxDeleteRows_Click);
-			// 
-			// btnSql
-			// 
-			this.btnSql.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.btnSql.Enabled = false;
-			this.btnSql.Location = new System.Drawing.Point(241, 725);
-			this.btnSql.Name = "btnSql";
-			this.btnSql.Size = new System.Drawing.Size(65, 23);
-			this.btnSql.TabIndex = 7;
-			this.btnSql.Text = "SQL";
-			this.btnSql.UseVisualStyleBackColor = true;
-			this.btnSql.Click += new System.EventHandler(this.btnSql_Click);
-			// 
-			// label8
-			// 
-			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(31, 46);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(41, 13);
-			this.label8.TabIndex = 30;
-			this.label8.Text = "DBMS:";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// cboSource
-			// 
-			this.cboSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboSource.FormattingEnabled = true;
-			this.cboSource.Location = new System.Drawing.Point(79, 43);
-			this.cboSource.Name = "cboSource";
-			this.cboSource.Size = new System.Drawing.Size(147, 21);
-			this.cboSource.TabIndex = 0;
-			this.cboSource.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-			// 
-			// txtSource
-			// 
-			this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSource.Location = new System.Drawing.Point(79, 73);
-			this.txtSource.Name = "txtSource";
-			this.txtSource.Size = new System.Drawing.Size(565, 20);
-			this.txtSource.TabIndex = 1;
-			this.txtSource.Text = "Data Source=.\\sqlexpress;Initial Catalog=<source>;Integrated Security=True";
-			// 
-			// txtDestination
-			// 
-			this.txtDestination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtDestination.Location = new System.Drawing.Point(79, 757);
-			this.txtDestination.Name = "txtDestination";
-			this.txtDestination.Size = new System.Drawing.Size(565, 20);
-			this.txtDestination.TabIndex = 16;
-			this.txtDestination.Text = "Data Source=.\\sqlexpress;Initial Catalog=<destination>;Integrated Security=True";
-			// 
-			// bttnOpen
-			// 
-			this.bttnOpen.Location = new System.Drawing.Point(79, 12);
-			this.bttnOpen.Name = "bttnOpen";
-			this.bttnOpen.Size = new System.Drawing.Size(75, 23);
-			this.bttnOpen.TabIndex = 33;
-			this.bttnOpen.Text = "Open...";
-			this.bttnOpen.UseVisualStyleBackColor = true;
-			this.bttnOpen.Click += new System.EventHandler(this.button1_Click_2);
-			// 
-			// openFileDialog1
-			// 
-			this.openFileDialog1.FileName = "";
-			this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
-			// 
-			// bttnSave
-			// 
-			this.bttnSave.Location = new System.Drawing.Point(159, 12);
-			this.bttnSave.Name = "bttnSave";
-			this.bttnSave.Size = new System.Drawing.Size(75, 23);
-			this.bttnSave.TabIndex = 34;
-			this.bttnSave.Text = "Save";
-			this.bttnSave.UseVisualStyleBackColor = true;
-			this.bttnSave.Click += new System.EventHandler(this.bttnSave_Click);
-			// 
-			// saveFileDialog1
-			// 
-			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
-			// 
-			// cboDestintaion
-			// 
-			this.cboDestintaion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.cboDestintaion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboDestintaion.FormattingEnabled = true;
-			this.cboDestintaion.Location = new System.Drawing.Point(79, 726);
-			this.cboDestintaion.Name = "cboDestintaion";
-			this.cboDestintaion.Size = new System.Drawing.Size(147, 21);
-			this.cboDestintaion.TabIndex = 35;
-			this.cboDestintaion.SelectedIndexChanged += new System.EventHandler(this.cboDestintaion_SelectedIndexChanged);
-			// 
-			// label10
-			// 
-			this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label10.AutoSize = true;
-			this.label10.Location = new System.Drawing.Point(33, 729);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(41, 13);
-			this.label10.TabIndex = 36;
-			this.label10.Text = "DBMS:";
-			// 
-			// bttnSaveAs
-			// 
-			this.bttnSaveAs.Location = new System.Drawing.Point(240, 12);
-			this.bttnSaveAs.Name = "bttnSaveAs";
-			this.bttnSaveAs.Size = new System.Drawing.Size(75, 23);
-			this.bttnSaveAs.TabIndex = 38;
-			this.bttnSaveAs.Text = "Save As...";
-			this.bttnSaveAs.UseVisualStyleBackColor = true;
-			this.bttnSaveAs.Click += new System.EventHandler(this.bttnSaveAs_Click);
-			// 
-			// cbxSchema
-			// 
-			this.cbxSchema.AutoSize = true;
-			this.cbxSchema.Location = new System.Drawing.Point(243, 47);
-			this.cbxSchema.Name = "cbxSchema";
-			this.cbxSchema.Size = new System.Drawing.Size(103, 17);
-			this.cbxSchema.TabIndex = 39;
-			this.cbxSchema.Text = "Include Schema";
-			this.cbxSchema.UseVisualStyleBackColor = true;
-			// 
-			// bttnSwitch
-			// 
-			this.bttnSwitch.Image = ((System.Drawing.Image)(resources.GetObject("bttnSwitch.Image")));
-			this.bttnSwitch.Location = new System.Drawing.Point(4, 354);
-			this.bttnSwitch.Name = "bttnSwitch";
-			this.bttnSwitch.Size = new System.Drawing.Size(68, 40);
-			this.bttnSwitch.TabIndex = 40;
-			this.bttnSwitch.UseVisualStyleBackColor = true;
-			this.bttnSwitch.Click += new System.EventHandler(this.bttnSwitch_Click);
+			this.Progress.HeaderText = "Progress";
+			this.Progress.Name = "Progress";
 			// 
 			// SqlCopyForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(742, 796);
+			this.ClientSize = new System.Drawing.Size(989, 980);
 			this.Controls.Add(this.bttnSwitch);
 			this.Controls.Add(this.cbxSchema);
 			this.Controls.Add(this.bttnSaveAs);
@@ -531,6 +570,7 @@ namespace c3o.SqlCopy
 			this.Controls.Add(this.label6);
 			this.DoubleBuffered = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.Name = "SqlCopyForm";
 			this.Text = "Copy Window";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SqlCopyForm_FormClosing);
@@ -578,12 +618,13 @@ namespace c3o.SqlCopy
         private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Button bttnSaveAs;
 		private System.Windows.Forms.CheckBox cbxSchema;
+		private System.Windows.Forms.Button bttnSwitch;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn Copy;
 		private System.Windows.Forms.DataGridViewTextBoxColumn table_Schema;
 		private System.Windows.Forms.DataGridViewTextBoxColumn table_name;
 		private System.Windows.Forms.DataGridViewTextBoxColumn status;
 		private System.Windows.Forms.DataGridViewImageColumn bttnSql;
-		private System.Windows.Forms.Button bttnSwitch;
+		private DataGridViewProgressColumn Progress;
     }
 }
 

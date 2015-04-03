@@ -169,6 +169,14 @@ namespace c3o.SqlCopy
 
 			this.cboSource.DataSource = System.Enum.GetValues(typeof(DBMS));
 			this.cboDestintaion.DataSource = System.Enum.GetValues(typeof(DBMS));
+
+			//DataGridViewProgressColumn column = new DataGridViewProgressColumn();
+
+			////this.dataGridView1.ColumnCount = this.dataGridView1.ColumnCount + 1;
+			//this.dataGridView1.Columns.Add(column);
+			////this.dataGridView1.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+			//column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill; 
+			//column.HeaderText = "Progress";
 		}
 
 		
@@ -242,20 +250,42 @@ namespace c3o.SqlCopy
 
 		public void ShowProgress(object sender, ProgressChangedEventArgs e)
 		{
-			BackgroundWorker worker = (BackgroundWorker)sender;
+			//BackgroundWorker worker = (BackgroundWorker)sender;
+
+
 
 			if (e.UserState != null)
 			{
-				DataGridViewRow row = e.UserState as DataGridViewRow;
+				TableObject table  = e.UserState as TableObject;
 
-				if (row != null)
-				{
-				   // this.dataGridView1.FirstDisplayedScrollingRowIndex = row.Index;
-					//this.dataGridView1.Refresh();					
-					this.dataGridView1.CurrentCell = row.Cells[3];
-					this.dataGridView1.UpdateCellValue(2, row.Index);
-				}
+				
+					var Row = table.Row;
+					//table.ShowProgress();
+
+					//DataGridViewRow row = e.UserState as DataGridViewRow;
+
+					//if (row != null)
+					//{
+					//   // this.dataGridView1.FirstDisplayedScrollingRowIndex = row.Index;
+					//	//this.dataGridView1.Refresh();					
+					//	this.dataGridView1.CurrentCell = row.Cells[3];
+					//	this.dataGridView1.UpdateCellValue(2, row.Index);
+					//}
+
+
+					if (Row != null)
+					{
+						//int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
+						Row.Cells[5].Value = e.ProgressPercentage;
+						var parent = Row.DataGridView;
+						parent.CurrentCell = Row.Cells[3];
+						parent.UpdateCellValue(2, Row.Index);
+					}
+				
+
 			}
+
+
 			
 		}
 
@@ -292,11 +322,15 @@ namespace c3o.SqlCopy
 
 			foreach (DataGridViewRow row in this.dataGridView1.Rows)
 			{
+				
 				TableObject obj = (TableObject)row.DataBoundItem;
 
 				// prepare
 				obj.Row = row;
 				obj.Worker = worker;
+
+
+				worker.ReportProgress(0, obj);
 
 				if (worker.CancellationPending)
 				{
@@ -309,7 +343,8 @@ namespace c3o.SqlCopy
 						manager.Copy(obj);
 						obj.Status = "Success";
 						//worker.ReportProgress(0, row);
-						obj.ShowProgress();
+						worker.ReportProgress(100, obj);
+						//obj.ShowProgress();
 					}
 				}
 				catch (Exception er)
@@ -317,7 +352,8 @@ namespace c3o.SqlCopy
 					obj.Status = er.Message;
 					//worker.ReportProgress(0, er);
 					//worker.ReportProgress(0, row);
-					obj.ShowProgress();
+					worker.ReportProgress(0, obj);
+					//obj.ShowProgress();
 				}
 				finally
 				{

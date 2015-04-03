@@ -106,6 +106,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataGridViewProgressColumn.cs" />
     <Compile Include="TableEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
