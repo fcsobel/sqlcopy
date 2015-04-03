@@ -10,6 +10,8 @@ namespace c3o.SqlCopy
 {
 	public class OracleData : IDbData
 	{
+		public event RowsCopiedEventHandler OnRowsCopied;
+		
 		public CopyObject settings { get; set; }
 
 		public OracleData(CopyObject settings)
@@ -42,6 +44,11 @@ namespace c3o.SqlCopy
 			this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table.FullName));
 		}
 
+		public long Count(TableObject table)
+		{
+			return (long) this.ExecuteScalar(this.settings.Destination, string.Format(settings.CountSql, table.FullName));
+		}
+
 		public void PreCopy()
 		{
 			if (!String.IsNullOrEmpty(this.settings.PreCopySql))
@@ -71,6 +78,8 @@ namespace c3o.SqlCopy
 					copy.BulkCopyTimeout = settings.BulkCopyTimeout;
 					copy.BatchSize = settings.BatchSize;
 					copy.DestinationTableName = table.FullName;
+					copy.NotifyAfter = settings.NotifyAfter;
+					copy.OracleRowsCopied += copy_OracleRowsCopied;
 					copy.WriteToServer(dr);
 				}
 			}
@@ -89,9 +98,16 @@ namespace c3o.SqlCopy
 					copy.BulkCopyTimeout = settings.BulkCopyTimeout;
 					copy.BatchSize = settings.BatchSize;
 					copy.DestinationTableName = table.FullName;
+					copy.NotifyAfter = settings.NotifyAfter;
+					copy.OracleRowsCopied += copy_OracleRowsCopied;
 					copy.WriteToServer(dr);
 				}
 			}
+		}
+
+		void copy_OracleRowsCopied(object sender, OracleRowsCopiedEventArgs eventArgs)
+		{
+			if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(eventArgs)); }
 		}
 
 
@@ -111,6 +127,16 @@ namespace c3o.SqlCopy
 				OracleCommand command = new OracleCommand(sql, connection);
 				connection.Open();
 				return command.ExecuteNonQuery();
+			}
+		}
+
+		public object ExecuteScalar(string db, string sql)
+		{
+			using (OracleConnection connection = new OracleConnection(db))
+			{
+				OracleCommand command = new OracleCommand(sql, connection);
+				connection.Open();
+				return command.ExecuteScalar();
 			}
 		}
 

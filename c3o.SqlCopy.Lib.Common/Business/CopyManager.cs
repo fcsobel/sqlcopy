@@ -10,6 +10,8 @@ namespace c3o.SqlCopy.Data
 {
 	public class CopyManager
 	{
+		public event RowsCopiedEventHandler OnRowsCopied;
+
 		private IDbData Source;
 		private IDbData Destination;
 		private CopyObject Settings {get; set;}
@@ -19,9 +21,16 @@ namespace c3o.SqlCopy.Data
 			this.Settings = settings;
 			this.Source = GetDb(settings, settings.SourceType);
 			this.Destination = GetDb(settings, settings.DestinationType);
+			this.Destination.OnRowsCopied += Destination_OnRowsCopied;
 
 			//this.Db = db;
 		}
+
+		void Destination_OnRowsCopied(object sender, RowsCopiedEventArgs e)
+		{
+			if (OnRowsCopied != null) { OnRowsCopied(this, e); }
+		}
+
 
 		public static IDbData GetDb(CopyObject obj, DBMS dmbs)
 		{
@@ -145,12 +154,19 @@ namespace c3o.SqlCopy.Data
 		{
 			IDbData source = GetDb(settings, settings.SourceType);
 			IDbData dest = GetDb(settings, settings.DestinationType);
-
-			dest.Copy(table, source);
 		}
+
+
+		// current copy object
+		public TableObject obj { get; set; }
 
 		public void Copy(TableObject obj)
 		{
+			obj.Count = this.Source.Count(obj);
+
+			//dest.OnRowsCopied += dest_OnRowsCopied;
+			//dest.Copy(table, source);
+
 			//this.Db.Copy(table);
 			this.Destination.Copy(obj, this.Source);
 

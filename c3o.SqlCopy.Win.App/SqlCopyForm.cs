@@ -113,6 +113,7 @@ namespace c3o.SqlCopy
 					obj.KeepIdentity = this.cbxKeepIdentity.Checked;
 					obj.KeepNulls = this.cbxKeepNulls.Checked;
 					obj.NotifyAfter = 0;
+					obj.NotifyAfter = 1;
 
 					//obj.ListSql = "";
 					//obj.PostCopySql = "";
@@ -250,28 +251,12 @@ namespace c3o.SqlCopy
 				if (row != null)
 				{
 				   // this.dataGridView1.FirstDisplayedScrollingRowIndex = row.Index;
-					//this.dataGridView1.Refresh();
-					
+					//this.dataGridView1.Refresh();					
 					this.dataGridView1.CurrentCell = row.Cells[3];
 					this.dataGridView1.UpdateCellValue(2, row.Index);
 				}
 			}
-
-			//this.dataGridView1.FirstDisplayedScrollingRowIndex = e.ProgressPercentage;
-
-			//if (e.UserState == null)
-			//{
-			//    this.dataGridView1.Rows[e.ProgressPercentage].Cells[2].Value = "Success";
-			//}
-			//else
-			//{
-			//    Exception er = (Exception) e.UserState;
-
-			//    this.dataGridView1.Rows[e.ProgressPercentage].Cells[2].Value = er.Message;
-			//}
-
-			//this.dataGridView1.Show();
-			//this.dataGridView1.Refresh();
+			
 		}
 
 
@@ -282,9 +267,15 @@ namespace c3o.SqlCopy
 
 			CopyObject settings = e.Argument as CopyObject;
 
-			CopyManager manager = new CopyManager(settings); ;
-
+			CopyManager manager = new CopyManager(settings);
+		
 			BackgroundWorker worker = (BackgroundWorker)sender;
+
+			manager.OnRowsCopied +=manager_OnRowsCopied;
+			
+
+			//ProgressChanged
+			//worker.ReportProgress()
 
 			try
 			{
@@ -303,6 +294,10 @@ namespace c3o.SqlCopy
 			{
 				TableObject obj = (TableObject)row.DataBoundItem;
 
+				// prepare
+				obj.Row = row;
+				obj.Worker = worker;
+
 				if (worker.CancellationPending)
 				{
 					break;
@@ -313,14 +308,16 @@ namespace c3o.SqlCopy
 					{
 						manager.Copy(obj);
 						obj.Status = "Success";
-						worker.ReportProgress(0, row);
+						//worker.ReportProgress(0, row);
+						obj.ShowProgress();
 					}
 				}
 				catch (Exception er)
 				{
 					obj.Status = er.Message;
 					//worker.ReportProgress(0, er);
-					worker.ReportProgress(0, row);
+					//worker.ReportProgress(0, row);
+					obj.ShowProgress();
 				}
 				finally
 				{
@@ -368,8 +365,12 @@ namespace c3o.SqlCopy
 			}
 		}
 
-
-	   
+		void manager_OnRowsCopied(object sender, RowsCopiedEventArgs e)
+		{
+			string test = "tt";
+			//throw new NotImplementedException();
+		}
+			   
 
 
 		
@@ -721,6 +722,7 @@ namespace c3o.SqlCopy
 				this.CurrentObj.PostCopySql = template.PostCopySql;
 				this.CurrentObj.PreCopySql = template.PreCopySql;
 				this.CurrentObj.DeleteSql = template.DeleteSql;
+				this.CurrentObj.CountSql = template.CountSql;
 			}
 		
 		}

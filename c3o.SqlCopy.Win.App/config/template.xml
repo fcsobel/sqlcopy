@@ -24,6 +24,7 @@
     <ListSql-old>SELECT '[' + table_schema + '].[' + table_name + ']' as table_name FROM information_schema.tables where table_type = 'BASE TABLE'</ListSql-old>
     <DeleteSql>delete from {0}</DeleteSql>
     <SelectSql>select * from {0}</SelectSql>
+		<CountSql>select count(*) from {0}</CountSql>
   </CopyObject>
   <CopyObject>
     <Name>Oracle</Name>
@@ -48,5 +49,6 @@
     <ListSql>select owner as table_schema, object_name as table_name from all_objects where object_type in ('TABLE', 'VIEW') and owner not in ('SYS', 'OUTLN', 'SYSTEM') and temporary = 'N'</ListSql>
     <DeleteSql>delete from {0}</DeleteSql>
     <SelectSql>select * from {0}</SelectSql>
+		<CountSql>select count(*) from {0}</CountSql>	
   </CopyObject>
 </ArrayOfCopyObject>

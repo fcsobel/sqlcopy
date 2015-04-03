@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using System.Data.SqlClient;
+using c3o.SqlCopy.Data;
+using Oracle.DataAccess.Client;
+using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace c3o.SqlCopy.Objects
 {
@@ -16,6 +21,23 @@ namespace c3o.SqlCopy.Objects
 		public bool Selected { get; set; }
 		public string Status { get; set; }
 		public string Sql { get; set; }
+		public long Count { get; set; }
+		public long Copied { get; set; }
+
+		[XmlIgnore]
+		public DataGridViewRow Row { get; set; }
+		[XmlIgnore]
+		public BackgroundWorker Worker { get; set; }
+
+		public void ShowProgress()
+		{
+			if (Row != null)
+			{
+				var parent = Row.DataGridView;
+				parent.CurrentCell = Row.Cells[3];
+				parent.UpdateCellValue(2, Row.Index);				
+			}
+		}
 
 		[XmlIgnore]
 		public string FullName 
@@ -39,8 +61,38 @@ namespace c3o.SqlCopy.Objects
 				}
 			}
 		}		
+
+		public void OnRowsCopied(object sender, OracleRowsCopiedEventArgs e)
+		{
+			this.Copied += e.RowsCopied;
+			this.Status = string.Format("Copying {0} out of {1}" , this.Copied, this.Count);
+			this.ShowProgress();
+		}
+
+		public void OnRowsCopied(object sender, SqlRowsCopiedEventArgs e)
+		{
+			this.Copied += e.RowsCopied;
+			this.Status = string.Format("Copying {0} out of {1}" , this.Copied, this.Count);
+			this.ShowProgress();
+		}
+
+		public void OnRowsCopied(object sender, RowsCopiedEventArgs e)
+		{
+			this.Copied += e.RowsCopied;
+			this.Status = "Copying " + this.Copied.ToString();
+			this.ShowProgress();
+		}
+
+		public void OnSuccess(object sender)
+		{
+			this.Status = string.Format("Success - Copied {0} rows out of {1}", this.Copied, this.Count);
+			this.ShowProgress();
+		}
+
 		public TableObject() { }
 		public TableObject(CopyObject parent) { this.Parent = parent; }
+
+
 
 	}
 
@@ -61,6 +113,7 @@ namespace c3o.SqlCopy.Objects
 		public int BulkCopyOptions { get; set; }
 		public int BulkCopyTimeout { get; set; }
 		public int NotifyAfter { get; set; }
+				
 		public int LogLimit { get; set; }
 
 		//public string DestinationTableName { get; set; }
@@ -103,6 +156,7 @@ namespace c3o.SqlCopy.Objects
 
 		//delete from {0};"
 		public string DeleteSql { get; set; }
+		public string CountSql { get; set; }
 
 		//"select * from {0}"
 		public string SelectSql { get; set; }

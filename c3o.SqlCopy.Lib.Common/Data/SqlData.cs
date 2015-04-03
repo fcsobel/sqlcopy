@@ -10,6 +10,8 @@ namespace c3o.SqlCopy.Data
 {
 	public class SqlData : IDbData 
 	{
+		public event RowsCopiedEventHandler OnRowsCopied;
+		
 		public CopyObject settings { get; set; }
 
 		public SqlData(CopyObject settings)
@@ -102,6 +104,12 @@ namespace c3o.SqlCopy.Data
 			this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table.FullName));
 		}
 
+		public long Count(TableObject table)
+		{
+			return System.Convert.ToInt64(this.ExecuteScalar(this.settings.Destination, string.Format(settings.CountSql, table.FullName)));
+		}
+
+
 		public void PreCopy()
 		{
 			if (!string.IsNullOrEmpty(this.settings.PreCopySql))
@@ -115,7 +123,6 @@ namespace c3o.SqlCopy.Data
 		{
 			if (!string.IsNullOrEmpty(this.settings.PostCopySql))
 			{
-
 				this.ExecuteNonQuery(this.settings.Destination, this.settings.PostCopySql);
 			}
 		}
@@ -132,9 +139,16 @@ namespace c3o.SqlCopy.Data
 					copy.BulkCopyTimeout = settings.BulkCopyTimeout;
 					copy.BatchSize = settings.BatchSize;
 					copy.DestinationTableName = table.FullName;
+					copy.NotifyAfter = settings.NotifyAfter;
+					copy.SqlRowsCopied += copy_SqlRowsCopied;
 					copy.WriteToServer(dr);
 				}
 			}
+		}
+
+		void copy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
+		{
+			if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(e)); }
 		}
 
 
@@ -149,6 +163,9 @@ namespace c3o.SqlCopy.Data
 					copy.BulkCopyTimeout = settings.BulkCopyTimeout;
 					copy.BatchSize = settings.BatchSize;
 					copy.DestinationTableName = table.FullName;
+					copy.NotifyAfter = settings.NotifyAfter;					
+					//copy.SqlRowsCopied += copy_SqlRowsCopied;
+					copy.SqlRowsCopied += table.OnRowsCopied;
 					copy.WriteToServer(dr);
 				}
 			}
@@ -173,5 +190,17 @@ namespace c3o.SqlCopy.Data
 				return command.ExecuteNonQuery();
 			}
 		}
+
+
+		public object ExecuteScalar(string db, string sql)
+		{
+			using (SqlConnection connection = new SqlConnection(db))
+			{
+				SqlCommand command = new SqlCommand(sql, connection);
+				connection.Open();
+				return command.ExecuteScalar();
+			}
+		}
+
 	}
 }
