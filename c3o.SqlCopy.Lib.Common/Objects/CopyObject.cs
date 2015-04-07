@@ -30,8 +30,11 @@ namespace c3o.SqlCopy.Objects
 		public BackgroundWorker Worker { get; set; }
 
 		[XmlIgnore]
-		int Percentage { get { return (int) Math.Round((decimal) (this.Copied / this.Count), 0) * 100; } }
-		
+		public int Percentage { get { return this.Copied == 0 || this.Count == 0 ? 0 : (int) Math.Round((decimal) (this.Copied / this.Count), 0) * 100; } }
+
+		//public int Percentage { get; set; }
+		//public string Percentage2 { get; set; }
+
 		public void ShowProgress()
 		{
 			//int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
@@ -109,8 +112,12 @@ namespace c3o.SqlCopy.Objects
 			this.ShowProgress();
 		}
 
-		public TableObject() { }
-		public TableObject(CopyObject parent) { this.Parent = parent; }
+		public TableObject() {
+		
+		}
+		public TableObject(CopyObject parent) { 
+			this.Parent = parent; 
+		}
 
 
 

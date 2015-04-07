@@ -65,12 +65,14 @@ namespace c3o.SqlCopy
 			this.bttnSaveAs = new System.Windows.Forms.Button();
 			this.cbxSchema = new System.Windows.Forms.CheckBox();
 			this.bttnSwitch = new System.Windows.Forms.Button();
+			this.dataGridViewProgressColumn1 = new c3o.SqlCopy.DataGridViewProgressColumn();
+			this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
 			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.table_Schema = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Percentage = new c3o.SqlCopy.DataGridViewProgressColumn();
 			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
-			this.Progress = new c3o.SqlCopy.DataGridViewProgressColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -78,7 +80,7 @@ namespace c3o.SqlCopy
 			// 
 			this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCopy.Location = new System.Drawing.Point(867, 929);
-			this.btnCopy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.btnCopy.Margin = new System.Windows.Forms.Padding(4);
 			this.btnCopy.Name = "btnCopy";
 			this.btnCopy.Size = new System.Drawing.Size(100, 28);
 			this.btnCopy.TabIndex = 17;
@@ -123,7 +125,7 @@ namespace c3o.SqlCopy
 			// 
 			this.bttnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.bttnRefresh.Location = new System.Drawing.Point(867, 87);
-			this.bttnRefresh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnRefresh.Margin = new System.Windows.Forms.Padding(4);
 			this.bttnRefresh.Name = "bttnRefresh";
 			this.bttnRefresh.Size = new System.Drawing.Size(100, 28);
 			this.bttnRefresh.TabIndex = 2;
@@ -138,7 +140,7 @@ namespace c3o.SqlCopy
 			this.cbxKeepIdentity.Checked = true;
 			this.cbxKeepIdentity.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbxKeepIdentity.Location = new System.Drawing.Point(436, 841);
-			this.cbxKeepIdentity.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxKeepIdentity.Margin = new System.Windows.Forms.Padding(4);
 			this.cbxKeepIdentity.Name = "cbxKeepIdentity";
 			this.cbxKeepIdentity.Size = new System.Drawing.Size(112, 21);
 			this.cbxKeepIdentity.TabIndex = 8;
@@ -152,7 +154,7 @@ namespace c3o.SqlCopy
 			this.cbxKeepNulls.Checked = true;
 			this.cbxKeepNulls.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbxKeepNulls.Location = new System.Drawing.Point(436, 869);
-			this.cbxKeepNulls.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxKeepNulls.Margin = new System.Windows.Forms.Padding(4);
 			this.cbxKeepNulls.Name = "cbxKeepNulls";
 			this.cbxKeepNulls.Size = new System.Drawing.Size(98, 21);
 			this.cbxKeepNulls.TabIndex = 9;
@@ -163,7 +165,7 @@ namespace c3o.SqlCopy
 			// 
 			this.bttnSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.bttnSelectAll.Location = new System.Drawing.Point(105, 837);
-			this.bttnSelectAll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnSelectAll.Margin = new System.Windows.Forms.Padding(4);
 			this.bttnSelectAll.Name = "bttnSelectAll";
 			this.bttnSelectAll.Size = new System.Drawing.Size(100, 28);
 			this.bttnSelectAll.TabIndex = 4;
@@ -175,7 +177,7 @@ namespace c3o.SqlCopy
 			// 
 			this.bttnDeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.bttnDeselectAll.Location = new System.Drawing.Point(213, 837);
-			this.bttnDeselectAll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnDeselectAll.Margin = new System.Windows.Forms.Padding(4);
 			this.bttnDeselectAll.Name = "bttnDeselectAll";
 			this.bttnDeselectAll.Size = new System.Drawing.Size(100, 28);
 			this.bttnDeselectAll.TabIndex = 5;
@@ -187,7 +189,7 @@ namespace c3o.SqlCopy
 			// 
 			this.bttnFlipSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.bttnFlipSelect.Location = new System.Drawing.Point(321, 837);
-			this.bttnFlipSelect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnFlipSelect.Margin = new System.Windows.Forms.Padding(4);
 			this.bttnFlipSelect.Name = "bttnFlipSelect";
 			this.bttnFlipSelect.Size = new System.Drawing.Size(87, 28);
 			this.bttnFlipSelect.TabIndex = 6;
@@ -215,10 +217,10 @@ namespace c3o.SqlCopy
             this.table_Schema,
             this.table_name,
             this.status,
-            this.bttnSql,
-            this.Progress});
+            this.Percentage,
+            this.bttnSql});
 			this.dataGridView1.Location = new System.Drawing.Point(105, 126);
-			this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dataGridView1.Size = new System.Drawing.Size(861, 697);
@@ -230,7 +232,7 @@ namespace c3o.SqlCopy
 			// 
 			this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtTimeout.Location = new System.Drawing.Point(831, 838);
-			this.txtTimeout.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.txtTimeout.Margin = new System.Windows.Forms.Padding(4);
 			this.txtTimeout.Name = "txtTimeout";
 			this.txtTimeout.Size = new System.Drawing.Size(67, 22);
 			this.txtTimeout.TabIndex = 14;
@@ -264,7 +266,7 @@ namespace c3o.SqlCopy
 			// 
 			this.txtBatchSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtBatchSize.Location = new System.Drawing.Point(831, 870);
-			this.txtBatchSize.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.txtBatchSize.Margin = new System.Windows.Forms.Padding(4);
 			this.txtBatchSize.Name = "txtBatchSize";
 			this.txtBatchSize.Size = new System.Drawing.Size(67, 22);
 			this.txtBatchSize.TabIndex = 15;
@@ -298,7 +300,7 @@ namespace c3o.SqlCopy
 			this.cbxCheckConstraints.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.cbxCheckConstraints.AutoSize = true;
 			this.cbxCheckConstraints.Location = new System.Drawing.Point(568, 841);
-			this.cbxCheckConstraints.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxCheckConstraints.Margin = new System.Windows.Forms.Padding(4);
 			this.cbxCheckConstraints.Name = "cbxCheckConstraints";
 			this.cbxCheckConstraints.Size = new System.Drawing.Size(144, 21);
 			this.cbxCheckConstraints.TabIndex = 11;
@@ -311,7 +313,7 @@ namespace c3o.SqlCopy
 			this.cbxFireTriggers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.cbxFireTriggers.AutoSize = true;
 			this.cbxFireTriggers.Location = new System.Drawing.Point(568, 869);
-			this.cbxFireTriggers.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxFireTriggers.Margin = new System.Windows.Forms.Padding(4);
 			this.cbxFireTriggers.Name = "cbxFireTriggers";
 			this.cbxFireTriggers.Size = new System.Drawing.Size(111, 21);
 			this.cbxFireTriggers.TabIndex = 12;
@@ -324,7 +326,7 @@ namespace c3o.SqlCopy
 			this.cbxTableLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.cbxTableLock.AutoSize = true;
 			this.cbxTableLock.Location = new System.Drawing.Point(568, 897);
-			this.cbxTableLock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxTableLock.Margin = new System.Windows.Forms.Padding(4);
 			this.cbxTableLock.Name = "cbxTableLock";
 			this.cbxTableLock.Size = new System.Drawing.Size(100, 21);
 			this.cbxTableLock.TabIndex = 13;
@@ -336,7 +338,7 @@ namespace c3o.SqlCopy
 			this.cbxDeleteRows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.cbxDeleteRows.AutoSize = true;
 			this.cbxDeleteRows.Location = new System.Drawing.Point(436, 897);
-			this.cbxDeleteRows.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxDeleteRows.Margin = new System.Windows.Forms.Padding(4);
 			this.cbxDeleteRows.Name = "cbxDeleteRows";
 			this.cbxDeleteRows.Size = new System.Drawing.Size(109, 21);
 			this.cbxDeleteRows.TabIndex = 10;
@@ -349,7 +351,7 @@ namespace c3o.SqlCopy
 			this.btnSql.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnSql.Enabled = false;
 			this.btnSql.Location = new System.Drawing.Point(321, 892);
-			this.btnSql.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.btnSql.Margin = new System.Windows.Forms.Padding(4);
 			this.btnSql.Name = "btnSql";
 			this.btnSql.Size = new System.Drawing.Size(87, 28);
 			this.btnSql.TabIndex = 7;
@@ -373,7 +375,7 @@ namespace c3o.SqlCopy
 			this.cboSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboSource.FormattingEnabled = true;
 			this.cboSource.Location = new System.Drawing.Point(105, 53);
-			this.cboSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cboSource.Margin = new System.Windows.Forms.Padding(4);
 			this.cboSource.Name = "cboSource";
 			this.cboSource.Size = new System.Drawing.Size(195, 24);
 			this.cboSource.TabIndex = 0;
@@ -384,7 +386,7 @@ namespace c3o.SqlCopy
 			this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSource.Location = new System.Drawing.Point(105, 90);
-			this.txtSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.txtSource.Margin = new System.Windows.Forms.Padding(4);
 			this.txtSource.Name = "txtSource";
 			this.txtSource.Size = new System.Drawing.Size(752, 22);
 			this.txtSource.TabIndex = 1;
@@ -395,7 +397,7 @@ namespace c3o.SqlCopy
 			this.txtDestination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtDestination.Location = new System.Drawing.Point(105, 932);
-			this.txtDestination.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.txtDestination.Margin = new System.Windows.Forms.Padding(4);
 			this.txtDestination.Name = "txtDestination";
 			this.txtDestination.Size = new System.Drawing.Size(752, 22);
 			this.txtDestination.TabIndex = 16;
@@ -404,7 +406,7 @@ namespace c3o.SqlCopy
 			// bttnOpen
 			// 
 			this.bttnOpen.Location = new System.Drawing.Point(105, 15);
-			this.bttnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnOpen.Margin = new System.Windows.Forms.Padding(4);
 			this.bttnOpen.Name = "bttnOpen";
 			this.bttnOpen.Size = new System.Drawing.Size(100, 28);
 			this.bttnOpen.TabIndex = 33;
@@ -419,7 +421,7 @@ namespace c3o.SqlCopy
 			// bttnSave
 			// 
 			this.bttnSave.Location = new System.Drawing.Point(212, 15);
-			this.bttnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnSave.Margin = new System.Windows.Forms.Padding(4);
 			this.bttnSave.Name = "bttnSave";
 			this.bttnSave.Size = new System.Drawing.Size(100, 28);
 			this.bttnSave.TabIndex = 34;
@@ -437,7 +439,7 @@ namespace c3o.SqlCopy
 			this.cboDestintaion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboDestintaion.FormattingEnabled = true;
 			this.cboDestintaion.Location = new System.Drawing.Point(105, 894);
-			this.cboDestintaion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cboDestintaion.Margin = new System.Windows.Forms.Padding(4);
 			this.cboDestintaion.Name = "cboDestintaion";
 			this.cboDestintaion.Size = new System.Drawing.Size(195, 24);
 			this.cboDestintaion.TabIndex = 35;
@@ -457,7 +459,7 @@ namespace c3o.SqlCopy
 			// bttnSaveAs
 			// 
 			this.bttnSaveAs.Location = new System.Drawing.Point(320, 15);
-			this.bttnSaveAs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnSaveAs.Margin = new System.Windows.Forms.Padding(4);
 			this.bttnSaveAs.Name = "bttnSaveAs";
 			this.bttnSaveAs.Size = new System.Drawing.Size(100, 28);
 			this.bttnSaveAs.TabIndex = 38;
@@ -469,7 +471,7 @@ namespace c3o.SqlCopy
 			// 
 			this.cbxSchema.AutoSize = true;
 			this.cbxSchema.Location = new System.Drawing.Point(324, 58);
-			this.cbxSchema.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbxSchema.Margin = new System.Windows.Forms.Padding(4);
 			this.cbxSchema.Name = "cbxSchema";
 			this.cbxSchema.Size = new System.Drawing.Size(130, 21);
 			this.cbxSchema.TabIndex = 39;
@@ -480,12 +482,25 @@ namespace c3o.SqlCopy
 			// 
 			this.bttnSwitch.Image = ((System.Drawing.Image)(resources.GetObject("bttnSwitch.Image")));
 			this.bttnSwitch.Location = new System.Drawing.Point(5, 436);
-			this.bttnSwitch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.bttnSwitch.Margin = new System.Windows.Forms.Padding(4);
 			this.bttnSwitch.Name = "bttnSwitch";
 			this.bttnSwitch.Size = new System.Drawing.Size(91, 49);
 			this.bttnSwitch.TabIndex = 40;
 			this.bttnSwitch.UseVisualStyleBackColor = true;
 			this.bttnSwitch.Click += new System.EventHandler(this.bttnSwitch_Click);
+			// 
+			// dataGridViewProgressColumn1
+			// 
+			this.dataGridViewProgressColumn1.HeaderText = "Progress";
+			this.dataGridViewProgressColumn1.Name = "dataGridViewProgressColumn1";
+			// 
+			// dataGridViewImageColumn1
+			// 
+			this.dataGridViewImageColumn1.FillWeight = 30F;
+			this.dataGridViewImageColumn1.HeaderText = "SQL";
+			this.dataGridViewImageColumn1.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
+			this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+			this.dataGridViewImageColumn1.Width = 30;
 			// 
 			// Copy
 			// 
@@ -517,6 +532,12 @@ namespace c3o.SqlCopy
 			this.status.Name = "status";
 			this.status.ReadOnly = true;
 			// 
+			// Percentage
+			// 
+			this.Percentage.DataPropertyName = "Percentage";
+			this.Percentage.HeaderText = "Progress";
+			this.Percentage.Name = "Percentage";
+			// 
 			// bttnSql
 			// 
 			this.bttnSql.FillWeight = 30F;
@@ -524,11 +545,6 @@ namespace c3o.SqlCopy
 			this.bttnSql.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
 			this.bttnSql.Name = "bttnSql";
 			this.bttnSql.Width = 30;
-			// 
-			// Progress
-			// 
-			this.Progress.HeaderText = "Progress";
-			this.Progress.Name = "Progress";
 			// 
 			// SqlCopyForm
 			// 
@@ -570,7 +586,7 @@ namespace c3o.SqlCopy
 			this.Controls.Add(this.label6);
 			this.DoubleBuffered = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "SqlCopyForm";
 			this.Text = "Copy Window";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SqlCopyForm_FormClosing);
@@ -619,12 +635,14 @@ namespace c3o.SqlCopy
 		private System.Windows.Forms.Button bttnSaveAs;
 		private System.Windows.Forms.CheckBox cbxSchema;
 		private System.Windows.Forms.Button bttnSwitch;
+		private DataGridViewProgressColumn dataGridViewProgressColumn1;
+		private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn Copy;
 		private System.Windows.Forms.DataGridViewTextBoxColumn table_Schema;
 		private System.Windows.Forms.DataGridViewTextBoxColumn table_name;
 		private System.Windows.Forms.DataGridViewTextBoxColumn status;
+		private DataGridViewProgressColumn Percentage;
 		private System.Windows.Forms.DataGridViewImageColumn bttnSql;
-		private DataGridViewProgressColumn Progress;
     }
 }
 

@@ -54,6 +54,7 @@ namespace c3o.SqlCopy
 			{
 				this.dataGridView1.AutoGenerateColumns = false;
 				this.dataGridView1.DataSource = value;
+				//ShowP();
 			}
 		}
 
@@ -248,6 +249,19 @@ namespace c3o.SqlCopy
 			//SerializationHelper.Serialize<List<CopyObject>>(this.list, @"config\list.xml");
 		}
 
+		//public void ShowP()
+		//{
+		//	foreach (DataGridViewRow row in this.dataGridView1.Rows)
+		//	{
+		//		TableObject obj = row.DataBoundItem as TableObject;
+		//		row.Cells[4].Value = obj.Perce;
+		//		var parent = row.DataGridView;
+		//		parent.CurrentCell = row.Cells[3];
+		//		parent.UpdateCellValue(2, row.Index);
+
+		//	}
+		//}
+
 		public void ShowProgress(object sender, ProgressChangedEventArgs e)
 		{
 			//BackgroundWorker worker = (BackgroundWorker)sender;
@@ -276,13 +290,11 @@ namespace c3o.SqlCopy
 					if (Row != null)
 					{
 						//int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
-						Row.Cells[5].Value = e.ProgressPercentage;
+						Row.Cells[4].Value = e.ProgressPercentage;
 						var parent = Row.DataGridView;
 						parent.CurrentCell = Row.Cells[3];
 						parent.UpdateCellValue(2, Row.Index);
 					}
-				
-
 			}
 
 
@@ -328,9 +340,7 @@ namespace c3o.SqlCopy
 				// prepare
 				obj.Row = row;
 				obj.Worker = worker;
-
-
-				worker.ReportProgress(0, obj);
+				//worker.ReportProgress(0, obj);
 
 				if (worker.CancellationPending)
 				{
@@ -599,10 +609,10 @@ namespace c3o.SqlCopy
 		private void SaveAs(string filename)
 		{ 
 			// set file name 
-			this.FileName = this.saveFileDialog1.FileName;
+			this.FileName = filename;
 
 			// save 
-			SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);
+			SerializationHelper.Serialize<CopyObject>(this.Settings, filename);
 
 			// set file in settings
 			Properties.Settings.Default.FileName = this.FileName;
