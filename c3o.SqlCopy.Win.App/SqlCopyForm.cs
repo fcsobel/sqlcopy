@@ -562,13 +562,14 @@ namespace c3o.SqlCopy
 		private void SaveAs(string filename)
 		{ 
 			// set file name 
-			this.FileName = this.saveFileDialog1.FileName;
+			//this.FileName = this.saveFileDialog1.FileName;
+			this.FileName = filename;
 
 			// save 
-			SerializationHelper.Serialize<CopyObject>(this.Settings, this.saveFileDialog1.FileName);
+			SerializationHelper.Serialize<CopyObject>(this.Settings, filename);
 
 			// set file in settings
-			Properties.Settings.Default.FileName = this.FileName;
+			Properties.Settings.Default.FileName = filename;
 			Properties.Settings.Default.Save();
 		}
 
