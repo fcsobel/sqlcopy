@@ -10,6 +10,7 @@ using c3o.SqlCopy.Objects;
 using c3o.SqlCopy.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace c3o.SqlCopy
 {
@@ -224,7 +225,8 @@ namespace c3o.SqlCopy
 
 			foreach (TableObject obj in settings.Tables)
 			{
-				obj.Status = "";
+				//obj.Status = "";
+				obj.CopyStatus = null;
 			}
 
 			this.dataGridView1.FirstDisplayedScrollingRowIndex = 0;
@@ -233,7 +235,9 @@ namespace c3o.SqlCopy
 			// this.dataGridView1.Refresh();
 
 			// Copy tables  
-			this.CopyTablesAsc();
+			//this.CopyTablesAsc();
+
+			this.CopyTablesAsync(settings);
 		}
 
 
@@ -266,39 +270,150 @@ namespace c3o.SqlCopy
 		{
 			//BackgroundWorker worker = (BackgroundWorker)sender;
 
-
-
 			if (e.UserState != null)
 			{
-				TableObject table  = e.UserState as TableObject;
+				TableObject table = e.UserState as TableObject;
+				//this.ShowProgress(table);
+				table.ShowProgress();
+			}
+		}
 
-				
-					var Row = table.Row;
-					//table.ShowProgress();
+		//public void ShowProgress(TableObject table)
+		//{
+		//	var Row = table.Row;
+		//	//table.ShowProgress();
 
-					//DataGridViewRow row = e.UserState as DataGridViewRow;
+		//	//DataGridViewRow row = e.UserState as DataGridViewRow;
 
-					//if (row != null)
-					//{
-					//   // this.dataGridView1.FirstDisplayedScrollingRowIndex = row.Index;
-					//	//this.dataGridView1.Refresh();					
-					//	this.dataGridView1.CurrentCell = row.Cells[3];
-					//	this.dataGridView1.UpdateCellValue(2, row.Index);
-					//}
+		//	//if (row != null)
+		//	//{
+		//	//   // this.dataGridView1.FirstDisplayedScrollingRowIndex = row.Index;
+		//	//	//this.dataGridView1.Refresh();					
+		//	//	this.dataGridView1.CurrentCell = row.Cells[3];
+		//	//	this.dataGridView1.UpdateCellValue(2, row.Index);
+		//	//}
+		//	if (Row != null)
+		//	{
+		//		//int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
+		//		//Row.Cells[4].Value = e.ProgressPercentage;
+		//		Row.Cells[4].Value = table.Percentage;
+		//		var parent = Row.DataGridView;
+		//		parent.CurrentCell = Row.Cells[3];
+		//		parent.UpdateCellValue(2, Row.Index);
+		//	}
+		//}
 
 
-					if (Row != null)
-					{
-						//int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
-						Row.Cells[4].Value = e.ProgressPercentage;
-						var parent = Row.DataGridView;
-						parent.CurrentCell = Row.Cells[3];
-						parent.UpdateCellValue(2, Row.Index);
-					}
+		public async void CopyTablesAsync(CopyObject settings)
+		{
+			CopyManager manager = new CopyManager(settings);
+
+			manager.OnRowsCopied +=manager_OnRowsCopied;
+
+			try
+			{
+				if (this.cbxDeleteRows.Checked)
+				{
+					await Task.Run(() => manager.PreCopy());
+				}
+			}
+			catch (Exception er)
+			{
+				MessageBox.Show(er.Message, "Pre SQL Error");
+				return;
 			}
 
+			foreach (DataGridViewRow row in this.dataGridView1.Rows)
+			{
+				
+				TableObject obj = (TableObject)row.DataBoundItem;
 
-			
+				// prepare
+				obj.Row = row;
+				//obj.Worker = worker;
+				//worker.ReportProgress(0, obj);
+
+				//if (worker.CancellationPending)
+				//{
+				//	break;
+				//}
+				try
+				{
+					if (obj.Selected)
+					{
+						await Task.Run(() => manager.Copy(obj));
+						//manager.Copy(obj);
+						//obj.Status = "Success";
+						obj.CopyStatus = CopyStatusEnum.Success;
+						//this.ShowProgress(obj);
+						
+						//worker.ReportProgress(0, row);
+						//worker.ReportProgress(100, obj);
+						//obj.ShowProgress();
+					}
+					else
+					{
+						obj.CopyStatus = CopyStatusEnum.Skipped;
+					}
+					obj.ShowProgress();
+				}
+				catch (Exception er)
+				{
+					obj.CopyStatus = CopyStatusEnum.Error;
+					//obj.Status = er.Message;
+					obj.Message = er.Message;
+					//this.ShowProgress(obj);
+					obj.ShowProgress();
+					//worker.ReportProgress(0, er);
+					//worker.ReportProgress(0, row);
+					//worker.ReportProgress(0, obj);
+					//obj.ShowProgress();
+				}
+				finally
+				{
+				}
+
+
+			}
+
+			//foreach (TableObject obj in settings.Tables)
+			//{
+			//    if (worker.CancellationPending)
+			//    {
+			//        break;
+			//    }
+			//    try
+			//    {
+			//        if (obj.Selected)
+			//        {
+			//            manager.Copy(obj.Name);
+			//            obj.Status = "Success";
+			//            worker.ReportProgress(0);
+			//        }
+			//    }
+			//    catch (Exception er)
+			//    {
+			//        obj.Status = er.Message;
+			//        worker.ReportProgress(0, er);
+			//    }
+			//    finally
+			//    {
+			//    }
+			//}
+
+			try
+			{
+				if (this.cbxDeleteRows.Checked)
+				{
+					await Task.Run(() => manager.PostCopy());
+					//manager.PostCopy();
+				}
+			}
+			catch (Exception er)
+			{
+				MessageBox.Show(er.Message, "Post SQL Error");
+				return;
+			}
 		}
 
 
@@ -351,7 +466,8 @@ namespace c3o.SqlCopy
 					if (obj.Selected)
 					{
 						manager.Copy(obj);
-						obj.Status = "Success";
+						//obj.Status = "Success";
+						obj.CopyStatus = CopyStatusEnum.Success;
 						//worker.ReportProgress(0, row);
 						worker.ReportProgress(100, obj);
 						//obj.ShowProgress();
@@ -359,7 +475,9 @@ namespace c3o.SqlCopy
 				}
 				catch (Exception er)
 				{
-					obj.Status = er.Message;
+					obj.CopyStatus = CopyStatusEnum.Error;
+					obj.Message = er.Message;
+					//obj.Status = er.Message;
 					//worker.ReportProgress(0, er);
 					//worker.ReportProgress(0, row);
 					worker.ReportProgress(0, obj);
@@ -676,9 +794,7 @@ namespace c3o.SqlCopy
 				}
 				this.Settings = obj;
 			}
-		}
-
-		
+		}		
 
 
 		/// <summary>

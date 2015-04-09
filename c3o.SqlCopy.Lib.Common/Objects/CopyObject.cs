@@ -11,6 +11,8 @@ using System.ComponentModel;
 
 namespace c3o.SqlCopy.Objects
 {
+	public enum CopyStatusEnum { Copying, Success, Error, Skipped }
+
 	[Serializable()]
 	public class TableObject
 	{
@@ -18,11 +20,37 @@ namespace c3o.SqlCopy.Objects
 		public CopyObject Parent { get; set; }
 		public string Schema { get; set; }
 		public string Name { get; set; }
+		public string Message { get; set; }
 		public bool Selected { get; set; }
-		public string Status { get; set; }
+
+		[XmlIgnore]
+		public string Status
+		{
+			get
+			{
+				if (CopyStatus.HasValue)
+				{
+					switch (this.CopyStatus.Value)
+					{
+						case CopyStatusEnum.Copying:
+							return string.Format("{0} {1} out of {2}", this.CopyStatus, this.Copied, this.Count);
+						case CopyStatusEnum.Success:
+							return string.Format("{0} {1} out of {2}", this.CopyStatus, this.Copied, this.Count);
+						case CopyStatusEnum.Error:
+							return string.Format("{0} {1} out of {2} - {3}", this.CopyStatus, this.Copied, this.Count, this.Message);
+						default:
+							return string.Format("{0}", this.CopyStatus.Value);
+					}
+				}
+				return "";
+			}
+		}
+
 		public string Sql { get; set; }
 		public long Count { get; set; }
 		public long Copied { get; set; }
+
+		public CopyStatusEnum? CopyStatus { get; set; }
 
 		[XmlIgnore]
 		public DataGridViewRow Row { get; set; }
@@ -30,24 +58,40 @@ namespace c3o.SqlCopy.Objects
 		public BackgroundWorker Worker { get; set; }
 
 		[XmlIgnore]
-		public int Percentage { get { return this.Copied == 0 || this.Count == 0 ? 0 : (int) Math.Round((decimal) (this.Copied / this.Count), 0) * 100; } }
+		public int Percentage 
+		{ 
+			get
+			{ 
+				return this.CopyStatus == CopyStatusEnum.Success ? 100 : this.Copied == 0 || this.Count == 0 ? 0 : (int) Math.Round((decimal) (((decimal)this.Copied / (decimal)this.Count) * 100), 0); 
+			} 
+		}
 
 		//public int Percentage { get; set; }
 		//public string Percentage2 { get; set; }
 
 		public void ShowProgress()
 		{
-			//int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
-			Worker.ReportProgress(this.Percentage, this);
+			//this.Status = string.Format("{0} {1} out of {2} - {3}", this.CopyStatus, this.Copied, this.Count, this.Percentage);
 
-			////if (Row != null)
-			////{
-			////	int i = (int) Math.Round((decimal) this.Copied / this.Count, 0) * 100;
-			////	Row.Cells[5].Value = i;
-			////	var parent = Row.DataGridView;
-			////	parent.CurrentCell = Row.Cells[3];
-			////	parent.UpdateCellValue(2, Row.Index);		
-			////}
+			if (Worker != null)
+			{
+				Worker.ReportProgress(this.Percentage, this);
+			}
+			else
+			{
+				if (Row != null)
+				{
+
+
+					//this.Status = this.Status + this.Percentage.ToString();
+					var parent = Row.DataGridView;
+					parent.CurrentCell = Row.Cells[3];
+					parent.UpdateCellValue(3, Row.Index);
+					//Row.Cells[4].Value = this.Percentage;
+					parent.CurrentCell = Row.Cells[4];
+					parent.UpdateCellValue(4, Row.Index);
+				}
+			}
 		}
 
 		//public void OnShowProgress()
@@ -88,27 +132,27 @@ namespace c3o.SqlCopy.Objects
 		public void OnRowsCopied(object sender, OracleRowsCopiedEventArgs e)
 		{
 			this.Copied = e.RowsCopied;
-			this.Status = string.Format("Copying {0} out of {1}" , this.Copied, this.Count);
+			//this.Status = string.Format("Copying {0} out of {1} - {2}" , this.Copied, this.Count, this.Percentage);
 			this.ShowProgress();
 		}
 
 		public void OnRowsCopied(object sender, SqlRowsCopiedEventArgs e)
 		{
 			this.Copied = e.RowsCopied;
-			this.Status = string.Format("Copying {0} out of {1}" , this.Copied, this.Count);
+			//this.Status = string.Format("Copying {0} out of {1} - {2}" , this.Copied, this.Count, this.Percentage);
 			this.ShowProgress();
 		}
 
 		public void OnRowsCopied(object sender, RowsCopiedEventArgs e)
 		{
 			this.Copied = e.RowsCopied;
-			this.Status = "Copying " + this.Copied.ToString();
+			//this.Status = "Copying " + this.Copied.ToString();
 			this.ShowProgress();
 		}
 
 		public void OnSuccess(object sender)
 		{
-			this.Status = string.Format("Success - Copied {0} rows out of {1}", this.Copied, this.Count);
+			//this.Status = string.Format("Success - Copied {0} rows out of {1}", this.Copied, this.Count);
 			this.ShowProgress();
 		}
 

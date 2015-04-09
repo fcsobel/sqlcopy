@@ -65,7 +65,8 @@ namespace c3o.SqlCopy.Data
 					// Clear status
 					foreach (TableObject table in obj.Tables)
 					{
-						table.Status = "";
+						//table.Status = "";
+						table.CopyStatus = null;
 					}
 
 					CopyManager manager = new CopyManager(obj);
@@ -130,12 +131,15 @@ namespace c3o.SqlCopy.Data
 					if (obj.Selected)
 					{
 						this.Copy(obj);
-						obj.Status = "Success";
+						//obj.Status = "Success";
+						obj.CopyStatus = CopyStatusEnum.Success;
 					}
 				}
 				catch (Exception er)
 				{
-					obj.Status = er.Message;
+					obj.CopyStatus = CopyStatusEnum.Error;
+					obj.Message = er.Message;
+					//obj.Status = er.Message;
 				}
 			}
 
@@ -193,7 +197,8 @@ namespace c3o.SqlCopy.Data
 					if (Settings.IncludeSchema) { obj.Schema = dr["table_schema"] as string; }
 					obj.Name = dr["table_name"] as string;
 					obj.Selected = false;
-					obj.Status = "";
+					//obj.Status = "";
+					obj.CopyStatus = null;
 
 					list.Add(obj);
 					//this.dataGridView1.Rows.Add(true, dr["table_name"].ToString(), "");

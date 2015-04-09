@@ -79,13 +79,16 @@ namespace c3o.SqlCopy.Console1.App
 									if (table.Selected)
 									{
 										manager.Copy(table);
-										table.Status = "Success";
+										//table.Status = "Success";
+										table.CopyStatus = CopyStatusEnum.Success;
 										System.Console.WriteLine("Success " + table.FullName);
 									}
 								}
 								catch (Exception er)
 								{
-									table.Status = er.Message;
+									//table.Status = er.Message;
+									table.Message = er.Message;
+									table.CopyStatus = CopyStatusEnum.Error;
 									System.Console.WriteLine("Error " + table.FullName);
 									exitCode = -1;
 								}
