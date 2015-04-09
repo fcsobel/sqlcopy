@@ -208,6 +208,7 @@ namespace c3o.SqlCopy
 
 		//}
 
+		// Test
 		private void bttnCopy_Click(object sender, EventArgs e)
 		{
 			CopyObject settings = this.Settings;
