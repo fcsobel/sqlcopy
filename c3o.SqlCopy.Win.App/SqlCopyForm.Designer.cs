@@ -68,11 +68,11 @@ namespace c3o.SqlCopy
 			this.dataGridViewProgressColumn1 = new c3o.SqlCopy.DataGridViewProgressColumn();
 			this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
 			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
 			this.table_Schema = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Percentage = new c3o.SqlCopy.DataGridViewProgressColumn();
-			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -214,14 +214,15 @@ namespace c3o.SqlCopy
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Copy,
+            this.bttnSql,
             this.table_Schema,
             this.table_name,
             this.status,
-            this.Percentage,
-            this.bttnSql});
+            this.Percentage});
 			this.dataGridView1.Location = new System.Drawing.Point(105, 126);
 			this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
 			this.dataGridView1.Name = "dataGridView1";
+			this.dataGridView1.RowHeadersWidth = 30;
 			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dataGridView1.Size = new System.Drawing.Size(861, 697);
 			this.dataGridView1.TabIndex = 3;
@@ -505,46 +506,52 @@ namespace c3o.SqlCopy
 			// Copy
 			// 
 			this.Copy.DataPropertyName = "Selected";
+			this.Copy.Frozen = true;
 			this.Copy.HeaderText = "";
 			this.Copy.Name = "Copy";
 			this.Copy.Width = 30;
 			// 
+			// bttnSql
+			// 
+			this.bttnSql.FillWeight = 30F;
+			this.bttnSql.Frozen = true;
+			this.bttnSql.HeaderText = "SQL";
+			this.bttnSql.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
+			this.bttnSql.Name = "bttnSql";
+			this.bttnSql.Width = 40;
+			// 
 			// table_Schema
 			// 
 			this.table_Schema.DataPropertyName = "Schema";
+			this.table_Schema.Frozen = true;
 			this.table_Schema.HeaderText = "Schema";
 			this.table_Schema.Name = "table_Schema";
 			this.table_Schema.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// table_name
 			// 
-			this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
 			this.table_name.DataPropertyName = "Name";
 			this.table_name.HeaderText = "Table";
 			this.table_name.Name = "table_name";
 			this.table_name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.table_name.Width = 300;
 			// 
 			// status
 			// 
-			this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
 			this.status.DataPropertyName = "Status";
 			this.status.HeaderText = "Status";
 			this.status.Name = "status";
 			this.status.ReadOnly = true;
+			this.status.Width = 200;
 			// 
 			// Percentage
 			// 
+			this.Percentage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.Percentage.DataPropertyName = "Percentage";
 			this.Percentage.HeaderText = "Progress";
 			this.Percentage.Name = "Percentage";
-			// 
-			// bttnSql
-			// 
-			this.bttnSql.FillWeight = 30F;
-			this.bttnSql.HeaderText = "SQL";
-			this.bttnSql.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
-			this.bttnSql.Name = "bttnSql";
-			this.bttnSql.Width = 30;
 			// 
 			// SqlCopyForm
 			// 
@@ -638,11 +645,11 @@ namespace c3o.SqlCopy
 		private DataGridViewProgressColumn dataGridViewProgressColumn1;
 		private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn Copy;
+		private System.Windows.Forms.DataGridViewImageColumn bttnSql;
 		private System.Windows.Forms.DataGridViewTextBoxColumn table_Schema;
 		private System.Windows.Forms.DataGridViewTextBoxColumn table_name;
 		private System.Windows.Forms.DataGridViewTextBoxColumn status;
 		private DataGridViewProgressColumn Percentage;
-		private System.Windows.Forms.DataGridViewImageColumn bttnSql;
     }
 }
 
