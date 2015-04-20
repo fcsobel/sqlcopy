@@ -25,7 +25,9 @@
     <DeleteSql>delete from {0}</DeleteSql>
     <SelectSql>select * from {0}</SelectSql>
 		<CountSql>select count(*) from {0}</CountSql>
-  </CopyObject>
+		<TableFormat>[{0}]</TableFormat>
+		<SchemaFormat>[{0}].[{1}]</SchemaFormat>
+	</CopyObject>
   <CopyObject>
     <Name>Oracle</Name>
 	  <SourceType>Oracle</SourceType>

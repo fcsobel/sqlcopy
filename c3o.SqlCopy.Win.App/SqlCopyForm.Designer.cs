@@ -41,6 +41,12 @@ namespace c3o.SqlCopy
 			this.bttnFlipSelect = new System.Windows.Forms.Button();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
+			this.table_Schema = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Percentage = new c3o.SqlCopy.DataGridViewProgressColumn();
 			this.txtTimeout = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
@@ -67,12 +73,6 @@ namespace c3o.SqlCopy
 			this.bttnSwitch = new System.Windows.Forms.Button();
 			this.dataGridViewProgressColumn1 = new c3o.SqlCopy.DataGridViewProgressColumn();
 			this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-			this.Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.bttnSql = new System.Windows.Forms.DataGridViewImageColumn();
-			this.table_Schema = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.table_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Percentage = new c3o.SqlCopy.DataGridViewProgressColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -228,6 +228,56 @@ namespace c3o.SqlCopy
 			this.dataGridView1.TabIndex = 3;
 			this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
 			this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+			// 
+			// Copy
+			// 
+			this.Copy.DataPropertyName = "Selected";
+			this.Copy.Frozen = true;
+			this.Copy.HeaderText = "";
+			this.Copy.Name = "Copy";
+			this.Copy.Width = 30;
+			// 
+			// bttnSql
+			// 
+			this.bttnSql.FillWeight = 30F;
+			this.bttnSql.Frozen = true;
+			this.bttnSql.HeaderText = "SQL";
+			this.bttnSql.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
+			this.bttnSql.Name = "bttnSql";
+			this.bttnSql.Width = 40;
+			// 
+			// table_Schema
+			// 
+			this.table_Schema.DataPropertyName = "Schema";
+			this.table_Schema.Frozen = true;
+			this.table_Schema.HeaderText = "Schema";
+			this.table_Schema.Name = "table_Schema";
+			this.table_Schema.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// table_name
+			// 
+			this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+			this.table_name.DataPropertyName = "Name";
+			this.table_name.HeaderText = "Table";
+			this.table_name.Name = "table_name";
+			this.table_name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.table_name.Width = 300;
+			// 
+			// status
+			// 
+			this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+			this.status.DataPropertyName = "Status";
+			this.status.HeaderText = "Status";
+			this.status.Name = "status";
+			this.status.ReadOnly = true;
+			this.status.Width = 200;
+			// 
+			// Percentage
+			// 
+			this.Percentage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.Percentage.DataPropertyName = "Percentage";
+			this.Percentage.HeaderText = "Progress";
+			this.Percentage.Name = "Percentage";
 			// 
 			// txtTimeout
 			// 
@@ -503,56 +553,6 @@ namespace c3o.SqlCopy
 			this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
 			this.dataGridViewImageColumn1.Width = 30;
 			// 
-			// Copy
-			// 
-			this.Copy.DataPropertyName = "Selected";
-			this.Copy.Frozen = true;
-			this.Copy.HeaderText = "";
-			this.Copy.Name = "Copy";
-			this.Copy.Width = 30;
-			// 
-			// bttnSql
-			// 
-			this.bttnSql.FillWeight = 30F;
-			this.bttnSql.Frozen = true;
-			this.bttnSql.HeaderText = "SQL";
-			this.bttnSql.Image = global::c3o.SqlCopy.Properties.Resources.pencil;
-			this.bttnSql.Name = "bttnSql";
-			this.bttnSql.Width = 40;
-			// 
-			// table_Schema
-			// 
-			this.table_Schema.DataPropertyName = "Schema";
-			this.table_Schema.Frozen = true;
-			this.table_Schema.HeaderText = "Schema";
-			this.table_Schema.Name = "table_Schema";
-			this.table_Schema.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			// 
-			// table_name
-			// 
-			this.table_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-			this.table_name.DataPropertyName = "Name";
-			this.table_name.HeaderText = "Table";
-			this.table_name.Name = "table_name";
-			this.table_name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			this.table_name.Width = 300;
-			// 
-			// status
-			// 
-			this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-			this.status.DataPropertyName = "Status";
-			this.status.HeaderText = "Status";
-			this.status.Name = "status";
-			this.status.ReadOnly = true;
-			this.status.Width = 200;
-			// 
-			// Percentage
-			// 
-			this.Percentage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.Percentage.DataPropertyName = "Percentage";
-			this.Percentage.HeaderText = "Progress";
-			this.Percentage.Name = "Percentage";
-			// 
 			// SqlCopyForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -595,7 +595,7 @@ namespace c3o.SqlCopy
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "SqlCopyForm";
-			this.Text = "Copy Window";
+			this.Text = "Simple Sql Copy";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SqlCopyForm_FormClosing);
 			this.Load += new System.EventHandler(this.CopyForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

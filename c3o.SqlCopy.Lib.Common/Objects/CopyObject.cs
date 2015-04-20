@@ -124,7 +124,14 @@ namespace c3o.SqlCopy.Objects
 				}
 				else
 				{
-					return this.Name;
+					if (string.IsNullOrEmpty(this.Parent.TableFormat))
+					{
+						return this.Name;
+					}
+					else
+					{
+						return string.Format(this.Parent.TableFormat, this.Name);
+					}				
 				}
 			}
 		}		
@@ -203,6 +210,7 @@ namespace c3o.SqlCopy.Objects
 
 		public bool IncludeSchema { get; set; }
 		public string SchemaFormat { get; set; }
+		public string TableFormat { get; set; }
 
 		// Custom
 		public bool DeleteRows { get; set; }

@@ -30,7 +30,7 @@ namespace c3o.SqlCopy
 			set 
 			{
 				this._FileName = value;
-				this.Text = string.Format("Copy Window - {0}", value); 
+				this.Text = string.Format("Simple SQL Copy - {0}", value); 
 			}
 		}
 
@@ -866,6 +866,7 @@ namespace c3o.SqlCopy
 				this.CurrentObj.SelectSql = template.SelectSql;
 				this.CurrentObj.ListSql = template.ListSql;
 				this.CurrentObj.SchemaFormat = template.SchemaFormat;
+				this.CurrentObj.TableFormat = template.TableFormat;
 			}
 		}
 
