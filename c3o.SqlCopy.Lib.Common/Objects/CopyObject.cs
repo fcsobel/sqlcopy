@@ -17,7 +17,7 @@ namespace c3o.SqlCopy.Objects
 	public class TableObject
 	{
 		[XmlIgnore]
-		public CopyObject Parent { get; set; }
+		//public CopyObject Parent { get; set; }
 		public string Schema { get; set; }
 		public string Name { get; set; }
 		public string Message { get; set; }
@@ -79,17 +79,46 @@ namespace c3o.SqlCopy.Objects
 			}
 			else
 			{
+				//if (Row != null)
+				//{
+				//	var parent = Row.DataGridView;
+				//	parent.CurrentCell = Row.Cells[3];
+				//	parent.UpdateCellValue(3, Row.Index);
+				//	parent.CurrentCell = Row.Cells[4];
+				//	parent.UpdateCellValue(4, Row.Index);
+				//}
+
 				if (Row != null)
 				{
-
-
-					//this.Status = this.Status + this.Percentage.ToString();
-					var parent = Row.DataGridView;
-					parent.CurrentCell = Row.Cells[3];
-					parent.UpdateCellValue(3, Row.Index);
-					//Row.Cells[4].Value = this.Percentage;
-					parent.CurrentCell = Row.Cells[4];
-					parent.UpdateCellValue(4, Row.Index);
+					if (Row.DataGridView.InvokeRequired)
+						Row.DataGridView.Invoke(new MethodInvoker(delegate
+						{
+							var parent = Row.DataGridView;
+							//parent.CurrentCell = Row.Cells[3];
+							//parent.UpdateCellValue(3, Row.Index);
+							//parent.CurrentCell = Row.Cells[4];
+							//parent.UpdateCellValue(4, Row.Index);
+							parent.CurrentCell = Row.Cells[5];
+							parent.UpdateCellValue(5, Row.Index);
+							
+							////access picturebox here
+							//parent.getView().refreshRow(record);
+							//parent.vue
+							//parent.Refresh();
+						}));
+					else
+					{
+						var parent = Row.DataGridView;
+						
+						//parent.CurrentCell = Row.Cells[3];
+						//parent.UpdateCellValue(3, Row.Index);
+						//parent.CurrentCell = Row.Cells[4];
+						//parent.UpdateCellValue(4, Row.Index);
+						parent.CurrentCell = Row.Cells[5];
+						parent.UpdateCellValue(5, Row.Index);
+						//access picturebox here
+						//parent.Refresh();
+					}
 				}
 			}
 		}
@@ -106,35 +135,35 @@ namespace c3o.SqlCopy.Objects
 		//	}
 		//}
 
-		[XmlIgnore]
-		public string FullName 
-		{
-			get
-			{
-				if (this.Parent.IncludeSchema)
-				{
-					if (string.IsNullOrEmpty(this.Parent.SchemaFormat))
-					{
-						return string.Format("{0}.{1}", this.Schema, this.Name);
-					}
-					else
-					{
-						return string.Format(this.Parent.SchemaFormat, this.Schema, this.Name);
-					}
-				}
-				else
-				{
-					if (string.IsNullOrEmpty(this.Parent.TableFormat))
-					{
-						return this.Name;
-					}
-					else
-					{
-						return string.Format(this.Parent.TableFormat, this.Name);
-					}				
-				}
-			}
-		}		
+		//[XmlIgnore]
+		//public string FullName 
+		//{
+		//	get
+		//	{
+		//		if (this.Parent.IncludeSchema)
+		//		{
+		//			if (string.IsNullOrEmpty(this.Parent.SchemaFormat))
+		//			{
+		//				return string.Format("{0}.{1}", this.Schema, this.Name);
+		//			}
+		//			else
+		//			{
+		//				return string.Format(this.Parent.SchemaFormat, this.Schema, this.Name);
+		//			}
+		//		}
+		//		else
+		//		{
+		//			if (string.IsNullOrEmpty(this.Parent.TableFormat))
+		//			{
+		//				return this.Name;
+		//			}
+		//			else
+		//			{
+		//				return string.Format(this.Parent.TableFormat, this.Name);
+		//			}				
+		//		}
+		//	}
+		//}		
 
 		public void OnRowsCopied(object sender, OracleRowsCopiedEventArgs e)
 		{
@@ -150,14 +179,21 @@ namespace c3o.SqlCopy.Objects
 			this.ShowProgress();
 		}
 
-
-		public void OnRowsCopied(IndiansInc.BatchSizeCompletedEventArgs e)
+		public void OnRowsCopied(System.Data.SqlClient.SqlRowsCopiedEventArgs e)
 		{
-			//if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(e)); }
-			this.Copied = System.Convert.ToInt32( e.CompletedRows);
+			this.Copied = e.RowsCopied;
 			//this.Status = string.Format("Copying {0} out of {1} - {2}" , this.Copied, this.Count, this.Percentage);
 			this.ShowProgress();
 		}
+
+
+		//public void OnRowsCopied(IndiansInc.BatchSizeCompletedEventArgs e)
+		//{
+		//	//if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(e)); }
+		//	this.Copied = System.Convert.ToInt32( e.CompletedRows);
+		//	//this.Status = string.Format("Copying {0} out of {1} - {2}" , this.Copied, this.Count, this.Percentage);
+		//	this.ShowProgress();
+		//}
 
 		public void OnRowsCopied(object sender, RowsCopiedEventArgs e)
 		{
@@ -175,9 +211,9 @@ namespace c3o.SqlCopy.Objects
 		public TableObject() {
 		
 		}
-		public TableObject(CopyObject parent) { 
-			this.Parent = parent; 
-		}
+		//public TableObject(CopyObject parent) { 
+		//	this.Parent = parent; 
+		//}
 
 
 
@@ -255,10 +291,10 @@ namespace c3o.SqlCopy.Objects
 		{
 			CopyObject obj = SerializationHelper.Deserialize<CopyObject>(filename);
 
-			if (obj.Tables != null && obj.Tables.Count > 0)
-			{
-				foreach (TableObject t in obj.Tables) { t.Parent = obj; }
-			}
+			//if (obj.Tables != null && obj.Tables.Count > 0)
+			//{
+			//	foreach (TableObject t in obj.Tables) { t.Parent = obj; }
+			//}
 			return obj;
 		}
 

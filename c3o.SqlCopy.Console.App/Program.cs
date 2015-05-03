@@ -81,7 +81,7 @@ namespace c3o.SqlCopy.Console1.App
 										manager.Copy(table);
 										//table.Status = "Success";
 										table.CopyStatus = CopyStatusEnum.Success;
-										System.Console.WriteLine("Success " + table.FullName);
+										System.Console.WriteLine("Success " + table.Name);
 									}
 								}
 								catch (Exception er)
@@ -89,7 +89,7 @@ namespace c3o.SqlCopy.Console1.App
 									//table.Status = er.Message;
 									table.Message = er.Message;
 									table.CopyStatus = CopyStatusEnum.Error;
-									System.Console.WriteLine("Error " + table.FullName);
+									System.Console.WriteLine("Error " + table.Name);
 									exitCode = -1;
 								}
 							}

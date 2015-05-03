@@ -308,7 +308,7 @@ namespace c3o.SqlCopy
 		{
 			CopyManager manager = new CopyManager(settings);
 
-			manager.OnRowsCopied +=manager_OnRowsCopied;
+			//manager.OnRowsCopied +=manager_OnRowsCopied;
 
 			try
 			{
@@ -428,7 +428,7 @@ namespace c3o.SqlCopy
 		
 			BackgroundWorker worker = (BackgroundWorker)sender;
 
-			manager.OnRowsCopied +=manager_OnRowsCopied;
+			//manager.OnRowsCopied +=manager_OnRowsCopied;
 			
 
 			//ProgressChanged
@@ -746,7 +746,7 @@ namespace c3o.SqlCopy
 			}
 			else
 			{
-				if (e.ColumnIndex == 4)
+				if (e.ColumnIndex == 1)
 				{
 					DataGridViewRow row = this.dataGridView1.Rows[e.RowIndex];
 
@@ -863,6 +863,7 @@ namespace c3o.SqlCopy
 
 			if (template != null && this.CurrentObj != null)
 			{
+				// load source values
 				this.CurrentObj.SelectSql = template.SelectSql;
 				this.CurrentObj.ListSql = template.ListSql;
 				this.CurrentObj.SchemaFormat = template.SchemaFormat;
@@ -882,6 +883,7 @@ namespace c3o.SqlCopy
 
 			if (template != null && this.CurrentObj != null)
 			{
+				// load destination values
 				this.CurrentObj.PostCopySql = template.PostCopySql;
 				this.CurrentObj.PreCopySql = template.PreCopySql;
 				this.CurrentObj.DeleteSql = template.DeleteSql;

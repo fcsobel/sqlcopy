@@ -35,66 +35,75 @@ namespace IndiansInc
     using MySql.Data.MySqlClient;
     using IndiansInc.Internals;
 
-    public class MySqlBulkCopy
+    public class MySqlBulkCopy : IDisposable
     {
+		protected SqlBulkCopyOptions copyOptions { get; set; }
+
+		protected bool _manageConnection { get; set; }
+
         /// <summary>
         /// Delegate to subscribe notification from assembly
         /// </summary>
         /// <param name="e">Event arguments </param>
-        public delegate void OnBatchSizeCompletedDelegate(BatchSizeCompletedEventArgs e);
-        /// <summary>
-        /// All column mappings between source column and destination table columns
-        /// </summary>
-        public ColumnMapItemCollection ColumnMapItems
-        {
-            get;
-            set;
-        }
-        /// <summary>
-        /// The connection that to be used while connecting destination column
-        /// </summary>
-        public MySqlConnection DestinationDbConnection
-        {
-            get;
-            set;
-        }
+        //public delegate void OnBatchSizeCompletedDelegate(BatchSizeCompletedEventArgs e);
+		public delegate void MySqlRowsCopiedEventHandler(SqlRowsCopiedEventArgs e);
+		
+		public ColumnMapItemCollection ColumnMappings { get; set; }
+		protected MySqlConnection DestinationDbConnection { get; set; }
+		protected string _connectionString { get; set; }
+		public string DestinationTableName { get; set; }
+		public int BatchSize { get; set; }
 
-        /// <summary>
-        /// The destination table name that need to be updated.
-        /// </summary>
-        public string DestinationTableName
-        {
-            get;
-            set;
-        }
+		//
+		// Summary:
+		//     Defines the number of rows to be processed before generating a notification
+		//     event.
+		//
+		// Returns:
+		//     The integer value of the System.Data.SqlClient.SqlBulkCopy.NotifyAfter property,
+		//     or zero if the property has not been set.
+		public int NotifyAfter { get; set; }
 
-        /// <summary>
-        /// Size of the batch that need to be completed before notifying caller
-        /// </summary>
-        public int BatchSize
-        {
-            get;
-            set;
-        }
+		// Summary:
+		//     Occurs every time that the number of rows specified by the System.Data.SqlClient.SqlBulkCopy.NotifyAfter
+		//     property have been processed.
+		//public event SqlRowsCopiedEventHandler SqlRowsCopied;
+
 
         /// <summary>
         /// Delegate that need to invoked once the assembly uploads the specified BatchSize
         /// </summary>
         //public OnBatchSizeCompletedDelegate OnBatchSizeCompleted { get; set; }
-		public event OnBatchSizeCompletedDelegate OnBatchSizeCompleted;		
+		//public event OnBatchSizeCompletedDelegate OnBatchSizeCompleted;		
+		public event MySqlRowsCopiedEventHandler SqlRowsCopied;		
+		
+		public MySqlBulkCopy(MySqlConnection connection)
+		{
+			this.DestinationDbConnection = connection;
+		}
+		public MySqlBulkCopy(string connectionString)
+		{
+			this._connectionString = connectionString;
+		}
+
+		public MySqlBulkCopy(string connectionString, SqlBulkCopyOptions copyOptions)
+		{ 
+			this._connectionString = connectionString;
+			this.copyOptions = copyOptions;
+		}
+
 
         /// <summary>
         /// Method that uploads the data from the MySqlDataReader that contains the data.
         /// </summary>
         /// <param name="reader">Data reader that contains the source data that to be uploaded</param>
-        public void Upload(System.Data.IDataReader reader)
+        public void WriteToServer(System.Data.IDataReader reader)
         {
-
             //if (reader.HasRows)
             //{
                 System.Data.DataTable table = new System.Data.DataTable();
                 table.Load(reader);
-                Upload(table);
+                WriteToServer(table);
             //}
         }
 
@@ -102,73 +111,65 @@ namespace IndiansInc
         /// Method that uploads the data from the <see cref="System.Data.DataTable">DataTable</see> that contains the data.
         /// </summary>
         /// <param name="table">Data table that contains source data that to be uploaded</param>
-        public void Upload(System.Data.DataTable table)
-        {
-            CommonFunctions functions = new CommonFunctions();
-            string sql = "";
-            int counter = 0;
-            BatchSizeCompletedEventArgs eventArgs = new BatchSizeCompletedEventArgs();
-            eventArgs.ErrorDataRows = new List<System.Data.DataRow>();
-            foreach (System.Data.DataRow item in table.Rows)
-            {
-				sql = functions.ConstructSql(DestinationTableName, item, ColumnMapItems);
-				//throw new Exception(sql);
+		public void WriteToServer(System.Data.DataTable table)
+		{
+			if (this.DestinationDbConnection == null)
+			{
+				this._manageConnection = true;
+				this.DestinationDbConnection = new MySqlConnection(this._connectionString);
+				this.DestinationDbConnection.Open();
+			}
+
+			CommonFunctions functions = new CommonFunctions();
+			int counter = 0;
+
+			//eventArgs.ErrorDataRows = new List<System.Data.DataRow>();
+			foreach (System.Data.DataRow item in table.Rows)
+			{
+				// build sql
+				string sql = functions.ConstructSql(DestinationTableName, item, ColumnMappings);
 				Console.WriteLine(sql);
+
+				// Insert data
 				MySqlCommand command = new MySqlCommand(sql, DestinationDbConnection);
 				command.ExecuteNonQuery();
 
-				//try
-				//{
-				//	// SQL constructed. 
-				//	// Using the destination connection Execute the statement
-				//	sql = functions.ConstructSql(DestinationTableName, item, ColumnMapItems);
-				//	Console.WriteLine(sql);
-				//	MySqlCommand command = new MySqlCommand(sql, DestinationDbConnection);
-				//	command.ExecuteNonQuery();
-				//}
-				//catch (Exception)
-				//{
-				//	eventArgs.ErrorDataRows.Add(item);
-				//}
-                
-                counter++;
+				counter++;
 
-                /*
-                 * Issue 2:	Does not support Batch sizes like in SqlBulkCopy
-                 * When the bulkupload code uploads the batch size that is specified by the caller, we need to notify the caller that
-                 * The batch size is done uploading. This will help the caller to make their decisions.
-                 */
-                if (counter == BatchSize && counter > 0)
-                {
-                    // batch size is completed. invoke the OnBatchSizeCompletedDelegate to alert the caller
-                    if (OnBatchSizeCompleted != null)
-                    {
-                        // create the event arguments
-                        
-                        eventArgs.CompletedRows = counter.ToString();
-                        // invoke the delegate
-                        OnBatchSizeCompleted(eventArgs);
-                    }
-                    eventArgs.CompletedRows = "";
-                    eventArgs.ErrorDataRows.Clear();
-                    counter = 0;
-                }
-            }
+				if (counter >= NotifyAfter && counter > 0)
+				{
+					if (SqlRowsCopied != null)
+					{
+						SqlRowsCopiedEventArgs eventArgs = new SqlRowsCopiedEventArgs(counter);
 
-            // A final raise from the code. this is to catch the arbitary values that does not meet the batch size limit
-            if (counter > 0)
-            {
-                // batch size is completed. invoke the OnBatchSizeCompletedDelegate to alert the caller
-                if (OnBatchSizeCompleted != null)
-                {
-                    // create the event arguments
-                    eventArgs.CompletedRows = counter.ToString();
-                    // invoke the delegate
-                    OnBatchSizeCompleted(eventArgs);
-                }
-            }
-        }
+						// invoke the delegate
+						SqlRowsCopied(eventArgs);
+					}
+					counter = 0;
+				}
+			}
+
+			// A final raise from the code. this is to catch the arbitary values that does not meet the batch size limit
+			if (counter > 0)
+			{
+				// batch size is completed. invoke the SqlRowsCopied Delegate to alert the caller
+				if (SqlRowsCopied != null)
+				{
+					SqlRowsCopiedEventArgs eventArgs = new SqlRowsCopiedEventArgs(counter);
+					SqlRowsCopied(eventArgs);
+				}
+			}
+		}     
 
 
-    }
+
+		public void Dispose()
+		{
+			if (_manageConnection)
+			{
+				this.DestinationDbConnection.Dispose();
+			}
+			//throw new NotImplementedException();
+		}
+	}
 }

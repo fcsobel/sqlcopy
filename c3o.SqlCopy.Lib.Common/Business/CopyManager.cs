@@ -10,7 +10,7 @@ namespace c3o.SqlCopy.Data
 {
 	public class CopyManager
 	{
-		public event RowsCopiedEventHandler OnRowsCopied;
+		//public event RowsCopiedEventHandler OnRowsCopied;
 
 		private IDbData Source;
 		private IDbData Destination;
@@ -19,29 +19,29 @@ namespace c3o.SqlCopy.Data
 		public CopyManager(CopyObject settings)
 		{
 			this.Settings = settings;
-			this.Source = GetDb(settings, settings.SourceType);
-			this.Destination = GetDb(settings, settings.DestinationType);
-			this.Destination.OnRowsCopied += Destination_OnRowsCopied;
+			this.Source = GetDb(settings.Source, settings, settings.SourceType);
+			this.Destination = GetDb(settings.Destination, settings, settings.DestinationType);
+			//this.Destination.OnRowsCopied += Destination_OnRowsCopied;
 
 			//this.Db = db;
 		}
 
-		void Destination_OnRowsCopied(object sender, RowsCopiedEventArgs e)
-		{
-			if (OnRowsCopied != null) { OnRowsCopied(this, e); }
-		}
+		//void Destination_OnRowsCopied(object sender, RowsCopiedEventArgs e)
+		//{
+		//	if (OnRowsCopied != null) { OnRowsCopied(this, e); }
+		//}
 
 
-		public static IDbData GetDb(CopyObject obj, DBMS dmbs)
+		public static IDbData GetDb(string connectionString, CopyObject obj, DBMS dmbs)
 		{
 			switch (dmbs)
 			{
 				case DBMS.Oracle:
-					return new OracleData(obj);
+					return new OracleData(connectionString, obj);
 				case DBMS.MySql:
-					return new MySqlData(obj);
+					return new MySqlData(connectionString, obj);
 				default:
-					return new SqlData(obj);
+					return new SqlData(connectionString, obj);
 			}
 
 			//this.Db = db;
@@ -156,11 +156,11 @@ namespace c3o.SqlCopy.Data
 		}
 
 
-		public static void Copy(CopyObject settings, TableObject table)
-		{
-			IDbData source = GetDb(settings, settings.SourceType);
-			IDbData dest = GetDb(settings, settings.DestinationType);
-		}
+		//public static void Copy(CopyObject settings, TableObject table)
+		//{
+		//	IDbData source = GetDb(settings.Source, settings, settings.SourceType);
+		//	IDbData dest = GetDb(settings.Destination, settings, settings.DestinationType);
+		//}
 
 
 		// current copy object
@@ -194,7 +194,7 @@ namespace c3o.SqlCopy.Data
 			{
 				while (dr.Read())
 				{
-					TableObject obj = new TableObject(this.Source.settings);
+					TableObject obj = new TableObject(); //this.Source.settings
 
 					if (Settings.IncludeSchema) { obj.Schema = dr["table_schema"] as string; }
 					obj.Name = dr["table_name"] as string;

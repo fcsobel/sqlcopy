@@ -10,13 +10,15 @@ namespace c3o.SqlCopy.Data
 {
 	public class SqlData : IDbData 
 	{
-		public event RowsCopiedEventHandler OnRowsCopied;
-		
-		public CopyObject settings { get; set; }
+		//public event RowsCopiedEventHandler OnRowsCopied;
+	
+		public string ConnectionString { get; set; }
+		public CopyObject CopySettings { get; set; }
 
-		public SqlData(CopyObject settings)
+		public SqlData(string connectionString, CopyObject settings)
 		{
-			this.settings = settings;
+			this.ConnectionString = connectionString;
+			this.CopySettings = settings;
 		}
 
 		public SqlBulkCopyOptions Options
@@ -24,20 +26,19 @@ namespace c3o.SqlCopy.Data
 			get
 			{
 				SqlBulkCopyOptions option = SqlBulkCopyOptions.Default;
-				if (settings.KeepIdentity) option = option | SqlBulkCopyOptions.KeepIdentity;
-				if (settings.KeepNulls) option = option | SqlBulkCopyOptions.KeepNulls;
-				if (settings.CheckConstraints) option = option | SqlBulkCopyOptions.CheckConstraints;
-				if (settings.FireTriggers) { option = option | SqlBulkCopyOptions.FireTriggers; }
-				if (settings.TableLock) { option = option | SqlBulkCopyOptions.TableLock; }
+				if (CopySettings.KeepIdentity) option = option | SqlBulkCopyOptions.KeepIdentity;
+				if (CopySettings.KeepNulls) option = option | SqlBulkCopyOptions.KeepNulls;
+				if (CopySettings.CheckConstraints) option = option | SqlBulkCopyOptions.CheckConstraints;
+				if (CopySettings.FireTriggers) { option = option | SqlBulkCopyOptions.FireTriggers; }
+				if (CopySettings.TableLock) { option = option | SqlBulkCopyOptions.TableLock; }
 				return option;                
 			}
 		}
 
 		public IDataReader List()
 		{
-			return this.ExecuteReader(this.settings.Source, this.settings.ListSql);
+			return this.ExecuteReader(this.CopySettings.ListSql);
 		}
-
 
 		
 		public string GetSelectSql(TableObject table)
@@ -50,7 +51,7 @@ namespace c3o.SqlCopy.Data
 			{
 				List<string> columns = new List<string>();
 
-				if (settings.IncludeSchema)
+				if (CopySettings.IncludeSchema)
 				{
 					//				                            where   '[' + table_schema + '].[' + table_name + ']' = '[{0}].[{1}]'
 					string sql = @"select column_name 
@@ -60,7 +61,7 @@ namespace c3o.SqlCopy.Data
 									and not columnproperty(object_id(table_name), COLUMN_NAME, 'IsComputed') = 1";
 
 
-					using (IDataReader dr = this.ExecuteReader(this.settings.Source, string.Format(sql, table.Schema, table.Name)))
+					using (IDataReader dr = this.ExecuteReader(string.Format(sql, table.Schema, table.Name)))
 					{
 						while (dr.Read())
 						{
@@ -75,7 +76,7 @@ namespace c3o.SqlCopy.Data
 							where   table_name  = '{0}' 
 									and not columnproperty(object_id(table_name), COLUMN_NAME, 'IsComputed') = 1";
 
-					using (IDataReader dr = this.ExecuteReader(this.settings.Source, string.Format(sql, table.Name)))
+					using (IDataReader dr = this.ExecuteReader(string.Format(sql, table.Name)))
 					{
 						while (dr.Read())
 						{
@@ -84,7 +85,7 @@ namespace c3o.SqlCopy.Data
 					}
 				}
 
-				string select = string.Format("select \r\n{1} \r\nfrom {0}", table.FullName, string.Join(",\r\n", columns.ToArray()));
+				string select = string.Format("select \r\n{1} \r\nfrom {0}", this.FullTableName(table), string.Join(",\r\n", columns.ToArray()));
 
 				return select;
 			}
@@ -96,74 +97,77 @@ namespace c3o.SqlCopy.Data
 			string sql = this.GetSelectSql(table);
 
 			//return this.ExecuteReader(this.settings.Source, string.Format(settings.SelectSql, table));
-			return this.ExecuteReader(this.settings.Source, string.Format(sql));
+			return this.ExecuteReader(string.Format(sql));
 		}
 
 		public void Delete(TableObject table)
 		{
-			this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table.FullName));
+			this.ExecuteNonQuery(string.Format(CopySettings.DeleteSql, this.FullTableName(table)));
 		}
 
 		public long Count(TableObject table)
 		{
-			return System.Convert.ToInt64(this.ExecuteScalar(this.settings.Source, string.Format(settings.CountSql, table.FullName)));
+			return System.Convert.ToInt64(this.ExecuteScalar(string.Format(CopySettings.CountSql, this.FullTableName(table))));
 		}
 
 
 		public void PreCopy()
 		{
-			if (!string.IsNullOrEmpty(this.settings.PreCopySql))
+			if (!string.IsNullOrEmpty(this.CopySettings.PreCopySql))
 			{
-				this.ExecuteNonQuery(this.settings.Destination, this.settings.PreCopySql);
+				this.ExecuteNonQuery(this.CopySettings.PreCopySql);
 			}
 		}
 
 
 		public void PostCopy()
 		{
-			if (!string.IsNullOrEmpty(this.settings.PostCopySql))
+			if (!string.IsNullOrEmpty(this.CopySettings.PostCopySql))
 			{
-				this.ExecuteNonQuery(this.settings.Destination, this.settings.PostCopySql);
+				this.ExecuteNonQuery(this.CopySettings.PostCopySql);
 			}
 		}
 
 
-		public void Copy(TableObject table)
-		{
-			if (settings.DeleteRows) this.Delete(table);
+		//public void Copy(TableObject table)
+		//{
+		//	if (CopySettings.DeleteRows) this.Delete(table);
 
-			using (IDataReader dr = this.Select(table))
-			{
-				using (SqlBulkCopy copy = new SqlBulkCopy(settings.Destination, this.Options))
-				{
-					copy.BulkCopyTimeout = settings.BulkCopyTimeout;
-					copy.BatchSize = settings.BatchSize;
-					copy.DestinationTableName = table.FullName;
-					copy.NotifyAfter = settings.NotifyAfter;
-					copy.SqlRowsCopied += copy_SqlRowsCopied;
-					copy.WriteToServer(dr);
-				}
-			}
-		}
+		//	using (IDataReader dr = this.Select(table))
+		//	{
+		//		using (SqlBulkCopy copy = new SqlBulkCopy(CopySettings.Destination, this.Options))
+		//		{
+		//			copy.BulkCopyTimeout = CopySettings.BulkCopyTimeout;
+		//			copy.BatchSize = CopySettings.BatchSize;
+		//			copy.DestinationTableName = this.FullTableName(table);
+		//			copy.NotifyAfter = CopySettings.NotifyAfter;
+		//			copy.SqlRowsCopied += copy_SqlRowsCopied;
+		//			copy.WriteToServer(dr);
+		//		}
+		//	}
+		//}
 
-		void copy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
-		{
-			if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(e)); }
-		}
+		//void copy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
+		//{
+		//	if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(e)); }
+		//}
 
-
+		// Copy from source to this destination
 		public void Copy(TableObject table, IDbData source)
 		{
-			if (settings.DeleteRows) this.Delete(table);
+			// delete from destination (this)
+			if (CopySettings.DeleteRows) this.Delete(table);
 
+			// select from source
 			using (IDataReader dr = source.Select(table))
 			{
-				using (SqlBulkCopy copy = new SqlBulkCopy(settings.Destination, this.Options))
+				// copy to destination (this)
+				using (SqlBulkCopy copy = new SqlBulkCopy(this.ConnectionString, this.Options))
 				{
-					copy.BulkCopyTimeout = settings.BulkCopyTimeout;
-					copy.BatchSize = settings.BatchSize;
-					copy.DestinationTableName = table.FullName;
-					copy.NotifyAfter = settings.NotifyAfter;					
+					copy.BulkCopyTimeout = CopySettings.BulkCopyTimeout;
+					copy.BatchSize = CopySettings.BatchSize;
+					copy.DestinationTableName = this.FullTableName(table);
+					copy.NotifyAfter = CopySettings.NotifyAfter;					
 					//copy.SqlRowsCopied += copy_SqlRowsCopied;
 					copy.SqlRowsCopied += table.OnRowsCopied;
 					copy.WriteToServer(dr);
@@ -172,18 +176,18 @@ namespace c3o.SqlCopy.Data
 		}
 
 
-		public IDataReader ExecuteReader(string db, string sql)
+		public IDataReader ExecuteReader(string sql)
 		{            
-			SqlConnection connection = new SqlConnection(db);
+			SqlConnection connection = new SqlConnection(this.ConnectionString);
 			SqlCommand command = new SqlCommand(sql, connection);
 			connection.Open();
 			return command.ExecuteReader(CommandBehavior.CloseConnection);
 		}
 
 
-		public int ExecuteNonQuery(string db, string sql)
+		public int ExecuteNonQuery(string sql)
 		{
-			using (SqlConnection connection = new SqlConnection(db))
+			using (SqlConnection connection = new SqlConnection(this.ConnectionString))
 			{
 				SqlCommand command = new SqlCommand(sql, connection);
 				connection.Open();
@@ -192,13 +196,44 @@ namespace c3o.SqlCopy.Data
 		}
 
 
-		public object ExecuteScalar(string db, string sql)
+		public object ExecuteScalar(string sql)
 		{
-			using (SqlConnection connection = new SqlConnection(db))
+			using (SqlConnection connection = new SqlConnection(this.ConnectionString))
 			{
 				SqlCommand command = new SqlCommand(sql, connection);
 				connection.Open();
 				return command.ExecuteScalar();
+			}
+		}
+
+		/// <summary>
+		/// Return DB formatted table name
+		/// </summary>
+		/// <param name="table"></param>
+		/// <returns></returns>
+		public string FullTableName(TableObject table)
+		{
+			if (this.CopySettings.IncludeSchema)
+			{
+				if (string.IsNullOrEmpty(this.CopySettings.SchemaFormat))
+				{
+					return string.Format("{0}.{1}", table.Schema, table.Name);
+				}
+				else
+				{
+					return string.Format(this.CopySettings.SchemaFormat, table.Schema, table.Name);
+				}
+			}
+			else
+			{
+				if (string.IsNullOrEmpty(this.CopySettings.TableFormat))
+				{
+					return table.Name;
+				}
+				else
+				{
+					return string.Format(this.CopySettings.TableFormat, table.Name);
+				}
 			}
 		}
 

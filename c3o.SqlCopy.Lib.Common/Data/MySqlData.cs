@@ -10,36 +10,49 @@ using IndiansInc.Internals;
 
 namespace c3o.SqlCopy.Data
 {
+	// MySql
+	// Date Time Conversion issues
+	//http://stackoverflow.com/questions/5754822/unable-to-convert-mysql-date-time-value-to-system-datetime
+	//You must add Convert Zero Datetime=True to your connection string, for example:
+	// added both "Convert Zero Datetime=True" & "Allow Zero Datetime=True" and it works fine
+
+	// Use Datetime2 in sql server
+	//http://stackoverflow.com/questions/1334143/sql-server-datetime2-vs-datetime
+
 	public class MySqlData : IDbData 
 	{
-		public event RowsCopiedEventHandler OnRowsCopied;
+		//public event RowsCopiedEventHandler OnRowsCopied;
 		
-		public CopyObject settings { get; set; }
+		public string ConnectionString { get; set; }
+		public CopyObject CopySettings { get; set; }
 
-		public MySqlData(CopyObject settings)
+		
+		public MySqlData(string connectionString, CopyObject settings)
 		{
-			this.settings = settings;
+			this.ConnectionString = connectionString;
+			this.CopySettings = settings;
 		}
 
-		//public SqlBulkCopyOptions Options
-		//{
-		//	get
-		//	{
-		//		SqlBulkCopyOptions option = SqlBulkCopyOptions.Default;
-		//		if (settings.KeepIdentity) option = option | SqlBulkCopyOptions.KeepIdentity;
-		//		if (settings.KeepNulls) option = option | SqlBulkCopyOptions.KeepNulls;
-		//		if (settings.CheckConstraints) option = option | SqlBulkCopyOptions.CheckConstraints;
-		//		if (settings.FireTriggers) { option = option | SqlBulkCopyOptions.FireTriggers; }
-		//		if (settings.TableLock) { option = option | SqlBulkCopyOptions.TableLock; }
-		//		return option;                
-		//	}
-		//}
+		public System.Data.SqlClient.SqlBulkCopyOptions Options
+		{
+			get
+			{
+				System.Data.SqlClient.SqlBulkCopyOptions option = System.Data.SqlClient.SqlBulkCopyOptions.Default;
+				if (CopySettings.KeepIdentity) option = option | System.Data.SqlClient.SqlBulkCopyOptions.KeepIdentity;
+				if (CopySettings.KeepNulls) option = option | System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls;
+				if (CopySettings.CheckConstraints) option = option | System.Data.SqlClient.SqlBulkCopyOptions.CheckConstraints;
+				if (CopySettings.FireTriggers) { option = option | System.Data.SqlClient.SqlBulkCopyOptions.FireTriggers; }
+				if (CopySettings.TableLock) { option = option | System.Data.SqlClient.SqlBulkCopyOptions.TableLock; }
+				return option;                
+			}
+		}
 
 		public IDataReader List()
 		{
-			return this.ExecuteReader(this.settings.Source, this.settings.ListSql);
+			return this.ExecuteReader(this.CopySettings.ListSql);
 		}
 
+		// Return Database formatted select 
 		public string GetSelectSql(TableObject table)
 		{
 			if (!string.IsNullOrEmpty(table.Sql))
@@ -48,7 +61,7 @@ namespace c3o.SqlCopy.Data
 			}
 			else
 			{
-				return string.Format(settings.SelectSql, table.FullName);
+				return string.Format(CopySettings.SelectSql, this.FullTableName(table));
 			}
 		}
 
@@ -97,7 +110,7 @@ namespace c3o.SqlCopy.Data
 //					}
 //				}
 
-//				string select = string.Format("select \r\n{1} \r\nfrom {0}", table.FullName, string.Join(",\r\n", columns.ToArray()));
+//				string select = string.Format("select \r\n{1} \r\nfrom {0}", this.FullTableName(table), string.Join(",\r\n", columns.ToArray()));
 
 //				return select;
 //			}
@@ -109,92 +122,93 @@ namespace c3o.SqlCopy.Data
 			string sql = this.GetSelectSql(table);
 
 			//return this.ExecuteReader(this.settings.Source, string.Format(settings.SelectSql, table));
-			return this.ExecuteReader(this.settings.Source, string.Format(sql));
+			return this.ExecuteReader(string.Format(sql));
 		}
 
 		public void Delete(TableObject table)
 		{
-			this.ExecuteNonQuery(this.settings.Destination, string.Format(settings.DeleteSql, table.FullName));
+			this.ExecuteNonQuery(string.Format(CopySettings.DeleteSql, table.Name));
 		}
 
 		public long Count(TableObject table)
 		{
-			return System.Convert.ToInt64(this.ExecuteScalar(this.settings.Source, string.Format(settings.CountSql, table.FullName)));
+			return System.Convert.ToInt64(this.ExecuteScalar(string.Format(CopySettings.CountSql, this.FullTableName(table))));
 		}
 
 
 		public void PreCopy()
 		{
-			if (!string.IsNullOrEmpty(this.settings.PreCopySql))
+			if (!string.IsNullOrEmpty(this.CopySettings.PreCopySql))
 			{
-				this.ExecuteNonQuery(this.settings.Destination, this.settings.PreCopySql);
+				this.ExecuteNonQuery(this.CopySettings.PreCopySql);
 			}
 		}
 
 
 		public void PostCopy()
 		{
-			if (!string.IsNullOrEmpty(this.settings.PostCopySql))
+			if (!string.IsNullOrEmpty(this.CopySettings.PostCopySql))
 			{
-				this.ExecuteNonQuery(this.settings.Destination, this.settings.PostCopySql);
+				this.ExecuteNonQuery(this.CopySettings.PostCopySql);
 			}
 		}
 
 
-		public void Copy(TableObject table)
-		{
-			if (settings.DeleteRows) this.Delete(table);
+		//public void Copy(TableObject table)
+		//{
+		//	if (CopySettings.DeleteRows) this.Delete(table);
 
-			using (IDataReader dr =  (IDataReader)this.Select(table))
-			{
-				using (MySqlConnection connection = new MySqlConnection(settings.Destination))
-				{
-					connection.Open();
-					//MySqlBulkCopy copy = new MySqlBulkCopy(settings.Destination, this.Options);
-					MySqlBulkCopy copy = new MySqlBulkCopy();
-					//copy.BatchSize = settings.BatchSize;
-					copy.DestinationTableName = table.FullName;
-					copy.DestinationTableName = copy.DestinationTableName.Replace("[","");
-					copy.DestinationTableName = copy.DestinationTableName.Replace("]","");
-					
-					//// map all items
-					//ColumnMapItemCollection collection = new ColumnMapItemCollection();
-					//for (int i = 0; i < dr.FieldCount; i++ )
-					//{
-					//	dr.GetDataTypeName(i);
-					//	ColumnMapItem item = new ColumnMapItem();
-					//	item.DataType = dr.GetDataTypeName(i);
-					//	item.DestinationColumn = dr.GetName(i);
-					//	item.SourceColumn = dr.GetName(i);
-					//	collection.Add(item);
-					//}				
-					//copy.ColumnMapItems = collection;
+		//	using (IDataReader dr = (IDataReader)this.Select(table))
+		//	{
+		//		MySqlBulkCopy copy = new MySqlBulkCopy(CopySettings.Destination, this.Options);
+		//		//MySqlBulkCopy copy = new MySqlBulkCopy();
+		//		//copy.BatchSize = settings.BatchSize;
+		//		copy.DestinationTableName = this.FullTableName(table);
+		//		copy.DestinationTableName = copy.DestinationTableName.Replace("[", "");
+		//		copy.DestinationTableName = copy.DestinationTableName.Replace("]", "");
 
-					copy.DestinationDbConnection = connection;
+		//		//// map all items
+		//		//ColumnMapItemCollection collection = new ColumnMapItemCollection();
+		//		//for (int i = 0; i < dr.FieldCount; i++ )
+		//		//{
+		//		//	dr.GetDataTypeName(i);
+		//		//	ColumnMapItem item = new ColumnMapItem();
+		//		//	item.DataType = dr.GetDataTypeName(i);
+		//		//	item.DestinationColumn = dr.GetName(i);
+		//		//	item.SourceColumn = dr.GetName(i);
+		//		//	collection.Add(item);
+		//		//}				
+		//		//copy.ColumnMapItems = collection;
 
-					//copy.OnBatchSizeCompleted +=		
-					//copy.OnBatchSizeCompleted = new IndiansInc.MySqlBulkCopy.OnBatchSizeCompletedDelegate(this.copy_SqlRowsCopied);
+		//		//copy.DestinationDbConnection = connection;
 
-					//OnBatchSizeCompletedDelegate test = copy_SqlRowsCopied;
+		//		//copy.OnBatchSizeCompleted +=		
+		//		//copy.OnBatchSizeCompleted = new IndiansInc.MySqlBulkCopy.OnBatchSizeCompletedDelegate(this.copy_SqlRowsCopied);
 
-					//copy.OnBatchSizeCompleted += copy_OnBatchSizeCompleted;
-					
-					copy.OnBatchSizeCompleted += table.OnRowsCopied;
+		//		//OnBatchSizeCompletedDelegate test = copy_SqlRowsCopied;
 
-					//copy.BulkCopyTimeout = settings.BulkCopyTimeout;
-					
-					//copy.NotifyAfter = settings.NotifyAfter;
-					//copy.SqlRowsCopied += copy_SqlRowsCopied;					 
-					//copy.WriteToServer(dr);
-					copy.Upload(dr);
-				}
-			}
-		}
+		//		//copy.OnBatchSizeCompleted += copy_OnBatchSizeCompleted;
 
-		void copy_OnBatchSizeCompleted(BatchSizeCompletedEventArgs e)
-		{
-			if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(e)); }
-		}
+		//		copy.SqlRowsCopied += table.OnRowsCopied;
+
+		//		//copy.BulkCopyTimeout = settings.BulkCopyTimeout;
+
+		//		copy.NotifyAfter = CopySettings.NotifyAfter;
+		//		//copy.SqlRowsCopied += copy_SqlRowsCopied;					 
+		//		//copy.WriteToServer(dr);
+		//		copy.WriteToServer(dr);
+		//	}
+		//}
+
+		//void copy_SqlRowsCopied(System.Data.SqlClient.SqlRowsCopiedEventArgs e)
+		//{
+		//	throw new NotImplementedException();
+		//}
+
+		//void copy_OnBatchSizeCompleted(BatchSizeCompletedEventArgs e)
+		//{
+		//	if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(e)); }
+		//}
 
 		//void copy_SqlRowsCopied(object sender, BatchSizeCompletedEventArgs e)
 		//{
@@ -202,28 +216,29 @@ namespace c3o.SqlCopy.Data
 		//}
 
 
+		// Copy from source to destination (this = destination)
 		public void Copy(TableObject table, IDbData source)
 		{
-			if (settings.DeleteRows) this.Delete(table);
+			// delete from destination (this)
+			if (CopySettings.DeleteRows) this.Delete(table);
 
+			// seletc from source
 			using (IDataReader dr = source.Select(table))
 			{
-				using (MySqlConnection connection = new MySqlConnection(settings.Destination))
+				// copy to destination this
+				using (MySqlBulkCopy copy = new MySqlBulkCopy(this.ConnectionString, this.Options))
 				{
-					connection.Open();
-					//MySqlBulkCopy copy = new MySqlBulkCopy(settings.Destination, this.Options);
 
-					MySqlBulkCopy copy = new MySqlBulkCopy();
-					copy.BatchSize = settings.BatchSize;
+					//MySqlBulkCopy copy = new MySqlBulkCopy();
+					copy.BatchSize = CopySettings.BatchSize;
+
+					copy.DestinationTableName = this.FullTableName(table);
+					copy.DestinationTableName = copy.DestinationTableName.Replace("[", "");
+					copy.DestinationTableName = copy.DestinationTableName.Replace("]", "");
 					
-					copy.DestinationTableName = table.FullName;
-					copy.DestinationTableName = copy.DestinationTableName.Replace("[","");
-					copy.DestinationTableName = copy.DestinationTableName.Replace("]","");
-
-
 					// map all items
 					ColumnMapItemCollection collection = new ColumnMapItemCollection();
-					for (int i = 0; i < dr.FieldCount; i++ )
+					for (int i = 0; i < dr.FieldCount; i++)
 					{
 						dr.GetDataTypeName(i);
 						ColumnMapItem item = new ColumnMapItem();
@@ -231,36 +246,34 @@ namespace c3o.SqlCopy.Data
 						item.DestinationColumn = dr.GetName(i);
 						item.SourceColumn = dr.GetName(i);
 						collection.Add(item);
-					}				
-					copy.ColumnMapItems = collection;
+					}
+					copy.ColumnMappings = collection;
 
-
-					copy.DestinationDbConnection = connection;
+					//copy.DestinationDbConnection = connection;
 					//copy.BulkCopyTimeout = settings.BulkCopyTimeout;
-					//copy.NotifyAfter = settings.NotifyAfter;					
+					copy.NotifyAfter = CopySettings.NotifyAfter;
 					//copy.SqlRowsCopied += table.OnRowsCopied;
-									
+
 
 					//copy.WriteToServer(dr);
-					copy.Upload(dr);
-					
+					copy.WriteToServer(dr);
 				}
 			}
 		}
 
 
-		public IDataReader ExecuteReader(string db, string sql)
+		public IDataReader ExecuteReader(string sql)
 		{            
-			MySqlConnection connection = new MySqlConnection(db);
+			MySqlConnection connection = new MySqlConnection(this.ConnectionString);
 			MySqlCommand command = new MySqlCommand(sql, connection);
 			connection.Open();
 			return command.ExecuteReader(CommandBehavior.CloseConnection);
 		}
 
 
-		public int ExecuteNonQuery(string db, string sql)
+		public int ExecuteNonQuery(string sql)
 		{
-			using (MySqlConnection connection = new MySqlConnection(db))
+			using (MySqlConnection connection = new MySqlConnection(this.ConnectionString))
 			{
 				MySqlCommand command = new MySqlCommand(sql, connection);
 				connection.Open();
@@ -269,13 +282,45 @@ namespace c3o.SqlCopy.Data
 		}
 
 
-		public object ExecuteScalar(string db, string sql)
+		public object ExecuteScalar(string sql)
 		{
-			using (MySqlConnection connection = new MySqlConnection(db))
+			using (MySqlConnection connection = new MySqlConnection(this.ConnectionString))
 			{
 				MySqlCommand command = new MySqlCommand(sql, connection);
 				connection.Open();
 				return command.ExecuteScalar();
+			}
+		}
+
+
+		/// <summary>
+		/// Return DB formatted table name
+		/// </summary>
+		/// <param name="table"></param>
+		/// <returns></returns>
+		public string FullTableName(TableObject table)
+		{
+			if (this.CopySettings.IncludeSchema)
+			{
+				if (string.IsNullOrEmpty(this.CopySettings.SchemaFormat))
+				{
+					return string.Format("{0}.{1}", table.Schema, table.Name);
+				}
+				else
+				{
+					return string.Format(this.CopySettings.SchemaFormat, table.Schema, table.Name);
+				}
+			}
+			else
+			{
+				if (string.IsNullOrEmpty(this.CopySettings.TableFormat))
+				{
+					return table.Name;
+				}
+				else
+				{
+					return string.Format(this.CopySettings.TableFormat, table.Name);
+				}
 			}
 		}
 
