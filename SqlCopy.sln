@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Lib.Common", "c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c3o.SqlCopy.Console.App", "c3o.SqlCopy.Console.App\c3o.SqlCopy.Console.App.csproj", "{DF43D7D7-01C8-488A-8687-7B423816DBA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySqlBulkCopy", "c3o.MySqlBulkCopy\MySqlBulkCopy.csproj", "{9C1D13BA-AB1B-4879-8539-FAD92B365EEE}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -55,6 +57,12 @@ Global
 		{DF43D7D7-01C8-488A-8687-7B423816DBA8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF43D7D7-01C8-488A-8687-7B423816DBA8}.Release|x86.ActiveCfg = Release|x86
 		{DF43D7D7-01C8-488A-8687-7B423816DBA8}.Release|x86.Build.0 = Release|x86
+		{9C1D13BA-AB1B-4879-8539-FAD92B365EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C1D13BA-AB1B-4879-8539-FAD92B365EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C1D13BA-AB1B-4879-8539-FAD92B365EEE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C1D13BA-AB1B-4879-8539-FAD92B365EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C1D13BA-AB1B-4879-8539-FAD92B365EEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C1D13BA-AB1B-4879-8539-FAD92B365EEE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

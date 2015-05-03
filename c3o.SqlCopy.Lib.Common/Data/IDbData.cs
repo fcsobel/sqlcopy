@@ -32,6 +32,7 @@ namespace c3o.SqlCopy.Data
 	{
 		private OracleRowsCopiedEventArgs _oracleArgs { get; set; }
 		private SqlRowsCopiedEventArgs _sqlArgs { get; set; }
+		private IndiansInc.BatchSizeCompletedEventArgs _mySqlArgs { get; set; }
 
 		public bool Abort
 		{
@@ -39,6 +40,7 @@ namespace c3o.SqlCopy.Data
 			{
 				if (this._oracleArgs != null) this._oracleArgs.Abort = value;
 				if (this._sqlArgs != null) this._sqlArgs.Abort = value;
+				//if (this._sqlArgs != null) this._mySqlArgs.Abort = value;
 			}
 		}
 		public long RowsCopied
@@ -47,10 +49,13 @@ namespace c3o.SqlCopy.Data
 			{
 				if (this._oracleArgs != null) return this._oracleArgs.RowsCopied;
 				if (this._sqlArgs != null) return this._sqlArgs.RowsCopied;
+				if (this._mySqlArgs != null) return System.Convert.ToInt32(this._mySqlArgs.CompletedRows);
 				return 0;
 			}
 		}
 		public RowsCopiedEventArgs(SqlRowsCopiedEventArgs e) { this._sqlArgs = e; }
 		public RowsCopiedEventArgs(OracleRowsCopiedEventArgs e) { this._oracleArgs = e; }
+		public RowsCopiedEventArgs(IndiansInc.BatchSizeCompletedEventArgs e) { this._mySqlArgs = e; }
+
 	}
 }

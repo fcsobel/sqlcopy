@@ -38,6 +38,8 @@ namespace c3o.SqlCopy.Data
 			{
 				case DBMS.Oracle:
 					return new OracleData(obj);
+				case DBMS.MySql:
+					return new MySqlData(obj);
 				default:
 					return new SqlData(obj);
 			}

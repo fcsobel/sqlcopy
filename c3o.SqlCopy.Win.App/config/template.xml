@@ -53,4 +53,29 @@
     <SelectSql>select * from {0}</SelectSql>
 		<CountSql>select count(*) from {0}</CountSql>	
   </CopyObject>
+	<CopyObject>
+		<Name>MySql</Name>
+		<SourceType>MySql</SourceType>
+		<Source></Source>
+		<Destination></Destination>
+		<BatchSize>0</BatchSize>
+		<BulkCopyOptions>0</BulkCopyOptions>
+		<BulkCopyTimeout>30</BulkCopyTimeout>
+		<NotifyAfter>0</NotifyAfter>
+		<Default>false</Default>
+		<UseInternalTransaction>false</UseInternalTransaction>
+		<DestinationPartitionName />
+		<CheckConstraints>false</CheckConstraints>
+		<FireTriggers>false</FireTriggers>
+		<KeepIdentity>true</KeepIdentity>
+		<KeepNulls>true</KeepNulls>
+		<TableLock>false</TableLock>
+		<DeleteRows>false</DeleteRows>
+		<PreCopySql />
+		<PostCopySql />
+		<ListSql>select table_schema, table_name from information_schema.tables where table_type in ('BASE TABLE', 'SYSTEM VIEW') and table_schema not in ('information_schema')</ListSql>
+		<DeleteSql>delete from {0}</DeleteSql>
+		<SelectSql>select * from {0}</SelectSql>
+		<CountSql>select count(*) from {0}</CountSql>
+	</CopyObject>
 </ArrayOfCopyObject>

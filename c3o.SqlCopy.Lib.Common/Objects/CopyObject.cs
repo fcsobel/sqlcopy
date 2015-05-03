@@ -150,6 +150,15 @@ namespace c3o.SqlCopy.Objects
 			this.ShowProgress();
 		}
 
+
+		public void OnRowsCopied(IndiansInc.BatchSizeCompletedEventArgs e)
+		{
+			//if (OnRowsCopied != null) { OnRowsCopied(this, new RowsCopiedEventArgs(e)); }
+			this.Copied = System.Convert.ToInt32( e.CompletedRows);
+			//this.Status = string.Format("Copying {0} out of {1} - {2}" , this.Copied, this.Count, this.Percentage);
+			this.ShowProgress();
+		}
+
 		public void OnRowsCopied(object sender, RowsCopiedEventArgs e)
 		{
 			this.Copied = e.RowsCopied;
@@ -280,7 +289,8 @@ namespace c3o.SqlCopy.Objects
 	public enum DBMS
 	{
 		SqlServer,
-		Oracle
+		Oracle,
+		MySql
 	}
 
 

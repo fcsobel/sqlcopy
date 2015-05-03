@@ -106,7 +106,7 @@ namespace c3o.SqlCopy.Data
 
 		public long Count(TableObject table)
 		{
-			return System.Convert.ToInt64(this.ExecuteScalar(this.settings.Destination, string.Format(settings.CountSql, table.FullName)));
+			return System.Convert.ToInt64(this.ExecuteScalar(this.settings.Source, string.Format(settings.CountSql, table.FullName)));
 		}
 
 

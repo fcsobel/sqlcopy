@@ -46,7 +46,7 @@ namespace c3o.SqlCopy
 
 		public long Count(TableObject table)
 		{
-			return (long) this.ExecuteScalar(this.settings.Destination, string.Format(settings.CountSql, table.FullName));
+			return (long) this.ExecuteScalar(this.settings.Source, string.Format(settings.CountSql, table.FullName));
 		}
 
 		public void PreCopy()
