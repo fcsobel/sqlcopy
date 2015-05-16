@@ -54,55 +54,62 @@ namespace c3o.SqlCopy.Console1.App
 
 				if (!string.IsNullOrEmpty(filename))
 				{
-					CopyObject obj = CopyObject.Read(filename);
-
-					if (obj != null)
+					if (File.Exists(filename))
 					{
-						CopyManager manager = new CopyManager(obj);
-						{
-							try
-							{
-								manager.PreCopy();
-							}
-							catch (Exception er)
-							{
-								obj.PreCopyStatus = er.Message;
-								return;
-							}
+						CopyObject obj = CopyObject.Read(filename);
 
-							foreach (TableObject table in obj.Tables)
+						if (obj != null)
+						{
+							CopyManager manager = new CopyManager(obj);
 							{
 								try
 								{
-									if (table.Selected)
-									{
-										manager.Copy(table);
-										//table.Status = "Success";
-										table.CopyStatus = CopyStatusEnum.Success;
-										System.Console.WriteLine("Success " + table.Name);
-									}
+									manager.PreCopy();
 								}
 								catch (Exception er)
 								{
-									//table.Status = er.Message;
-									table.Message = er.Message;
-									table.CopyStatus = CopyStatusEnum.Error;
-									System.Console.WriteLine("Error " + table.Name);
+									obj.PreCopyStatus = er.Message;
+									return;
+								}
+
+								foreach (TableObject table in obj.Tables)
+								{
+									try
+									{
+										if (table.Selected)
+										{
+											manager.Copy(table);
+											//table.Status = "Success";
+											table.CopyStatus = CopyStatusEnum.Success;
+											System.Console.WriteLine("Success " + table.Name);
+										}
+									}
+									catch (Exception er)
+									{
+										//table.Status = er.Message;
+										table.Message = er.Message;
+										table.CopyStatus = CopyStatusEnum.Error;
+										System.Console.WriteLine("Error " + table.Name);
+										exitCode = -1;
+									}
+								}
+
+								try
+								{
+									manager.PostCopy();
+								}
+								catch (Exception er)
+								{
+									obj.PostCopyStatus = er.Message;
 									exitCode = -1;
 								}
-							}
 
-							try
-							{
-								manager.PostCopy();
 							}
-							catch (Exception er)
-							{
-								obj.PostCopyStatus = er.Message;
-								exitCode = -1;
-							}
-
 						}
+					}
+					else
+					{ 
+						exitCode = -5;
 					}
 				}
 				else
@@ -114,8 +121,7 @@ namespace c3o.SqlCopy.Console1.App
 			{
 				exitCode = -3;
 			}
-
-
+			
 			Environment.Exit(exitCode);
 		}
 
