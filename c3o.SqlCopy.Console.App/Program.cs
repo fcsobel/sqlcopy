@@ -11,8 +11,6 @@ namespace c3o.SqlCopy.Console1.App
 {
 	class Program
 	{
-
-
 		class Options
 		{
 			//[Option('r', "read", Required = true,

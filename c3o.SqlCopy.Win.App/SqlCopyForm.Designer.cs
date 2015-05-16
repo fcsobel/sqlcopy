@@ -531,6 +531,7 @@ namespace c3o.SqlCopy
 			// 
 			// bttnSwitch
 			// 
+			this.bttnSwitch.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.bttnSwitch.Image = ((System.Drawing.Image)(resources.GetObject("bttnSwitch.Image")));
 			this.bttnSwitch.Location = new System.Drawing.Point(5, 436);
 			this.bttnSwitch.Margin = new System.Windows.Forms.Padding(4);

@@ -776,17 +776,17 @@ namespace c3o.SqlCopy
 						else { obj.Tables = obj.Tables.OrderBy(x => x.Selected).ToList(); }
 						this.sortChecked = !this.sortChecked;
 						break;
-					case 1:	// schema
+					case 2:	// schema
 						if (this.sortName) { obj.Tables = obj.Tables.OrderByDescending(x => x.Schema).ToList(); }
 						else { obj.Tables = obj.Tables.OrderBy(x => x.Schema).ToList(); }
 						this.sortName = !this.sortName;
 						break;
-					case 2:	// name
+					case 3:	// name
 						if (this.sortName) { obj.Tables = obj.Tables.OrderByDescending(x => x.Name).ToList(); }
 						else { obj.Tables = obj.Tables.OrderBy(x => x.Name).ToList(); }
 						this.sortName = !this.sortName;
 						break;
-					case 3: // status
+					case 4: // status
 						if (this.sortStatus) { obj.Tables = obj.Tables.OrderByDescending(x => x.Status).ToList(); }
 						else { obj.Tables = obj.Tables.OrderBy(x => x.Status).ToList(); }
 						this.sortStatus = !this.sortStatus;
