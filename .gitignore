@@ -3,3 +3,17 @@
 ################################################################################
 
 *.dll
+/c3o.SqlCopy.Console.App/bin
+/c3o.SqlCopy.Console.App/obj
+/c3o.MySqlBulkCopy/obj
+/c3o.SqlCopy.Lib.Common/bin
+/c3o.SqlCopy.Lib.Common/obj
+/c3o.SqlCopy.Win.App/bin
+/c3o.SqlCopy.Win.App/obj
+/c3o.SqlCopy.Win.Service/bin/x64/Debug
+/c3o.SqlCopy.Win.Service/obj
+/c3o.MySqlBulkCopy/bin
+/packages
+/.vs/SqlCopy/v16
+*.user
+/c3o.SqlCopy.Win.Service/bin/Debug

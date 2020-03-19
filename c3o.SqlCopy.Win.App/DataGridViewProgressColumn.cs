@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.ComponentModel;
 using System.Linq;
+using c3o.SqlCopy.Common;
 
 namespace c3o.SqlCopy
 {
@@ -67,8 +68,9 @@ namespace c3o.SqlCopy
 						g.DrawString(progressVal.ToString() + "%", cellStyle.Font, foreColorBrush, cellBounds.X + 6, cellBounds.Y + 2);
 				}
 			}
-			catch (Exception e) { }
-
+			catch (Exception e) {
+                ErrorLog.Instance.Errors.Add(e.Message);
+            }
 		}
 	}
 }

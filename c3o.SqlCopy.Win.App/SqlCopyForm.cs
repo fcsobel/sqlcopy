@@ -531,7 +531,6 @@ namespace c3o.SqlCopy
 
 		void manager_OnRowsCopied(object sender, RowsCopiedEventArgs e)
 		{
-			string test = "tt";
 			//throw new NotImplementedException();
 		}
 			   
