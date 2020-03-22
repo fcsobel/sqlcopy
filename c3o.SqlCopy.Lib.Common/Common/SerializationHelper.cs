@@ -30,15 +30,6 @@ namespace c3o.SqlCopy
 			return new UTF8Encoding().GetBytes(xml);
 		}
 
-      
-		//public static void Serialize(object o, string filename)
-		//{
-		//    Stream stream = File.Open(filename, FileMode.Create);
-		//    XmlSerializer x = new XmlSerializer(o.GetType());
-		//    x.Serialize(stream, o);
-		//    stream.Close();
-		//}
-
         public static void Serialize<T>(T obj, string filename)
         {
             Stream stream = File.Open(filename, FileMode.Create);
@@ -46,26 +37,6 @@ namespace c3o.SqlCopy
             x.Serialize(stream, obj);
             stream.Close();
         }
-
-
-		////<summary>
-		////Method to convert a custom Object to XML string: typeof(Animal)
-		////</summary>
-		////<param name="pObject">Object that is to be serialized to XML</param>
-		////<returns>XML string</returns>
-		//public static string Serialize(object obj)
-		//{
-		//    String XmlizedString = null;
-		//    MemoryStream memoryStream = new MemoryStream();
-		//    XmlSerializer xs = new XmlSerializer(obj.GetType());
-
-		//    XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
-		//    xs.Serialize(xmlTextWriter, obj);
-		//    memoryStream = (MemoryStream)xmlTextWriter.BaseStream;
-		//    XmlizedString = UTF8ByteArrayToString(memoryStream.ToArray());
-		//    return XmlizedString;
-		//}
-
 
 		/// <summary>
 		/// Serialize an object into an XML string
@@ -92,7 +63,6 @@ namespace c3o.SqlCopy
 		}
 
 
-
 		/// <summary>
 		/// Method to reconstruct an Object from XML string
 		/// </summary>
@@ -105,8 +75,6 @@ namespace c3o.SqlCopy
 			XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
 			return xs.Deserialize(memoryStream);
 		}
-
-
 
 
         public static Object Deserialize(Type type, string filename)
