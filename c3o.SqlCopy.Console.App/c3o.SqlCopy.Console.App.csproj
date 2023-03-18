@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>c3o.SqlCopy.Console.App</RootNamespace>
     <AssemblyName>SqlCopy</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignManifests>false</SignManifests>
     <ManifestCertificateThumbprint>8F19E7F373DFEAB4D750AA2D3DBCE5F754DCB208</ManifestCertificateThumbprint>

@@ -18,3 +18,4 @@
 *.user
 /c3o.SqlCopy.Win.Service/bin/Debug
 *.suo
+/.vs

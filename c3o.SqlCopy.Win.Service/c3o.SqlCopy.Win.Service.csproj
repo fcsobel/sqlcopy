@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>c3o.SqlCopy.Win.Service</RootNamespace>
     <AssemblyName>c3o.SqlCopy.Win.Service</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ManifestCertificateThumbprint>97D40DB12F7A78F4027807592525F8B60B0EE62E</ManifestCertificateThumbprint>
     <ManifestKeyFile>c3o.SqlCopy.Win.Service_TemporaryKey.pfx</ManifestKeyFile>
